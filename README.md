@@ -27,7 +27,7 @@
 1. Get into project Directory
 
    ```shell
-   cd "Online Voting System"
+   cd "Voting-app-using-Blockchain"
    ```
 
 1. Run local Ethereum blockchain on Ganache GUI
@@ -39,7 +39,7 @@
 1. Deploy smart contract
 
 ```shell
-  # on the "Online Voting System" directory
+  # on the "Voting-app-using-Blockchain" directory
   npx truffle migrate
 ```
 
