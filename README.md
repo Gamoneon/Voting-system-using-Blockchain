@@ -1,3 +1,7 @@
+# Voting-app-using-Blockchain
+
+Voting app using Blockchain developed as a part of Internship program.
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
