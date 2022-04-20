@@ -1,8 +1,10 @@
 import React from "react";
+import Navbar from "../components/Navbar.js";
 
 const HomeScreen = () => {
   return (
     <>
+      <Navbar />
       <div className="HomePageWallpaper">
         <img
           src="./Images/wallpaper1.png"
@@ -13,7 +15,7 @@ const HomeScreen = () => {
             width: "100%",
             height: "100%",
           }}
-          cover
+          cover="true"
         />
       </div>
     </>
