@@ -14,7 +14,14 @@ code {
 
 * {
   box-sizing: border-box;
-  overflow: hidden;
+  overflow-x: hidden;
 }
 
+ul{
+  list-style: disc inside;
+}
+
+h1,h2,h3,h4,h5{
+  overflow: hidden;
+}
 

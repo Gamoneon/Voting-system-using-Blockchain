@@ -9,6 +9,8 @@ import LoginScreen from "./screens/LoginScreen.js";
 import DashboardScreen from "./screens/DashboardScreen.js";
 import InformationScreen from "./screens/InformationScreen.js";
 import VoterRegistrationScreen from "./screens/VoterRegistrationScreen.js";
+import ElectionSetupScreen from "./screens/admin/ElectionSetupScreen.js";
+import VerificationScreen from "./screens/admin/VerificationScreen.js";
 import VotingScreen from "./screens/VotingScreen.js";
 import ResultScreen from "./screens/ResultScreen.js";
 import Footer from "./components/Footer.js";
@@ -50,7 +52,21 @@ const App = () => {
 
               <Route
                 exact
-                path="/results"
+                path="/electionsetup"
+                element={
+                  <DashboardScreen component={<ElectionSetupScreen />} />
+                }
+              />
+
+              <Route
+                exact
+                path="/verification"
+                element={<DashboardScreen component={<VerificationScreen />} />}
+              />
+
+              <Route
+                exact
+                path="/result"
                 element={<DashboardScreen component={<ResultScreen />} />}
               />
             </Routes>
