@@ -1,8 +1,10 @@
-import React from "react";
+import React  from "react";
 import { Link } from "react-router-dom";
 import Logo from "./Logo.js";
 
+
 const Navbar = () => {
+
   return (
     <div>
       <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
@@ -52,6 +54,7 @@ const Navbar = () => {
           </div>
         </div>
       </nav>
+      
     </div>
   );
 };
