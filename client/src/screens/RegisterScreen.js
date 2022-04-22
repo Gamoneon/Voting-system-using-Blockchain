@@ -1,9 +1,10 @@
 import React from "react";
+import Navbar from "../components/Navbar.js";
 
 const RegisterScreen = () => {
   return(
     <>
-   
+   <Navbar />
     <div>
       <form className="row g-3">
       <fieldset> 
