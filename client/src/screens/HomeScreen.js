@@ -3,7 +3,13 @@ import Navbar from "../components/Navbar.js";
 
 const HomeScreen = () => {
   const homescreenstyle = {
-    height: "max-content",
+    minHeight: "100%",
+    backgroundImage: `url("./Images/wallpaper4.png")`,
+    backgroundRepeat: "no-repeat",
+    backgroundPosition: "center center",
+    backgroundSize: "cover",
+    width: "100vw",
+    height: "84vh",
   };
   const wallpaperstyle = {
     position: "relative",
@@ -16,12 +22,8 @@ const HomeScreen = () => {
     
       <Navbar />
       <div className="HomePageWallpaper" style={homescreenstyle}>
-        <img
-          src="./Images/wallpaper1.png"
-          alt=""
-          style={wallpaperstyle}
-          cover="true"
-        ></img>
+        <div></div>
+        <h1 className="text-light">Blockchain in voting</h1>
       </div>
     </>
   );
