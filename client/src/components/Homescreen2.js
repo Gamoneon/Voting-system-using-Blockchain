@@ -15,14 +15,15 @@ const HomeScreen = () => {
     <>
     
       <Navbar />
-      <div className="HomePageWallpaper" style={homescreenstyle}>
+
+      {/* <div className="HomePageWallpaper" style={homescreenstyle}>
         <img
           src="./Images/wallpaper1.png"
           alt=""
           style={wallpaperstyle}
           cover="true"
         ></img>
-      </div>
+      </div> */}
     </>
   );
 };
