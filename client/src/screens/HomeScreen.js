@@ -15,10 +15,11 @@ const HomeScreen = () => {
     position: "relative",
     left: "0",
     width: "100vw",
-    height: "84vh",
+    height: "84vh", 
   };
   return (
     <>
+    
       <Navbar />
       <div className="HomePageWallpaper" style={homescreenstyle}>
         <div></div>
