@@ -54,36 +54,11 @@ const VerificationScreen = () => {
         >
           List of registered students [ Count : {tabledata.length} ]
         </div>
+        <h3>Pending Approvals : </h3>
         {tabledata.map((student, key) => {
           return (
             <div className="container" key={key}>
-              {student.verified ? (
-                <>
-                  <table
-                    className="table mt-5 "
-                    style={{
-                      width: "75%",
-                      margin: "auto",
-                      background: "#a3ffb4",
-                    }}
-                  >
-                    <tbody>
-                      <tr>
-                        <th>Student's Name </th>
-                        <td>{student.name}</td>
-                        <th>PRN No </th>
-                        <td>{student.prn}</td>
-                      </tr>
-                      <tr>
-                        <th>Voted </th>
-                        <td>{student.voted ? "True" : "False"}</td>
-                        <th>Verified</th>
-                        <td> {student.verified ? "True" : "False"}</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </>
-              ) : (
+              {!student.verified && (
                 <>
                   <table
                     className="table table-striped mt-5 "
@@ -122,6 +97,41 @@ const VerificationScreen = () => {
                             </button>
                           </div>
                         </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </>
+              )}
+            </div>
+          );
+        })}
+
+        <h3 className="mt-4">Approved Students : </h3>
+        {tabledata.map((student, key) => {
+          return (
+            <div className="container" key={key}>
+              {student.verified && (
+                <>
+                  <table
+                    className="table mt-5 "
+                    style={{
+                      width: "75%",
+                      margin: "auto",
+                      background: "#a3ffb4",
+                    }}
+                  >
+                    <tbody>
+                      <tr>
+                        <th>Student's Name </th>
+                        <td>{student.name}</td>
+                        <th>PRN No </th>
+                        <td>{student.prn}</td>
+                      </tr>
+                      <tr>
+                        <th>Voted </th>
+                        <td>{student.voted ? "True" : "False"}</td>
+                        <th>Verified</th>
+                        <td> {student.verified ? "True" : "False"}</td>
                       </tr>
                     </tbody>
                   </table>
