@@ -59,7 +59,7 @@
   "sourceMap": "69:326:0:-;;;229:52;8:9:-1;5:2;;;30:1;27;20:12;5:2;229:52:0;265:10;257:5;;:18;;;;;;;;;;;;;;;;;;69:326;;;;;;",
   "deployedSourceMap": "69:326:0:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;69:326:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;119:36;;;:::i;:::-;;;;;;;;;;;;;;;;;;;94:20;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;287:105;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;287:105:0;;;;;;;;;;;;;;;;;:::i;:::-;;119:36;;;;:::o;94:20::-;;;;;;;;;;;;;:::o;287:105::-;209:5;;;;;;;;;;;195:19;;:10;:19;;;191:26;;;377:9;350:24;:36;;;;191:26;287:105;:::o",
   "source": "// SPDX-License-Identifier: MIT\r\npragma solidity >=0.4.21 <0.7.0;\r\n\r\ncontract Migrations {\r\n  address public owner;\r\n  uint public last_completed_migration;\r\n\r\n  modifier restricted() {\r\n    if (msg.sender == owner) _;\r\n  }\r\n\r\n  constructor() public {\r\n    owner = msg.sender;\r\n  }\r\n\r\n  function setCompleted(uint completed) public restricted {\r\n    last_completed_migration = completed;\r\n  }\r\n}\r\n",
-  "sourcePath": "C:\\Users\\91774\\OneDrive\\Desktop\\Blockchain\\Voting-app-using-Blockchain\\contracts\\Migrations.sol",
+  "sourcePath": "C:\\Users\\91774\\OneDrive\\Desktop\\Voting-app-using-Blockchain\\contracts\\Migrations.sol",
   "ast": {
     "absolutePath": "project:/contracts/Migrations.sol",
     "exportedSymbols": {
@@ -963,8 +963,7 @@
     }
   },
   "schemaVersion": "3.4.6",
-  "updatedAt": "2022-04-22T10:01:57.188Z",
-  "networkType": "ethereum",
+  "updatedAt": "2022-04-26T04:44:46.139Z",
   "devdoc": {
     "methods": {}
   },

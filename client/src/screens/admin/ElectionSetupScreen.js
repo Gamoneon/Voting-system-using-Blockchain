@@ -1,5 +1,6 @@
-import React from "react";
+import React , {useEffect, useState} from "react";
 import ElectionInitializeMsg from "../../components/ElectionInitializeMsg.js";
+import { connectwallet } from "../../webaction/getWeb3";
 
 const ElectionSetupScreen = () => {
   const aboutelectionstyle = {
@@ -8,13 +9,21 @@ const ElectionSetupScreen = () => {
     padding: "3%",
     margin: "2% auto",
   };
-
-  const submitHandler = () => {
+  const [acc ,setAcc] = useState('')
+  const getAccount = async () => {
     // prevent form loading
     console.log("Submit form");
     // disable input and button
     // show values
+    const data = await connectwallet();
+    setAcc(data.acc[0])
+    console.log(data);
   };
+  
+  useEffect(() => {
+    getAccount();
+  });
+
   return (
     <>
       <div className="container">
@@ -22,7 +31,7 @@ const ElectionSetupScreen = () => {
           className="alert alert-success text-center fw-bold mt-3"
           role="alert"
         >
-          Your Account: 0x12345657890asdf
+          Your Account : {acc}
         </div>
 
         <ElectionInitializeMsg />

@@ -1,25 +1,8 @@
-import React , { useState} from "react";
+import React , {useState} from "react";
 import Navbar from "../components/Navbar.js";
-import Web3 from 'web3'
+import { connectwallet } from "../webaction/getWeb3";
 
 const LoginScreen = () => {
- 
-  const [error, setError] = useState('')
-  let web3
-  const connectwallet = async () => {
-    if (typeof window !== "undefined" && typeof window.ethereum !== "undefined") {
-      try {
-        let acc = await window.ethereum.request({ method : "eth_requestAccounts"})
-        console.log(acc)
-        web3 = new Web3(window.ethereum)
-      }catch(err) {
-        setError(err.message)
-      }
-    } else {
-      console.log("Please install MetaMask")
-    }
-  }
-
   const Loginscreenstyle = {
     height: "max-content",
   };
@@ -38,11 +21,17 @@ const LoginScreen = () => {
     margin: "3%",
     borderRadius: "20px",
   };
-  const submitHandler = () => {
+  const [acc ,setAcc] = useState('')
+  const [error, setError] = useState('')
+  const submitHandler = async () => {
     // prevent form loading
     console.log("Submit form");
     // disable input and button
     // show values
+    const data = await connectwallet();
+    setAcc(data.acc)
+    console.log(data.acc);
+    setError(data.error)
   };
   return (
     <>
@@ -55,11 +44,18 @@ const LoginScreen = () => {
           cover="true"
         ></img>
 
-        <form onSubmit={submitHandler}>
+        <form>
           <div className="container text-light" style={aboutloginstyle}>
             <div className="mb-3">
               <center>
                 <h3>Login</h3>
+                {error &&
+                <div
+                  className="alert alert-danger text-center fw-bold mt-3"
+                  role="alert"
+                >
+                 {error} 
+              </div>}
               </center>
             </div>
             <div className="mb-3">
@@ -86,7 +82,7 @@ const LoginScreen = () => {
             </div>
             <div className="mb-3">
               <div className="d-grid gap-2">
-                <button className="btn btn-warning btn-lg mt-4 " onClick={connectwallet} type="submit">
+                <button className="btn btn-warning btn-lg mt-4 " onClick={submitHandler} type="button">
                   Submit
                 </button>
               </div>
