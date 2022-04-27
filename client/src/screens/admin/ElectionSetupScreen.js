@@ -1,6 +1,7 @@
 import React , {useEffect, useState} from "react";
 import ElectionInitializeMsg from "../../components/ElectionInitializeMsg.js";
-import { connectwallet } from "../../webaction/getWeb3";
+import {isAdminAddress, connectwallet } from "../../webaction/getWeb3";
+import Election from "../../contracts/Election.json";
 
 const ElectionSetupScreen = () => {
   const aboutelectionstyle = {
@@ -10,20 +11,20 @@ const ElectionSetupScreen = () => {
     margin: "2% auto",
   };
   const [acc ,setAcc] = useState('')
+  const [isAdmin, setIsAdmin] = useState(false)
+
   const getAccount = async () => {
-    // prevent form loading
-    console.log("Submit form");
-    // disable input and button
-    // show values
     const data = await connectwallet();
     setAcc(data.acc[0])
-    console.log(data);
   };
   
-  useEffect(() => {
+  useEffect( async () => {
     getAccount();
-  });
+    setIsAdmin(await isAdminAddress());
+    console.log("Admin connected: ",isAdmin);  
+  }, [isAdmin]);
 
+  
   return (
     <>
       <div className="container">
@@ -36,7 +37,7 @@ const ElectionSetupScreen = () => {
 
         <ElectionInitializeMsg />
         <h3>About Election</h3>
-        <form onSubmit={submitHandler}>
+        <form onSubmit={getAccount}>
           <div className="container" style={aboutelectionstyle}>
             <div className="mb-3">
               <label htmlFor="electionTitle" className="form-label">
