@@ -52,7 +52,7 @@ const LoginScreen = () => {
                 type="text"
                 className="form-control"
                 id="studentEmail"
-                placeholder="e.g. XYZ@gmail.com"
+                placeholder="e.g. xyz@gmail.com"
                 required
               ></input>
             </div>
