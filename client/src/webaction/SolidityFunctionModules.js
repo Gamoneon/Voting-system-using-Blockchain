@@ -35,6 +35,12 @@ export const getElectionInstance = async () => {
   return ElectionInstance;
 }
 
+//Get current accout
+export const getCurrentAccount = async () => {
+  const data = await connectwallet();
+  return data.acc[0];
+}
+
 export const isAdminAddress = async () => {
 
   const data = await connectwallet()
@@ -51,10 +57,15 @@ export const isAdminAddress = async () => {
 export const startElection = async () => {
   const ElectionInstance = await getElectionInstance()
   let start = await ElectionInstance.methods.getStart().call()
-  console.log("Start is set to: ", start);
+  console.log("Start status before election start: ", start);
   if (await isAdminAddress() && !start) {
-    await ElectionInstance.methods.startElection().call()
-    console.log("Election started");
+    const electionStatus = await ElectionInstance.methods.startElection().send({ from: await getCurrentAccount(), gas: 1000000 });
+    console.log("Election started: ",electionStatus);
+
+    const start = await ElectionInstance.methods.getStart().call()
+    console.log("Election Name:", await ElectionInstance.methods.getElectionName().call());
+    console.log("Start is set to: ", start);
+
     return true;
   }
 

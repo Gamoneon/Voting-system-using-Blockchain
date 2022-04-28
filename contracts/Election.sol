@@ -31,8 +31,12 @@ contract Election {
         return end;
     }
 
-    function startElection() public {
+    
+    function startElection() public returns (bool){
         start = true;
         end = false;
+        return start;
     }
+
+    
 }

@@ -1,6 +1,6 @@
 import React , {useState} from "react";
 import Navbar from "../components/Navbar.js";
-import { connectwallet } from "../webaction/getWeb3";
+import { connectwallet } from "../webaction/SolidityFunctionModules";
 
 const LoginScreen = () => {
   const Loginscreenstyle = {
@@ -24,10 +24,6 @@ const LoginScreen = () => {
   const [acc ,setAcc] = useState('')
   const [error, setError] = useState('')
   const submitHandler = async () => {
-    // prevent form loading
-    console.log("Submit form");
-    // disable input and button
-    // show values
     const data = await connectwallet();
     setAcc(data.acc)
     console.log(data.acc);
