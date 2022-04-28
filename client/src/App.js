@@ -14,7 +14,6 @@ import VerificationScreen from "./screens/admin/VerificationScreen.js";
 import VotingScreen from "./screens/VotingScreen.js";
 import ResultScreen from "./screens/ResultScreen.js";
 import Footer from "./components/Footer.js";
-
 import "./App.css";
 
 const App = () => {

@@ -1,12 +1,14 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Logo from "./Logo.js";
 
 const NavbarVertical = () => {
+  const navigate = useNavigate();
+
   const navbarStyle = {
     position: "fixed",
     left: "0",
-    display: "block",
     display: "flex",
     height: "100vh",
     width: "15vw",
@@ -14,6 +16,12 @@ const NavbarVertical = () => {
 
   const userDetailStyle = {
     color: "white",
+  };
+
+  const logoutHandler = () => {
+    if (window.confirm("Are you sure want to logout ?")) {
+      navigate("/");
+    }
   };
 
   return (
@@ -62,9 +70,13 @@ const NavbarVertical = () => {
           <Link to="/result" className="list-group-item list-group-item-action">
             <i className="fa-solid fa-square-poll-vertical"></i> Result
           </Link>
-          <Link to="/" className="list-group-item list-group-item-action">
+          <div
+            onClick={logoutHandler}
+            className="list-group-item list-group-item-action"
+            style={{ cursor: "pointer" }}
+          >
             <i className="fa-solid fa-right-from-bracket"></i> Logout
-          </Link>
+          </div>
         </div>
       </div>
     </>
