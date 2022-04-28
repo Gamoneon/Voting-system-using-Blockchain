@@ -124,7 +124,11 @@ const LoginScreen = () => {
                   />
                   METAMASK
                 </button>
-                <button className="btn btn-warning btn-lg mt-4" type="submit">
+                <button
+                  className="btn btn-warning btn-lg mt-4"
+                  type="submit"
+                  disabled={!isAccountConnected}
+                >
                   Login
                 </button>
               </div>
