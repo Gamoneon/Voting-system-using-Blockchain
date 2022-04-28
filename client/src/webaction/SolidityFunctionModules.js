@@ -8,7 +8,6 @@ export const connectwallet = async () => {
     try {
       acc = await window.ethereum.request({ method: "eth_requestAccounts" })
       web3 = new Web3(window.ethereum)
-      //console.log("Connected Add: ", web3.eth.getAccounts());
       return { acc, web3, error }
     } catch (err) {
       error = err.message
@@ -43,11 +42,11 @@ export const getCurrentAccount = async () => {
 
 export const isAdminAddress = async () => {
 
-  const data = await connectwallet()
-  let acc = data.acc
+  let acc = await getCurrentAccount();
 
   const ElectionInstance = await getElectionInstance()
   const admin = await ElectionInstance.methods.getAdmin().call();
+
   if (admin.toString().toLowerCase() === acc.toString().toLowerCase())
     return true;
   else
@@ -60,7 +59,7 @@ export const startElection = async () => {
   console.log("Start status before election start: ", start);
   if (await isAdminAddress() && !start) {
     const electionStatus = await ElectionInstance.methods.startElection().send({ from: await getCurrentAccount(), gas: 1000000 });
-    console.log("Election started: ",electionStatus);
+    console.log("Election started: ", electionStatus);
 
     const start = await ElectionInstance.methods.getStart().call()
     console.log("Election Name:", await ElectionInstance.methods.getElectionName().call());
@@ -73,5 +72,32 @@ export const startElection = async () => {
     console.log("Election start - failed!");
     return false;
   }
+
+}
+
+//Add login details
+export const addLoginDetails = async (username, email, password) => {
+
+  const acc = await getCurrentAccount();
+  const ElectionInstance = await getElectionInstance()
+  if(await ElectionInstance.methods.isVoterExists(acc).call())
+  {
+    const addNewLogin = await ElectionInstance.methods.addVoterDetails(username, email, password).send({ from: acc, gas: 1000000 });
+    return true;
+  }
+    return false;
+}
+
+//Verify login details
+export const verifyLoginDetails = async (email, password) => {
+
+  const acc = await getCurrentAccount();
+  const ElectionInstance = await getElectionInstance()
+
+  const loginData = await ElectionInstance.methods.getLoginDetails(acc).call()
+  if (loginData[0] === email && loginData[1] === password && acc.toString().toLowerCase() === loginData[2].toString().toLowerCase())
+    return true;
+  else
+    return false;
 
 }

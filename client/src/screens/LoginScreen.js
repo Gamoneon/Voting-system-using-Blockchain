@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar.js";
-import { connectwallet } from "../webaction/SolidityFunctionModules";
+import { verifyLoginDetails, connectwallet } from "../webaction/SolidityFunctionModules";
+import { useNavigate } from "react-router-dom";
+
 
 const LoginScreen = () => {
   //------------------------------ Style CSS -----------------------------------------//
@@ -37,15 +39,37 @@ const LoginScreen = () => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isAccountConnected, setIsAccountConnected] = useState(true);
+  const [isAccountConnected, setIsAccountConnected] = useState(false);
+  const [errorLogin, setErrorLogin] = useState(null);
+  const [currentAcc, setCurrentAcc] = useState("")
+  const [errorConnectWallet, setErrorConnectWallet] = useState(null)
+
+
+  const navigate = useNavigate();
+
 
   //------------------------------ Functions -----------------------------------------//
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
-    console.log("Submit form");
-    // match inputs credentials
-    // Navigate to dashboard
+    // Verify login details
+    let result = await verifyLoginDetails(email, password);
+    if (result)
+      navigate("/dashboard")
+    else
+      setErrorLogin("Wrong credentails!")
+    // navigate to login
   };
+
+  const onWalletConnection = async () => {
+    let data = await connectwallet();
+    if (data.error) {
+      setErrorConnectWallet(data.error);
+    }
+    else {
+      setCurrentAcc(data.acc[0])
+      setIsAccountConnected(true)
+    }
+  }
 
   //------------------------------ Render Content -----------------------------------------//
   return (
@@ -56,6 +80,13 @@ const LoginScreen = () => {
           <div className="container text-light" style={loginformstyle}>
             <div className="text-center">
               <h3>Login</h3>
+              {errorConnectWallet && <div className="alert alert-danger text-center fw-bold mt-3" role="alert">
+                {errorConnectWallet}
+              </div>
+              }
+              {errorLogin && <div className="alert alert-danger text-center fw-bold mt-3" role="alert">
+                {errorLogin}
+              </div>}
             </div>
             <div>
               <p>
@@ -110,11 +141,11 @@ const LoginScreen = () => {
                   )}
                 </label>
                 <button
-                  className={`btn ${
-                    isAccountConnected ? "btn-success" : "btn-danger"
-                  }  btn-lg fw-bold`}
+                  className={`btn ${isAccountConnected ? "btn-success" : "btn-danger"
+                    }  btn-lg fw-bold`}
                   type="button"
                   id="metamaskbtn"
+                  onClick={onWalletConnection}
                   style={metmamaskBtnStyle}
                 >
                   <img

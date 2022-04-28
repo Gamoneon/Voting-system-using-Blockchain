@@ -1,6 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar.js";
+import { addLoginDetails, isAdminAddress, connectwallet } from "../webaction/SolidityFunctionModules.js";
+import { useNavigate } from "react-router-dom";
+
+
 
 const RegisterScreen = () => {
   //------------------------------ Style CSS -----------------------------------------//
@@ -35,15 +39,49 @@ const RegisterScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isAccountConnected, setIsAccountConnected] = useState(false);
+  const [currentAcc, setCurrentAcc] = useState("")
+  const [isAdmin, setIsAdmin] = useState(false)
+  const [errorConnectWallet, setErrorConnectWallet] = useState(null)
+  const [errorRegister, setErrorRegister] = useState(null)
+
+  const navigate = useNavigate();
+
 
   //------------------------------ Functions -----------------------------------------//
-  const submitHandler = (e) => {
+
+  const submitHandler = async (e) => {
     e.preventDefault();
-    console.log("Submit form");
     // check if user already exists
     // if not then add to list
+    let result = await addLoginDetails(username, email, password);
+    if (result)
+      navigate("/login")
+    else
+      setErrorRegister("Voter address already exists!")
     // navigate to login
   };
+
+  const onWalletConnection = async () => {
+    let data = await connectwallet();
+    if (data.error) {
+      setErrorConnectWallet(data.error);
+    }
+    else {
+      setCurrentAcc(data.acc[0])
+      setIsAccountConnected(true)
+      //console.log("Current Account is: ", currentAcc);
+
+      // const adminConnected = await isAdminAddress();
+      // setIsAdmin(adminConnected);
+      //console.log("Is admin connected: ", isAdmin);
+    }
+  }
+
+
+  useEffect(() => {
+
+
+  }, [currentAcc])
 
   //------------------------------ Render Content -----------------------------------------//
   return (
@@ -54,6 +92,13 @@ const RegisterScreen = () => {
           <div className="container text-light" style={registerformstyle}>
             <div className="text-center">
               <h3>Register</h3>
+              {errorConnectWallet && <div className="alert alert-danger text-center fw-bold mt-3" role="alert">
+                {errorConnectWallet}
+              </div>
+              }
+              {errorRegister && <div className="alert alert-danger text-center fw-bold mt-3" role="alert">
+                {errorRegister}
+              </div>}
             </div>
             <div>
               <p>
@@ -122,11 +167,11 @@ const RegisterScreen = () => {
                   )}
                 </label>
                 <button
-                  className={`btn ${
-                    isAccountConnected ? "btn-success" : "btn-danger"
-                  }  btn-lg fw-bold`}
+                  className={`btn ${isAccountConnected ? "btn-success" : "btn-danger"
+                    }  btn-lg fw-bold`}
                   type="button"
                   id="metamaskbtn"
+                  onClick={onWalletConnection}
                   style={metmamaskBtnStyle}
                 >
                   <img
