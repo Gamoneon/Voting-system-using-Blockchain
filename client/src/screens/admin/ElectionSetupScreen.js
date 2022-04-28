@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import ElectionInitializeMsg from "../../components/ElectionInitializeMsg.js";
+import YourAccount from "../../components/YourAccount.js";
 
 const ElectionSetupScreen = () => {
+  //------------------------------ style CSS -----------------------------------------//
   const aboutelectionstyle = {
     width: "60%",
     background: "#FFF8DC",
@@ -9,6 +11,11 @@ const ElectionSetupScreen = () => {
     margin: "2% auto",
   };
 
+  //------------------------------ useState Hooks -----------------------------------------//
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [account, setAccount] = useState(null);
+
+  //------------------------------ Functions -----------------------------------------//
   const submitHandler = () => {
     // prevent form loading
     console.log("Submit form");
@@ -18,14 +25,8 @@ const ElectionSetupScreen = () => {
   return (
     <>
       <div className="container">
-        <div
-          className="alert alert-success text-center fw-bold mt-3"
-          role="alert"
-        >
-          Your Account: 0x12345657890asdf
-        </div>
-
-        <ElectionInitializeMsg />
+        <YourAccount account={account} />
+        <ElectionInitializeMsg isAdmin={isAdmin} />
         <h3>About Election</h3>
         <form onSubmit={submitHandler}>
           <div className="container" style={aboutelectionstyle}>

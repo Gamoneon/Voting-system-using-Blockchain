@@ -1,7 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import ElectionInitializeMsg from "../components/ElectionInitializeMsg.js";
+import YourAccount from "../components/YourAccount.js";
 
 const VotingScreen = () => {
+  //------------------------------ useState Hooks -----------------------------------------//
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [account, setAccount] = useState(null);
   const candidates = [
     {
       no: 1,
@@ -17,9 +21,11 @@ const VotingScreen = () => {
     },
   ];
 
+  //------------------------------ Render Content -----------------------------------------//
   return (
     <>
-      <ElectionInitializeMsg />
+      <YourAccount account={account} />
+      <ElectionInitializeMsg isAdmin={isAdmin} />
       <div
         className="alert alert-success text-center fw-bold mt-2"
         role="alert"

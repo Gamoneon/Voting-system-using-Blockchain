@@ -1,7 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./css/VerificationScreen.css";
+import ElectionInitializeMsg from "../../components/ElectionInitializeMsg.js";
 
 const VerificationScreen = () => {
+  //------------------------------ useState Hooks -----------------------------------------//
+
+  const [isAdmin, setIsAdmin] = useState(false);
   const tabledata = [
     {
       name: "Sahil Kavitake",
@@ -37,6 +41,7 @@ const VerificationScreen = () => {
     },
   ];
 
+  //------------------------------ Functions -----------------------------------------//
   const onApproveClick = (key) => {
     console.log(key);
     tabledata[key].verified = true;
@@ -45,15 +50,18 @@ const VerificationScreen = () => {
     // reload page using useeffect
   };
 
+  //------------------------------ Render Content -----------------------------------------//
   return (
     <>
+      <ElectionInitializeMsg isAdmin={isAdmin} />
       <div className="container">
         <div
           className="alert alert-primary text-center fw-bold mt-3"
           role="alert"
         >
-          List of registered students [ Count : {tabledata.length} ]
+          List of registered students
         </div>
+        <h4>Total Candidates : {tabledata.length}</h4>
         <h3>Pending Approvals : </h3>
         {tabledata.map((student, key) => {
           return (

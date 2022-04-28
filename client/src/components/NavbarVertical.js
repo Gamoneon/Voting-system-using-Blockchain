@@ -9,7 +9,6 @@ const NavbarVertical = () => {
   const navbarStyle = {
     position: "fixed",
     left: "0",
-    display: "block",
     display: "flex",
     height: "100vh",
     width: "15vw",
