@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar.js";
+import AlertMessage from "../components/AlertMessage.js";
 import {
   sol_verifyLoginDetails,
   sol_connectwallet,
@@ -68,6 +69,8 @@ const LoginScreen = () => {
     }
   };
 
+  useEffect(() => {}, [errorConnectWallet, errorLogin]);
+
   //------------------------------ Render Content -----------------------------------------//
   return (
     <>
@@ -77,21 +80,12 @@ const LoginScreen = () => {
           <div className="container text-light" style={loginformstyle}>
             <div className="text-center">
               <h3>Login</h3>
+
               {errorConnectWallet && (
-                <div
-                  className="alert alert-danger text-center fw-bold mt-3"
-                  role="alert"
-                >
-                  {errorConnectWallet}
-                </div>
+                <AlertMessage type="danger" message={errorConnectWallet} />
               )}
               {errorLogin && (
-                <div
-                  className="alert alert-danger text-center fw-bold mt-3"
-                  role="alert"
-                >
-                  {errorLogin}
-                </div>
+                <AlertMessage type="danger" message={errorLogin} />
               )}
             </div>
             <div>

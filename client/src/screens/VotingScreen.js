@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import ElectionInitializeMsg from "../components/ElectionInitializeMsg.js";
 import YourAccount from "../components/YourAccount.js";
+import { sol_isAdminAddress } from "../webaction/SolidityFunctionModules.js";
 
 const VotingScreen = () => {
   //------------------------------ useState Hooks -----------------------------------------//
-  const [isAdmin, setIsAdmin] = useState(false);
+  const navigate = useNavigate();
+  const [isAdminConnected, setIsAdminConnected] = useState(false);
   const [account, setAccount] = useState(null);
   const candidates = [
     {
@@ -21,11 +24,24 @@ const VotingScreen = () => {
     },
   ];
 
+  //------------------------------ Functions -----------------------------------------//
+  const routeValidation = async () => {
+    const data = await sol_isAdminAddress();
+    if (data) {
+      navigate("/dashboard");
+    }
+    setIsAdminConnected(data);
+  };
+
+  useEffect(() => {
+    routeValidation();
+  });
+
   //------------------------------ Render Content -----------------------------------------//
   return (
     <>
       <YourAccount account={account} />
-      <ElectionInitializeMsg isAdmin={isAdmin} />
+      <ElectionInitializeMsg isAdmin={isAdminConnected} />
       <div
         className="alert alert-success text-center fw-bold mt-2"
         role="alert"

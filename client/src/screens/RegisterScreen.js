@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar.js";
+import AlertMessage from "../components/AlertMessage.js";
 import {
   sol_addLoginDetails,
   sol_isAdminAddress,
@@ -42,7 +43,6 @@ const RegisterScreen = () => {
   const [password, setPassword] = useState("");
   const [isAccountConnected, setIsAccountConnected] = useState(false);
   const [currentAcc, setCurrentAcc] = useState("");
-  const [isAdmin, setIsAdmin] = useState(false);
   const [errorConnectWallet, setErrorConnectWallet] = useState(null);
   const [errorRegister, setErrorRegister] = useState(null);
 
@@ -86,21 +86,12 @@ const RegisterScreen = () => {
           <div className="container text-light" style={registerformstyle}>
             <div className="text-center">
               <h3>Register</h3>
+
               {errorConnectWallet && (
-                <div
-                  className="alert alert-danger text-center fw-bold mt-3"
-                  role="alert"
-                >
-                  {errorConnectWallet}
-                </div>
+                <AlertMessage type="danger" message={errorConnectWallet} />
               )}
               {errorRegister && (
-                <div
-                  className="alert alert-danger text-center fw-bold mt-3"
-                  role="alert"
-                >
-                  {errorRegister}
-                </div>
+                <AlertMessage type="danger" message={errorRegister} />
               )}
             </div>
             <div>

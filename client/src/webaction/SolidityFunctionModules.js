@@ -38,20 +38,24 @@ export const sol_getElectionInstance = async () => {
 //Get current accout
 export const sol_getCurrentAccount = async () => {
   const data = await sol_connectwallet();
-  return data.acc[0];
+  if (data.error) {
+    return false;
+  } else {
+    return data.acc[0];
+  }
 };
 
 export const sol_isAdminAddress = async () => {
   let acc = await sol_getCurrentAccount();
+  if (acc) {
+    const ElectionInstance = await sol_getElectionInstance();
+    const admin = await ElectionInstance.methods.getAdmin().call();
 
-  const ElectionInstance = await sol_getElectionInstance();
-  const admin = await ElectionInstance.methods.getAdmin().call();
-
-  if (admin.toString().toLowerCase() === acc.toString().toLowerCase()) {
-    return true;
-  } else {
-    return false;
+    if (admin.toString().toLowerCase() === acc.toString().toLowerCase()) {
+      return true;
+    }
   }
+  return false;
 };
 
 export const sol_startElection = async () => {
@@ -81,12 +85,14 @@ export const sol_startElection = async () => {
 //Add login details
 export const sol_addLoginDetails = async (username, email, password) => {
   const acc = await sol_getCurrentAccount();
-  const ElectionInstance = await sol_getElectionInstance();
-  if (await ElectionInstance.methods.isVoterExists(acc).call()) {
-    await ElectionInstance.methods
-      .addVoterDetails(username, email, password)
-      .send({ from: acc, gas: 1000000 });
-    return true;
+  if (acc) {
+    const ElectionInstance = await sol_getElectionInstance();
+    if (await ElectionInstance.methods.isVoterExists(acc).call()) {
+      await ElectionInstance.methods
+        .addVoterDetails(username, email, password)
+        .send({ from: acc, gas: 1000000 });
+      return true;
+    }
   }
   return false;
 };
@@ -94,23 +100,32 @@ export const sol_addLoginDetails = async (username, email, password) => {
 //Verify login details
 export const sol_verifyLoginDetails = async (email, password) => {
   const acc = await sol_getCurrentAccount();
-  const ElectionInstance = await sol_getElectionInstance();
+  if (acc) {
+    const ElectionInstance = await sol_getElectionInstance();
 
-  const loginData = await ElectionInstance.methods.getLoginDetails(acc).call();
-  if (
-    loginData[0] === email &&
-    loginData[1] === password &&
-    acc.toString().toLowerCase() === loginData[2].toString().toLowerCase()
-  )
-    return true;
-  else return false;
+    const loginData = await ElectionInstance.methods
+      .getLoginDetails(acc)
+      .call();
+    if (
+      loginData[0] === email &&
+      loginData[1] === password &&
+      acc.toString().toLowerCase() === loginData[2].toString().toLowerCase()
+    )
+      return true;
+  }
+  return false;
 };
 
 // Get account details by address
 export const sol_getUserDetails = async () => {
   const acc = await sol_getCurrentAccount();
-  const ElectionInstance = await sol_getElectionInstance();
+  if (acc) {
+    const ElectionInstance = await sol_getElectionInstance();
 
-  const loginData = await ElectionInstance.methods.getLoginDetails(acc).call();
-  return loginData;
+    const loginData = await ElectionInstance.methods
+      .getLoginDetails(acc)
+      .call();
+    return loginData;
+  }
+  return false;
 };

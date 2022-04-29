@@ -15,6 +15,7 @@ const NavbarVertical = (props) => {
 
   const userDetailStyle = {
     color: "white",
+    background: "#696969", // by soumya singh
   };
 
   //------------------------------ useState Hooks -----------------------------------------//
@@ -42,7 +43,7 @@ const NavbarVertical = (props) => {
             <Logo />
           </div>
           <div
-            className="list-group-item list-group-item-action disabled bg-primary"
+            className="list-group-item list-group-item-action disabled "
             style={userDetailStyle}
           >
             {username} <br />
@@ -91,7 +92,7 @@ const NavbarVertical = (props) => {
           </Link>
           <div
             onClick={logoutHandler}
-            className="list-group-item list-group-item-action"
+            className="list-group-item list-group-item-action bg-danger"
             style={{ cursor: "pointer" }}
           >
             <i className="fa-solid fa-right-from-bracket"></i> Logout

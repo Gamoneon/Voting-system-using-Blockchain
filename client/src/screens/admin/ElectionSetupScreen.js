@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import ElectionInitializeMsg from "../../components/ElectionInitializeMsg.js";
 import YourAccount from "../../components/YourAccount.js";
+import { sol_isAdminAddress } from "../../webaction/SolidityFunctionModules.js";
 
 const ElectionSetupScreen = () => {
   //------------------------------ style CSS -----------------------------------------//
@@ -12,21 +14,35 @@ const ElectionSetupScreen = () => {
   };
 
   //------------------------------ useState Hooks -----------------------------------------//
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [isAdminConnected, setIsAdminConnected] = useState(false);
   const [account, setAccount] = useState(null);
-
+  const navigate = useNavigate();
   //------------------------------ Functions -----------------------------------------//
+
+  const routeValidation = async () => {
+    const data = await sol_isAdminAddress();
+    if (!data) {
+      navigate("/dashboard");
+    }
+    setIsAdminConnected(data);
+  };
+
   const submitHandler = () => {
     // prevent form loading
     console.log("Submit form");
     // disable input and button
     // show values
   };
+
+  useEffect(() => {
+    routeValidation();
+  });
+
   return (
     <>
       <div className="container">
         <YourAccount account={account} />
-        <ElectionInitializeMsg isAdmin={isAdmin} />
+        <ElectionInitializeMsg isAdmin={isAdminConnected} />
         <h3>About Election</h3>
         <form onSubmit={submitHandler}>
           <div className="container" style={aboutelectionstyle}>

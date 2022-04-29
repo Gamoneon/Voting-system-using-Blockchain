@@ -25,7 +25,8 @@ const HomeScreen = () => {
   const buttonstyle = {
     fontFamily: "Monserrat , sansserif",
     border: "none",
-    borderRadius: "20px",
+    fontSize: "1.5rem",
+    borderRadius: "10px",
     opacity: "0.",
   };
 
@@ -37,7 +38,7 @@ const HomeScreen = () => {
         <div className="content" style={headerstyle}>
           <h1>BLOCKCHAIN IN VOTING</h1>
           <h3>THE DIGITAL VOTING SYSTEM</h3>
-          <Link className="nav-link" to="/register">
+          <Link to="/register">
             <button className="btn btn-light btn-lg" style={buttonstyle}>
               Register Now
             </button>

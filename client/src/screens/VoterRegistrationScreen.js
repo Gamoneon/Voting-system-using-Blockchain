@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import RequiredFieldStar from "../components/RequiredFieldStar.js";
 import ElectionInitializeMsg from "../components/ElectionInitializeMsg.js";
 import YourAccount from "../components/YourAccount.js";
 import "./admin/css/VerificationScreen.css";
+import { sol_isAdminAddress } from "../webaction/SolidityFunctionModules.js";
 
 const VoterRegistrationScreen = () => {
   //------------------------------ style CSS -----------------------------------------//
@@ -28,7 +30,8 @@ const VoterRegistrationScreen = () => {
     display: "block",
   };
   //------------------------------ userState Hooks  -----------------------------------------//
-  const [isAdmin, setIsAdmin] = useState(false);
+  const navigate = useNavigate();
+  const [isAdminConnected, setIsAdminConnected] = useState(false);
   const [account, setAccount] = useState(null);
 
   //------------------------------ Functions  -----------------------------------------//
@@ -39,11 +42,23 @@ const VoterRegistrationScreen = () => {
     // show values
   };
 
+  const routeValidation = async () => {
+    const data = await sol_isAdminAddress();
+    if (data) {
+      navigate("/dashboard");
+    }
+    setIsAdminConnected(data);
+  };
+
+  useEffect(() => {
+    routeValidation();
+  });
+
   //------------------------------ Render Content -----------------------------------------//
   return (
     <>
       <YourAccount account={account} />
-      <ElectionInitializeMsg isAdmin={isAdmin} />
+      <ElectionInitializeMsg isAdmin={isAdminConnected} />
       <div className="container-main">
         <h2>Registration</h2>
         <div className="container-item">

@@ -12,6 +12,10 @@ const AlertMessage = (props) => {
         class="btn-close"
         data-bs-dismiss="alert"
         aria-label="Close"
+        style={{ display: "hidden" }}
+        onClick={setTimeout(function () {
+          window.location.reload(false);
+        }, 3000)}
       ></button>
     </div>
   );

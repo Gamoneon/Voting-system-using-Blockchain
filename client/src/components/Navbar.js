@@ -1,10 +1,8 @@
-import React  from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import Logo from "./Logo.js";
 
-
 const Navbar = () => {
-
   return (
     <div>
       <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
@@ -44,17 +42,11 @@ const Navbar = () => {
                     Login
                   </Link>
                 </li>
-                <li className="nav-item">
-                  <Link className="nav-link" to="/dashboard">
-                    Dashboard
-                  </Link>
-                </li>
               </ul>
             </div>
           </div>
         </div>
       </nav>
-      
     </div>
   );
 };

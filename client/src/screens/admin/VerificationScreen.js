@@ -1,10 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "./css/VerificationScreen.css";
 import ElectionInitializeMsg from "../../components/ElectionInitializeMsg.js";
+import { sol_isAdminAddress } from "../../webaction/SolidityFunctionModules.js";
 
 const VerificationScreen = () => {
   //------------------------------ useState Hooks -----------------------------------------//
 
+  const navigate = useNavigate();
+  const [isAdminConnected, setIsAdminConnected] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const tabledata = [
     {
@@ -49,6 +53,18 @@ const VerificationScreen = () => {
     // update verfied = true
     // reload page using useeffect
   };
+
+  const routeValidation = async () => {
+    const data = await sol_isAdminAddress();
+    if (!data) {
+      navigate("/dashboard");
+    }
+    setIsAdminConnected(data);
+  };
+
+  useEffect(() => {
+    routeValidation();
+  });
 
   //------------------------------ Render Content -----------------------------------------//
   return (

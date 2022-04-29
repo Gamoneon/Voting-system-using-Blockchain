@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import NavbarVertical from "../components/NavbarVertical.js";
 import {
   sol_getUserDetails,
@@ -22,7 +23,7 @@ const DashboardScreen = (props) => {
   };
 
   //------------------------------ useState Hooks -----------------------------------------//
-
+  const navigate = useNavigate();
   const [isAdminConnected, setIsAdminConnected] = useState(false);
   const [username, setUsername] = useState("");
 
@@ -35,6 +36,9 @@ const DashboardScreen = (props) => {
 
   const getUserDetails = async () => {
     const data = await sol_getUserDetails();
+    if (!data) {
+      navigate("/login");
+    }
     setUsername(data[3]);
   };
 
@@ -42,7 +46,7 @@ const DashboardScreen = (props) => {
     isAdmin();
     getUserDetails();
     // console.log(isAdminConnected);
-  }, []);
+  });
 
   return (
     <>
