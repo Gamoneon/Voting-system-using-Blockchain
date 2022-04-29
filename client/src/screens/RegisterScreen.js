@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar.js";
+import AlertMessage from "../components/AlertMessage.js";
 
 const RegisterScreen = () => {
   //------------------------------ Style CSS -----------------------------------------//
@@ -35,6 +36,7 @@ const RegisterScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isAccountConnected, setIsAccountConnected] = useState(false);
+  const [error, setError] = useState(null);
 
   //------------------------------ Functions -----------------------------------------//
   const submitHandler = (e) => {
@@ -45,6 +47,12 @@ const RegisterScreen = () => {
     // navigate to login
   };
 
+  const showerror = () => {
+    setError("user not found");
+  };
+
+  useEffect(() => {}, [error]);
+
   //------------------------------ Render Content -----------------------------------------//
   return (
     <>
@@ -54,6 +62,7 @@ const RegisterScreen = () => {
           <div className="container text-light" style={registerformstyle}>
             <div className="text-center">
               <h3>Register</h3>
+              {error && <AlertMessage type="danger" message={error} />}
             </div>
             <div>
               <p>
@@ -128,6 +137,7 @@ const RegisterScreen = () => {
                   type="button"
                   id="metamaskbtn"
                   style={metmamaskBtnStyle}
+                  onClick={showerror}
                 >
                   <img
                     src="./Images/metamask.png"
