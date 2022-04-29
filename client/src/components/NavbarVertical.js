@@ -1,11 +1,10 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import Logo from "./Logo.js";
 
-const NavbarVertical = () => {
-  const navigate = useNavigate();
-
+const NavbarVertical = (props) => {
+  //------------------------------ Style CSS -----------------------------------------//
   const navbarStyle = {
     position: "fixed",
     left: "0",
@@ -18,11 +17,22 @@ const NavbarVertical = () => {
     color: "white",
   };
 
+  //------------------------------ useState Hooks -----------------------------------------//
+  const navigate = useNavigate();
+  const [isAdminConnected, setIsAdminConnected] = useState(false);
+  const [username, setUsername] = useState("");
+
+  //------------------------------ Functions -----------------------------------------//
   const logoutHandler = () => {
     if (window.confirm("Are you sure want to logout ?")) {
       navigate("/");
     }
   };
+
+  useEffect(() => {
+    setIsAdminConnected(props.isAdmin);
+    setUsername(props.username);
+  }, [props.isAdmin, props.username]);
 
   return (
     <>
@@ -35,8 +45,8 @@ const NavbarVertical = () => {
             className="list-group-item list-group-item-action disabled bg-primary"
             style={userDetailStyle}
           >
-            Sahil Kavitake <br />
-            Role : Student
+            {username} <br />
+            Role : {isAdminConnected ? "Admin" : "Student"}
           </div>
 
           <Link
@@ -45,28 +55,37 @@ const NavbarVertical = () => {
           >
             <i className="fa-solid fa-circle-info"></i> Information
           </Link>
-          <Link
-            to="/voterregistration"
-            className="list-group-item list-group-item-action"
-          >
-            <i className="fa-regular fa-id-card"></i> Voter Registration
-          </Link>
-          <Link to="/voting" className="list-group-item list-group-item-action">
-            <i className="fa-solid fa-box-archive"></i> Voting
-          </Link>
-          <Link
-            to="/electionsetup"
-            className="list-group-item list-group-item-action"
-          >
-            <i className="fa-solid fa-gears"></i> Election Setup
-          </Link>
-          <Link
-            to="/verification"
-            className="list-group-item list-group-item-action"
-          >
-            <i className="fa-solid fa-user-check"></i> Verification
-          </Link>
-
+          {isAdminConnected ? (
+            <>
+              <Link
+                to="/electionsetup"
+                className="list-group-item list-group-item-action"
+              >
+                <i className="fa-solid fa-gears"></i> Election Setup
+              </Link>
+              <Link
+                to="/verification"
+                className="list-group-item list-group-item-action"
+              >
+                <i className="fa-solid fa-user-check"></i> Verification
+              </Link>
+            </>
+          ) : (
+            <>
+              <Link
+                to="/voterregistration"
+                className="list-group-item list-group-item-action"
+              >
+                <i className="fa-regular fa-id-card"></i> Voter Registration
+              </Link>
+              <Link
+                to="/voting"
+                className="list-group-item list-group-item-action"
+              >
+                <i className="fa-solid fa-box-archive"></i> Voting
+              </Link>
+            </>
+          )}
           <Link to="/result" className="list-group-item list-group-item-action">
             <i className="fa-solid fa-square-poll-vertical"></i> Result
           </Link>
