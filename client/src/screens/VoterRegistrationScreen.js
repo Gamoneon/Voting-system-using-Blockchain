@@ -60,7 +60,7 @@ const VoterRegistrationScreen = () => {
       <YourAccount account={account} />
       <ElectionInitializeMsg isAdmin={isAdminConnected} />
       <div className="container-main">
-        <h2>Registration</h2>
+        <h2>Voter Verification</h2>
         <div className="container-item">
           <form onSubmit={submitHandler}>
             <div className="container" style={divisionstyle}>
@@ -136,7 +136,7 @@ const VoterRegistrationScreen = () => {
               </p>
               <div className="d-grid gap-2 mt-3">
                 <button className="btn btn-primary btn-lg" type="button">
-                  Submit
+                  Apply
                 </button>
               </div>
             </div>

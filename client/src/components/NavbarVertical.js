@@ -77,7 +77,7 @@ const NavbarVertical = (props) => {
                 to="/voterregistration"
                 className="list-group-item list-group-item-action"
               >
-                <i className="fa-regular fa-id-card"></i> Voter Registration
+                <i className="fa-regular fa-id-card"></i> Voter Verification
               </Link>
               <Link
                 to="/voting"

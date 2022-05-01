@@ -10,6 +10,7 @@ contract Election {
     string electionTitle;
     string electionOrganization;
     string currentElectionPhase;
+    string nextElectionPhase;
     uint256 electionPhaseIndex;
     string[] public electionPhases;
 
@@ -99,16 +100,13 @@ contract Election {
         return isElectionEnded;
     }
 
-    function getElectionPhasesCount() public view returns (uint256 count) {
-        return electionPhases.length;
-    }
-
     function changeElectionPhase() public {
-        electionPhaseIndex =
-            (electionPhaseIndex + 1) %
-            getElectionPhasesCount();
+        electionPhaseIndex = (electionPhaseIndex + 1) % electionPhases.length;
         currentElectionPhase = electionPhases[electionPhaseIndex];
-        if (electionPhaseIndex == getElectionPhasesCount() - 1) {
+        nextElectionPhase = electionPhases[
+            (electionPhaseIndex + 1) % electionPhases.length
+        ];
+        if (electionPhaseIndex == electionPhases.length - 1) {
             isElectionEnded = true;
         }
     }
@@ -121,6 +119,7 @@ contract Election {
             bool,
             string memory,
             string memory,
+            string memory,
             string memory
         )
     {
@@ -129,7 +128,8 @@ contract Election {
             isElectionEnded,
             electionTitle,
             electionOrganization,
-            currentElectionPhase
+            currentElectionPhase,
+            nextElectionPhase
         );
     }
 

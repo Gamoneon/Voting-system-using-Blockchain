@@ -5,6 +5,8 @@ import YourAccount from "../../components/YourAccount.js";
 import {
   sol_isAdminAddress,
   sol_startElection,
+  sol_getElectionDetails,
+  sol_changeElectionPhase,
 } from "../../webaction/SolidityFunctionModules.js";
 
 const ElectionSetupScreen = () => {
@@ -21,6 +23,12 @@ const ElectionSetupScreen = () => {
   const [account, setAccount] = useState(null);
   const [electionTitle, setElectionTitle] = useState("");
   const [organizationName, setOrganizationName] = useState("");
+  const [storedElectionTitle, setStoredElectionTitle] = useState("");
+  const [storedOrganizationName, setStoredOrganizationName] = useState("");
+  const [isElectionStarted, setIsElectionStarted] = useState(false);
+  const [isElectionEnded, setIsElectionEnded] = useState(false);
+  const [currentElectionPhase, setCurrentElectionPhase] = useState("");
+  const [nextElectionPhase, setNextElectionPhase] = useState("");
   const navigate = useNavigate();
   //------------------------------ Functions -----------------------------------------//
 
@@ -32,27 +40,43 @@ const ElectionSetupScreen = () => {
     setIsAdminConnected(data);
   };
 
-  const startElection = async () => {
-    const data = await sol_startElection();
-    console.log("Election details on screen :", data);
+  const getElectionDetails = async () => {
+    const data = await sol_getElectionDetails();
+    setIsElectionStarted(data[0]);
+    setIsElectionEnded(data[1]);
+    setStoredElectionTitle(data[2]);
+    setStoredOrganizationName(data[3]);
+    setCurrentElectionPhase(data[4]);
+    setNextElectionPhase(data[5]);
+  };
+
+  const changeElectionPhase = async () => {
+    const data = await sol_changeElectionPhase();
+    getElectionDetails();
+  };
+
+  const startElection = async (electionTitle, organizationName) => {
+    const data = await sol_startElection(electionTitle, organizationName);
+    if (data) {
+      getElectionDetails();
+    }
   };
 
   const submitHandler = (e) => {
     e.preventDefault();
     startElection(electionTitle, organizationName);
-    // disable input and button
-    // show values
   };
 
   useEffect(() => {
     routeValidation();
+    getElectionDetails();
   });
 
   return (
     <>
       <div className="container">
         <YourAccount />
-        <ElectionInitializeMsg isAdmin={isAdminConnected} />
+        <ElectionInitializeMsg />
         <h3>About Election</h3>
         <form onSubmit={submitHandler}>
           <div className="container" style={aboutelectionstyle}>
@@ -65,7 +89,7 @@ const ElectionSetupScreen = () => {
                 className="form-control"
                 id="electionTitle"
                 placeholder="e.g. Class Representative"
-                value={electionTitle}
+                // value={storedElectionTitle}
                 onChange={(e) => setElectionTitle(e.target.value)}
                 required
               ></input>
@@ -79,14 +103,18 @@ const ElectionSetupScreen = () => {
                 className="form-control"
                 id="organizationName"
                 placeholder="e.g. S.Y.M.Sc. Computer Science"
-                value={organizationName}
+                // value={isElectionStarted && storedOrganizationName}
                 onChange={(e) => setOrganizationName(e.target.value)}
                 required
               ></input>
             </div>
             <div className="mb-3">
               <div className="d-grid gap-2">
-                <button className="btn btn-primary btn-lg" type="submit">
+                <button
+                  className="btn btn-primary btn-lg"
+                  type="submit"
+                  disabled={isElectionStarted}
+                >
                   Start Election
                 </button>
               </div>
@@ -96,14 +124,19 @@ const ElectionSetupScreen = () => {
         <h3>Change Phase</h3>
         <div className="container" style={aboutelectionstyle}>
           <h4>
-            Current Phase : <span className="text-success">Registration</span>
+            Current Phase :{" "}
+            <span className="text-success">{currentElectionPhase}</span>
           </h4>
           <h4>
             Next Phase :{" "}
-            <span className="text-danger">Apply for Candidate</span>
+            <span className="text-danger">{nextElectionPhase}</span>
           </h4>
           <div className="d-grid gap-2 mt-3">
-            <button className="btn btn-primary btn-lg" type="button">
+            <button
+              className="btn btn-primary btn-lg"
+              type="button"
+              onClick={changeElectionPhase}
+            >
               Change Phase
             </button>
           </div>
