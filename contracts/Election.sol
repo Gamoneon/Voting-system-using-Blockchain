@@ -5,16 +5,32 @@ contract Election {
     address public admin;
     uint256 candidateCount;
     uint256 voterCount;
-    bool start;
-    bool end;
+    bool isElectionStarted;
+    bool isElectionEnded;
+    string electionTitle;
+    string electionOrganization;
+    string currentElectionPhase;
+    uint256 electionPhaseIndex;
+    string[] public electionPhases;
 
     constructor() public {
         // Initilizing default values
         admin = msg.sender;
         candidateCount = 0;
         voterCount = 0;
-        start = false;
-        end = false;
+        isElectionStarted = false;
+        isElectionEnded = false;
+        electionTitle = "";
+        electionOrganization = "";
+        electionPhaseIndex = 0;
+        electionPhases = [
+            "None",
+            "Registration",
+            "Apply as a Candidate",
+            "Voting",
+            "Result"
+        ];
+        currentElectionPhase = electionPhases[electionPhaseIndex];
     }
 
     struct voter {
@@ -45,11 +61,10 @@ contract Election {
         //Loop through voters array
         for (uint256 i = 0; i < voters.length; i++) {
             if ((voterAddress) == voters[i]) {
-                return false;
+                return true;
             }
         }
-
-        return true;
+        return false;
     }
 
     function getLoginDetails(address loginAddress)
@@ -75,18 +90,56 @@ contract Election {
         return admin;
     }
 
-    // Get election start and end values
+    // Get election isElectionStarted and isElectionEnded values
     function getStart() public view returns (bool) {
-        return start;
+        return isElectionStarted;
     }
 
     function getEnd() public view returns (bool) {
-        return end;
+        return isElectionEnded;
     }
 
-    function startElection() public returns (bool) {
-        start = true;
-        end = false;
-        return start;
+    function getElectionPhasesCount() public view returns (uint256 count) {
+        return electionPhases.length;
+    }
+
+    function changeElectionPhase() public {
+        electionPhaseIndex =
+            (electionPhaseIndex + 1) %
+            getElectionPhasesCount();
+        currentElectionPhase = electionPhases[electionPhaseIndex];
+        if (electionPhaseIndex == getElectionPhasesCount() - 1) {
+            isElectionEnded = true;
+        }
+    }
+
+    function getElectionDetails()
+        public
+        view
+        returns (
+            bool,
+            bool,
+            string memory,
+            string memory,
+            string memory
+        )
+    {
+        return (
+            isElectionStarted,
+            isElectionEnded,
+            electionTitle,
+            electionOrganization,
+            currentElectionPhase
+        );
+    }
+
+    function startElection(
+        string memory _electionTitle,
+        string memory _electionOrganization
+    ) public {
+        isElectionStarted = true;
+        electionTitle = _electionTitle;
+        electionOrganization = _electionOrganization;
+        changeElectionPhase();
     }
 }

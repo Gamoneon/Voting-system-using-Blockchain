@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./css/VerificationScreen.css";
 import ElectionInitializeMsg from "../../components/ElectionInitializeMsg.js";
+import YourAccount from "../../components/YourAccount.js";
 import { sol_isAdminAddress } from "../../webaction/SolidityFunctionModules.js";
 
 const VerificationScreen = () => {
@@ -69,7 +70,8 @@ const VerificationScreen = () => {
   //------------------------------ Render Content -----------------------------------------//
   return (
     <>
-      <ElectionInitializeMsg isAdmin={isAdmin} />
+      <YourAccount />
+      <ElectionInitializeMsg isAdmin={isAdminConnected} />
       <div className="container">
         <div
           className="alert alert-primary text-center fw-bold mt-3"

@@ -2,7 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ElectionInitializeMsg from "../../components/ElectionInitializeMsg.js";
 import YourAccount from "../../components/YourAccount.js";
-import { sol_isAdminAddress } from "../../webaction/SolidityFunctionModules.js";
+import {
+  sol_isAdminAddress,
+  sol_startElection,
+} from "../../webaction/SolidityFunctionModules.js";
 
 const ElectionSetupScreen = () => {
   //------------------------------ style CSS -----------------------------------------//
@@ -16,6 +19,8 @@ const ElectionSetupScreen = () => {
   //------------------------------ useState Hooks -----------------------------------------//
   const [isAdminConnected, setIsAdminConnected] = useState(false);
   const [account, setAccount] = useState(null);
+  const [electionTitle, setElectionTitle] = useState("");
+  const [organizationName, setOrganizationName] = useState("");
   const navigate = useNavigate();
   //------------------------------ Functions -----------------------------------------//
 
@@ -27,9 +32,14 @@ const ElectionSetupScreen = () => {
     setIsAdminConnected(data);
   };
 
-  const submitHandler = () => {
-    // prevent form loading
-    console.log("Submit form");
+  const startElection = async () => {
+    const data = await sol_startElection();
+    console.log("Election details on screen :", data);
+  };
+
+  const submitHandler = (e) => {
+    e.preventDefault();
+    startElection(electionTitle, organizationName);
     // disable input and button
     // show values
   };
@@ -41,7 +51,7 @@ const ElectionSetupScreen = () => {
   return (
     <>
       <div className="container">
-        <YourAccount account={account} />
+        <YourAccount />
         <ElectionInitializeMsg isAdmin={isAdminConnected} />
         <h3>About Election</h3>
         <form onSubmit={submitHandler}>
@@ -55,6 +65,8 @@ const ElectionSetupScreen = () => {
                 className="form-control"
                 id="electionTitle"
                 placeholder="e.g. Class Representative"
+                value={electionTitle}
+                onChange={(e) => setElectionTitle(e.target.value)}
                 required
               ></input>
             </div>
@@ -67,6 +79,8 @@ const ElectionSetupScreen = () => {
                 className="form-control"
                 id="organizationName"
                 placeholder="e.g. S.Y.M.Sc. Computer Science"
+                value={organizationName}
+                onChange={(e) => setOrganizationName(e.target.value)}
                 required
               ></input>
             </div>
