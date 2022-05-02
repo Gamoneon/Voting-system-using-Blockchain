@@ -66,29 +66,6 @@ export const sol_isAdminAddress = async () => {
   return false;
 };
 
-// export const sol_startElection = async () => {
-//   const ElectionInstance = await sol_getElectionInstance();
-//   let start = await ElectionInstance.methods.getStart().call();
-//   console.log("Start status before election start: ", start);
-//   if ((await sol_isAdminAddress()) && !start) {
-//     const electionStatus = await ElectionInstance.methods
-//       .startElection()
-//       .send({ from: await sol_getCurrentAccount(), gas: 1000000 });
-//     console.log("Election started: ", electionStatus);
-
-//     const start = await ElectionInstance.methods.getStart().call();
-//     console.log(
-//       "Election Name:",
-//       await ElectionInstance.methods.getElectionName().call()
-//     );
-//     console.log("Start is set to: ", start);
-
-//     return true;
-//   } else {
-//     console.log("Election start - failed!");
-//     return false;
-//   }
-// };
 
 export const sol_getElectionDetails = async () => {
   const ElectionInstance = await sol_getElectionInstance();
@@ -107,7 +84,7 @@ export const sol_startElection = async (electionTitle, organizationName) => {
     if (!isElectionStarted) {
       await ElectionInstance.methods
         .startElection(electionTitle, organizationName)
-        .send({ from: acc, gas: 1000000 });
+        .send({ from: acc, gas: 1000000, gasPrice: 5000000  });
       return true;
     }
   } else {
@@ -124,6 +101,7 @@ export const sol_changeElectionPhase = async () => {
     let data = await ElectionInstance.methods.changeElectionPhase().send({
       from: acc,
       gas: 1000000,
+      gasPrice: 5000000 
     });
     // console.log("Election Details: ", data);
     return true;
@@ -140,7 +118,7 @@ export const sol_addLoginDetails = async (username, email, password) => {
     if (!(await ElectionInstance.methods.isVoterExists(acc).call())) {
       await ElectionInstance.methods
         .addVoterDetails(username, email, password)
-        .send({ from: acc, gas: 1000000 });
+        .send({ from: acc, gas: 1000000, gasPrice: 5000000 });
       return true;
     }
   }
