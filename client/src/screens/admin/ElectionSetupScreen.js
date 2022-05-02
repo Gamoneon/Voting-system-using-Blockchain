@@ -121,6 +121,7 @@ const ElectionSetupScreen = () => {
             </div>
           </div>
         </form>
+        {isElectionStarted && <>
         <h3>Change Phase</h3>
         <div className="container" style={aboutelectionstyle}>
           <h4>
@@ -141,6 +142,7 @@ const ElectionSetupScreen = () => {
             </button>
           </div>
         </div>
+        </>}
       </div>
     </>
   );

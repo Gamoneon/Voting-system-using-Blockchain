@@ -14,7 +14,7 @@ contract Election {
     uint256 electionPhaseIndex;
     string[] public electionPhases;
 
-    constructor() public {
+    constructor(){
         // Initilizing default values
         admin = msg.sender;
         candidateCount = 0;
@@ -32,6 +32,7 @@ contract Election {
             "Result"
         ];
         currentElectionPhase = electionPhases[electionPhaseIndex];
+        nextElectionPhase = electionPhases[electionPhaseIndex + 1]; 
     }
 
     struct voter {
