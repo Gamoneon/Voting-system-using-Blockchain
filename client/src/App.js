@@ -11,10 +11,10 @@ import InformationScreen from "./screens/InformationScreen.js";
 import VoterRegistrationScreen from "./screens/VoterRegistrationScreen.js";
 import ElectionSetupScreen from "./screens/admin/ElectionSetupScreen.js";
 import VerificationScreen from "./screens/admin/VerificationScreen.js";
+import CandidateVerificationScreen from "./screens/admin/CandidateVerificationScreen.js";
 import VotingScreen from "./screens/VotingScreen.js";
 import ResultScreen from "./screens/ResultScreen.js";
 import Footer from "./components/Footer.js";
-
 import "./App.css";
 
 const App = () => {
@@ -62,6 +62,12 @@ const App = () => {
                 exact
                 path="/verification"
                 element={<DashboardScreen component={<VerificationScreen />} />}
+              />
+
+              <Route
+                exact
+                path="/candidateverification"
+                element={<DashboardScreen component={<CandidateVerificationScreen />} />}
               />
 
               <Route

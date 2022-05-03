@@ -1,10 +1,13 @@
 import React from "react";
 
 const InformationScreen = () => {
+  //------------------------------ Style CSS -----------------------------------------//
   const cardStyle = {
     width: "80%",
     margin: "3% auto",
   };
+
+  //------------------------------ Content Render -----------------------------------------//
   return (
     <>
       <div className="card" style={cardStyle}>

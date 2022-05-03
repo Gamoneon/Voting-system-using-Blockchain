@@ -6,19 +6,19 @@ import YourAccount from "../../components/YourAccount.js";
 import {
   sol_getAllVoterDetails,
   sol_isAdminAddress,
-  sol_approveVerificationRequests,
+  sol_approveCandidateRequests,
 } from "../../webaction/SolidityFunctionModules.js";
 
-const VerificationScreen = () => {
+const CandidateVerificationScreen = () => {
   //------------------------------ useState Hooks -----------------------------------------//
 
   const navigate = useNavigate();
-  const [voterData, setVoterData] = useState([]);
+  const [candidateData, setCandidateData] = useState([]);
   const [isApproved, setIsApproved] = useState(false);
 
   //------------------------------ Functions -----------------------------------------//
   const onClickApprove = async (voterAddress) => {
-    const data = await sol_approveVerificationRequests(voterAddress);
+    const data = await sol_approveCandidateRequests(voterAddress);
     setIsApproved(data);
   };
 
@@ -31,24 +31,22 @@ const VerificationScreen = () => {
 
   const getAllVoterDetails = async () => {
     const data = await sol_getAllVoterDetails();
-    let allVoterDetails = [];
+    let allCandidateDetails = [];
     if (data) {
       for (let i = 0; i < data.length; i++) {
         let temp = {};
 
         temp["voterAddress"] = data[i]["voterAddress"];
         temp["username"] = data[i]["username"];
-        temp["prn"] = data[i]["prn"];
-        temp["mobile"] = data[i]["mobile"];
-        temp["isVerified"] = data[i]["isVerified"];
+        temp["tagLine"] = data[i]["tagLine"];
         temp["hasApplied"] = data[i]["hasApplied"];
+        temp["isCandidate"] = data[i]["isCandidate"]; 
 
-        allVoterDetails.push(temp);
+        allCandidateDetails.push(temp);
       }
 
-      
-      // console.log(allVoterDetails);
-      setVoterData([...allVoterDetails]);
+      console.log(allCandidateDetails);
+      setCandidateData([...allCandidateDetails]);
     }
   };
 
@@ -70,11 +68,11 @@ const VerificationScreen = () => {
           className="alert alert-primary text-center fw-bold mt-3"
           role="alert"
         >
-          List of registered students
+          List of registered Candidates
         </div>
-        {/* <h4>Total Candidates : {voterData.length - 1}</h4> */}
+        {/* <h4>Total Candidates : {candidateData.length - 1}</h4> */}
         <h3>Pending Approvals : </h3>
-        {voterData.map((student, key) => {
+        {candidateData.map((student, key) => {
           return (
             <div className="container" key={key}>
               {student.hasApplied && (
@@ -87,14 +85,10 @@ const VerificationScreen = () => {
                       <tr>
                         <th>Student's Name </th>
                         <td>{student.username}</td>
-                        <th>Mobile No </th>
-                        <td>{student.mobile}</td>
                       </tr>
                       <tr>
-                        <th>PRN No </th>
-                        <td>{student.prn}</td>
-                        <th>Verified</th>
-                        <td> {student.isVerified ? "True" : "False"}</td>
+                        <th>Tag Line </th>
+                        <td>{student.tagLine}</td>
                       </tr>
                       <tr>
                         <td colSpan="4">
@@ -119,32 +113,28 @@ const VerificationScreen = () => {
           );
         })}
 
-        <h3 className="mt-4">Approved Students : </h3>
-        {voterData.map((student, key) => {
+        <h3 className="mt-4">Approved Candidates : </h3>
+        {candidateData.map((student, key) => {
           return (
             <div className="container" key={key}>
-              {student.isVerified && (
+              {student.isCandidate && (
                 <>
                   <table
                     className="table mt-5 "
                     style={{
                       width: "75%",
                       margin: "auto",
-                      background: "#a3ffb4",
+                      background: " #aaf0d1",
                     }}
                   >
                     <tbody>
                       <tr>
                         <th>Student's Name </th>
                         <td>{student.username}</td>
-                        <th>Mobile No </th>
-                        <td>{student.mobile}</td>
                       </tr>
                       <tr>
-                        <th>PRN No </th>
-                        <td>{student.prn}</td>
-                        <th>Verified</th>
-                        <td> {student.isVerified ? "True" : "False"}</td>
+                        <th>Tag Line </th>
+                        <td>{student.tagLine}</td>
                       </tr>
                     </tbody>
                   </table>
@@ -158,4 +148,4 @@ const VerificationScreen = () => {
   );
 };
 
-export default VerificationScreen;
+export default CandidateVerificationScreen;
