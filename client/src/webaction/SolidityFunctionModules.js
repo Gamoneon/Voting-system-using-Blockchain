@@ -233,3 +233,24 @@ export const sol_approveCandidateRequests = async (approveAccount) => {
     return false;
   }
 };
+
+/*------------------------ Voting Handlers --------------------------- */
+
+export const sol_addVote = async (candidateAddress) => {
+  const acc = await sol_getCurrentAccount();
+  if (acc) {
+    const ElectionInstance = await sol_getElectionInstance();
+    const voteSuccess = await ElectionInstance.methods
+      .addVote(acc, candidateAddress)
+      .send({ from: acc, gas: 1000000, gasPrice: 5000000 });
+  }
+};
+
+export const sol_hasVoted = async () => {
+  const acc = await sol_getCurrentAccount();
+  if (acc) {
+    const ElectionInstance = await sol_getElectionInstance();
+    const hasCastedVote = await ElectionInstance.methods.hasVoted(acc).call();
+    return hasCastedVote;
+  } else return false;
+};

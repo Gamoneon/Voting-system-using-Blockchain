@@ -46,7 +46,8 @@ const VerificationScreen = () => {
         allVoterDetails.push(temp);
       }
 
-      console.log(allVoterDetails);
+      
+      // console.log(allVoterDetails);
       setVoterData([...allVoterDetails]);
     }
   };

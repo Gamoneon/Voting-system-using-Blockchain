@@ -49,10 +49,12 @@ contract Election {
         bool hasApplied;
         bool isCandidate;
         string tagLine;
+        uint256 votesCount;
     }
 
     mapping(address => voter) public voterDetails;
     address[] public voters; // Array of address to store address of voters
+
 
     /*------------------------ Voter Verification --------------------------- */
 
@@ -92,6 +94,8 @@ contract Election {
        return allVoterDetails;
     }
 
+    /*------------------------ Voter Handlers --------------------------- */
+
     function addVoterDetails(
         string memory _username,
         string memory _email,
@@ -104,6 +108,7 @@ contract Election {
             voterAddress: msg.sender,
             prn: "",
             mobile: "",
+            votesCount: 0,
             isVerified: false,
             hasVoted: false,
             hasApplied: false,
@@ -143,7 +148,9 @@ contract Election {
             voterDetails[loginAddress].username,
             voterDetails[loginAddress].isVerified
         );
-    }
+    }   
+
+    /*------------------------ Election Handlers --------------------------- */
 
     function getAdmin() public view returns (address) {
         // Returns account address used to deploy contract (i.e. admin)
@@ -201,4 +208,18 @@ contract Election {
         electionOrganization = _electionOrganization;
         changeElectionPhase();
     }
-}
+
+
+
+    /*------------------------ Voting Handlers --------------------------- */
+    
+    function addVote (address voterAddress, address candidateAddress) public{
+        voterDetails[voterAddress].hasVoted = true;
+        voterDetails[candidateAddress].votesCount ++;
+    }
+
+    function hasVoted (address voterAddress) public view returns (bool){
+        return voterDetails[voterAddress].hasVoted;
+    }
+
+}   
