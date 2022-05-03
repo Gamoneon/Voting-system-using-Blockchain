@@ -47,6 +47,8 @@ contract Election {
         bool isVerified;
         bool hasVoted;
         bool hasApplied;
+        bool isCandidate;
+        string tagLine;
     }
 
     mapping(address => voter) public voterDetails;
@@ -65,6 +67,19 @@ contract Election {
     function approveVerificationRequests(address pendingVoterAddress) public{
         voterDetails[pendingVoterAddress].hasApplied = false;
         voterDetails[pendingVoterAddress].isVerified = true;
+    }
+
+    // sending candidate request
+
+    function addCandidateRequest(address pendingVoterAddress, string memory _tagLine) public{
+        voterDetails[pendingVoterAddress].hasApplied = true;
+        voterDetails[pendingVoterAddress].tagLine = _tagLine;
+    }
+
+    // Approve candidate requests
+    function approveCandidateRequests(address pendingVoterAddress) public{
+        voterDetails[pendingVoterAddress].hasApplied = false;
+        voterDetails[pendingVoterAddress].isCandidate = true;
     }
 
     // Get all voter details
@@ -91,7 +106,9 @@ contract Election {
             mobile: "",
             isVerified: false,
             hasVoted: false,
-            hasApplied: false
+            hasApplied: false,
+            isCandidate : false,
+            tagLine : ""
         });
         voterDetails[msg.sender] = newVoter;
         voterCount++;

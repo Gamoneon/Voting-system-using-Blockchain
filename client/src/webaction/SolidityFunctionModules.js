@@ -203,3 +203,33 @@ export const sol_getAllVoterDetails = async () => {
     return allVoterDetails;
   }
 };
+
+// add candidate request
+
+export const sol_addCandidateRequest = async (tagLine) => {
+  const acc = await sol_getCurrentAccount();
+  if (acc) {
+    const ElectionInstance = await sol_getElectionInstance();
+
+    const addCandidateReq = await ElectionInstance.methods
+      .addCandidateRequest(acc, tagLine)
+      .send({ from: acc, gas: 1000000, gasPrice: 5000000 });
+
+    return addCandidateReq;
+  }
+};
+
+export const sol_approveCandidateRequests = async (approveAccount) => {
+  const acc = await sol_getCurrentAccount();
+  if (acc) {
+    const ElectionInstance = await sol_getElectionInstance();
+
+    const approveCandidateReq = await ElectionInstance.methods
+      .approveCandidateRequests(approveAccount)
+      .send({ from: acc, gas: 1000000, gasPrice: 5000000 });
+
+    return true;
+  } else {
+    return false;
+  }
+};

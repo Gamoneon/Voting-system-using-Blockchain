@@ -5,11 +5,11 @@ import ElectionInitializeMsg from "../components/ElectionInitializeMsg.js";
 import YourAccount from "../components/YourAccount.js";
 import "./admin/css/VerificationScreen.css";
 import {
-  sol_getPendingVerificationRequests,
   sol_addVerificationRequest,
   sol_isAdminAddress,
-  sol_getAllVoterDetails,
   sol_getUserDetails,
+  sol_addCandidateRequest
+
 } from "../webaction/SolidityFunctionModules.js";
 
 const VoterRegistrationScreen = () => {
@@ -44,13 +44,21 @@ const VoterRegistrationScreen = () => {
   const [prn, setPrn] = useState("");
   const [mobile, setMobile] = useState("");
   const [isVerified, setIsVerified] = useState(false);
+  const [tagLine , setTagLine] = useState("");
 
   //------------------------------ Functions  -----------------------------------------//
   const submitHandler = (e) => {
     // prevent form loading
     e.preventDefault();
 
-    applyForVerification(prn, mobile);
+    applyForVerification();
+  };
+
+  const candidateHandler = (e) => {
+    // prevent form loading
+    e.preventDefault();
+
+    applyForCandidate();
   };
 
   const getUserDetails = async () => {
@@ -63,6 +71,10 @@ const VoterRegistrationScreen = () => {
 
   const applyForVerification = async () => {
     const addVerificationReq = await sol_addVerificationRequest(prn, mobile);
+  };
+
+  const applyForCandidate = async () => {
+    const addCandidateReq = await sol_addCandidateRequest(tagLine);
   };
 
   const routeValidation = async () => {
@@ -147,7 +159,7 @@ const VoterRegistrationScreen = () => {
           <div className="container-main">
             <h2>Apply For Candidate</h2>
             <div className="container-item">
-              <form onSubmit={submitHandler}>
+              <form onSubmit={candidateHandler}>
                 <div className="container" style={divisionstyle}>
                   <div className="mb-3">
                     <label
@@ -161,6 +173,7 @@ const VoterRegistrationScreen = () => {
                         className="form-control"
                         id="studentTagline"
                         placeholder="e.g. Vote me!!"
+                        onChange={(e) => setTagLine(e.target.value)}
                         required
                       />
                     </label>
@@ -170,7 +183,7 @@ const VoterRegistrationScreen = () => {
                     <br /> You can describe yourself in one line or two.
                   </p>
                   <div className="d-grid gap-2 mt-3">
-                    <button className="btn btn-primary btn-lg" type="button">
+                    <button className="btn btn-primary btn-lg" type="submit">
                       Apply
                     </button>
                   </div>

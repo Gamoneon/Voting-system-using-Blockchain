@@ -70,6 +70,12 @@ const NavbarVertical = (props) => {
               >
                 <i className="fa-solid fa-user-check"></i> Verification
               </Link>
+              <Link
+                to="/candidateverification"
+                className="list-group-item list-group-item-action"
+              >
+                <i className="fa-solid fa-user-check"></i> Candidate Verification
+              </Link>
             </>
           ) : (
             <>
