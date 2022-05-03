@@ -66,7 +66,6 @@ export const sol_isAdminAddress = async () => {
   return false;
 };
 
-
 export const sol_getElectionDetails = async () => {
   const ElectionInstance = await sol_getElectionInstance();
   let data = await ElectionInstance.methods.getElectionDetails().call();
@@ -84,7 +83,7 @@ export const sol_startElection = async (electionTitle, organizationName) => {
     if (!isElectionStarted) {
       await ElectionInstance.methods
         .startElection(electionTitle, organizationName)
-        .send({ from: acc, gas: 1000000, gasPrice: 5000000  });
+        .send({ from: acc, gas: 1000000, gasPrice: 5000000 });
       return true;
     }
   } else {
@@ -101,7 +100,7 @@ export const sol_changeElectionPhase = async () => {
     let data = await ElectionInstance.methods.changeElectionPhase().send({
       from: acc,
       gas: 1000000,
-      gasPrice: 5000000 
+      gasPrice: 5000000,
     });
     // console.log("Election Details: ", data);
     return true;
@@ -160,4 +159,46 @@ export const sol_getUserDetails = async () => {
     return loginData;
   }
   return false;
+};
+
+/*------------ Voter Verification functions ------------*/
+
+export const sol_addVerificationRequest = async (prn, mobile) => {
+  const acc = await sol_getCurrentAccount();
+  if (acc) {
+    const ElectionInstance = await sol_getElectionInstance();
+
+    const addVerificationReq = await ElectionInstance.methods
+      .addVerificationRequest(acc, prn, mobile)
+      .send({ from: acc, gas: 1000000, gasPrice: 5000000 });
+
+    return addVerificationReq;
+  }
+};
+
+export const sol_getPendingVerificationRequests = async () => {
+  const acc = await sol_getCurrentAccount();
+  if (acc) {
+    const ElectionInstance = await sol_getElectionInstance();
+
+    const pendingRequests =
+      ElectionInstance.methods.pendingVerfications().call();
+
+    console.log(pendingRequests);
+    
+    return pendingRequests;
+  }
+};
+
+
+export const sol_getAllVoterDetails = async () => {
+  const acc = await sol_getCurrentAccount();
+  if (acc) {
+    const ElectionInstance = await sol_getElectionInstance();
+
+    const allVoterDetails =
+      ElectionInstance.methods.getAllVoterDetails().call();
+    
+    return allVoterDetails;
+  }
 };

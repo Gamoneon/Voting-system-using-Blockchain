@@ -4,7 +4,12 @@ import RequiredFieldStar from "../components/RequiredFieldStar.js";
 import ElectionInitializeMsg from "../components/ElectionInitializeMsg.js";
 import YourAccount from "../components/YourAccount.js";
 import "./admin/css/VerificationScreen.css";
-import { sol_isAdminAddress } from "../webaction/SolidityFunctionModules.js";
+import {
+  sol_getPendingVerificationRequests,
+  sol_addVerificationRequest,
+  sol_isAdminAddress,
+  sol_getAllVoterDetails,
+} from "../webaction/SolidityFunctionModules.js";
 
 const VoterRegistrationScreen = () => {
   //------------------------------ style CSS -----------------------------------------//
@@ -17,6 +22,7 @@ const VoterRegistrationScreen = () => {
     border: "1px solid #000000 !important",
     backgroundcolor: "#90EE90",
   };
+
   const divisionstyle = {
     width: "50%",
     background: "#FFF8DC",
@@ -29,17 +35,24 @@ const VoterRegistrationScreen = () => {
     padding: "0.5em",
     display: "block",
   };
+
   //------------------------------ userState Hooks  -----------------------------------------//
   const navigate = useNavigate();
   const [isAdminConnected, setIsAdminConnected] = useState(false);
   const [account, setAccount] = useState(null);
+  const [prn, setPrn] = useState("");
+  const [mobile, setMobile] = useState("");
 
   //------------------------------ Functions  -----------------------------------------//
-  const submitHandler = () => {
+  const submitHandler = (e) => {
     // prevent form loading
-    console.log("Submit form");
-    // disable input and button
-    // show values
+    e.preventDefault();
+
+    applyForVerification(prn, mobile);
+  };
+
+  const applyForVerification = async () => {
+    const addVerificationReq = await sol_addVerificationRequest(prn, mobile);
   };
 
   const routeValidation = async () => {
@@ -76,22 +89,7 @@ const VoterRegistrationScreen = () => {
                     className="form-control"
                     id="studentPRNNo"
                     placeholder="e.g. 15562522"
-                    required
-                  />
-                </label>
-              </div>
-              <div className="mb-2">
-                <label
-                  htmlFor="studentName"
-                  className="form-label"
-                  style={ystyle}
-                >
-                  Name <RequiredFieldStar />
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="studentName"
-                    placeholder="eg. Saurabh"
+                    onChange={(e) => setPrn(e.target.value)}
                     required
                   />
                 </label>
@@ -108,34 +106,19 @@ const VoterRegistrationScreen = () => {
                     className="form-control"
                     id="studentPhoneno"
                     placeholder="eg. 9841234567"
+                    onChange={(e) => setMobile(e.target.value)}
                     required
                   />
                 </label>
               </div>
-              <div className="mb-2">
-                <label
-                  htmlFor="studentEmail"
-                  className="form-label"
-                  style={ystyle}
-                >
-                  Email <RequiredFieldStar />
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="studentEmail"
-                    placeholder="e.g. XYZ@gmail.com"
-                    required
-                  ></input>
-                </label>
-              </div>
               <p className="note">
-                <span style={{ color: "tomato" }}> Note: </span>
-                <br /> Make sure your Phone number is correct. <br /> Admin
-                might not approve your account if the provided Phone number does
-                not matches the account registered in admins catalogue.
+                <span className="text-danger"> Note: </span>
+                <br /> Make sure your PRN is correct. <br /> Admin might not
+                approve your account if the provided PRN does not matches the
+                account registered in admin's catalogue.
               </p>
               <div className="d-grid gap-2 mt-3">
-                <button className="btn btn-primary btn-lg" type="button">
+                <button className="btn btn-primary btn-lg" type="submit">
                   Apply
                 </button>
               </div>

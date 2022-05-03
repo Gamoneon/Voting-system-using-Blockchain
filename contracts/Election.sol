@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.4.21 <0.9.0;
+pragma experimental ABIEncoderV2;
 
 contract Election {
     address public admin;
@@ -7,6 +8,7 @@ contract Election {
     uint256 voterCount;
     bool isElectionStarted;
     bool isElectionEnded;
+    bool isVerified;
     string electionTitle;
     string electionOrganization;
     string currentElectionPhase;
@@ -14,7 +16,7 @@ contract Election {
     uint256 electionPhaseIndex;
     string[] public electionPhases;
 
-    constructor(){
+    constructor() public{
         // Initilizing default values
         admin = msg.sender;
         candidateCount = 0;
@@ -39,10 +41,41 @@ contract Election {
         string username;
         string email;
         string password;
+        string prn;
+        string mobile;
         address voterAddress;
+        bool isVerified;
+        bool hasVoted;
+        bool hasApplied;
     }
+
     mapping(address => voter) public voterDetails;
     address[] public voters; // Array of address to store address of voters
+
+    /*------------------------ Voter Verification --------------------------- */
+
+    // Update verification details
+    function addVerificationRequest(address pendingVoterAddress, string memory _prn, string memory _mobile) public{
+        voterDetails[pendingVoterAddress].hasApplied = true;
+        voterDetails[pendingVoterAddress].prn = _prn;
+        voterDetails[pendingVoterAddress].mobile = _mobile;
+    }
+
+    // Approve verification requests
+    function approveVerificationRequests(address pendingVoterAddress) public{
+        voterDetails[pendingVoterAddress].hasApplied = false;
+        voterDetails[pendingVoterAddress].isVerified = true;
+    }
+
+    // Get all voter details
+    function getAllVoterDetails() public view returns(voter[] memory){
+       voter[] memory allVoterDetails = new voter[](voterCount);
+       for(uint i = 0; i <voterCount; i++)
+       {
+           allVoterDetails[i] =  voterDetails[voters[i]];
+       }
+       return allVoterDetails;
+    }
 
     function addVoterDetails(
         string memory _username,
@@ -53,9 +86,15 @@ contract Election {
             username: _username,
             email: _email,
             password: _password,
-            voterAddress: msg.sender
+            voterAddress: msg.sender,
+            prn: "",
+            mobile: "",
+            isVerified: false,
+            hasVoted: false,
+            hasApplied: false
         });
         voterDetails[msg.sender] = newVoter;
+        voterCount++;
         voters.push(msg.sender);
     }
 
@@ -76,14 +115,16 @@ contract Election {
             string memory,
             string memory,
             address,
-            string memory
+            string memory,
+            bool
         )
     {
         return (
             voterDetails[loginAddress].email,
             voterDetails[loginAddress].password,
             voterDetails[loginAddress].voterAddress,
-            voterDetails[loginAddress].username
+            voterDetails[loginAddress].username,
+            voterDetails[loginAddress].isVerified
         );
     }
 

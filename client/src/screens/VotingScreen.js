@@ -20,7 +20,7 @@ const VotingScreen = () => {
     {
       no: 2,
       name: "Soumya Singh",
-      tagline: `A very talented lazy girl who can make everything possible...`,
+      tagline: `A very talented girl who can make everything possible...`,
     },
   ];
 

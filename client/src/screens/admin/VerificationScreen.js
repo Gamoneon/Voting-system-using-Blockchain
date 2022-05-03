@@ -3,57 +3,22 @@ import { useNavigate } from "react-router-dom";
 import "./css/VerificationScreen.css";
 import ElectionInitializeMsg from "../../components/ElectionInitializeMsg.js";
 import YourAccount from "../../components/YourAccount.js";
-import { sol_isAdminAddress } from "../../webaction/SolidityFunctionModules.js";
+import {
+  sol_getAllVoterDetails,
+  sol_isAdminAddress,
+} from "../../webaction/SolidityFunctionModules.js";
 
 const VerificationScreen = () => {
+
   //------------------------------ useState Hooks -----------------------------------------//
 
   const navigate = useNavigate();
   const [isAdminConnected, setIsAdminConnected] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
-  const tabledata = [
-    {
-      name: "Sahil Kavitake",
-      mob: 8459225341,
-      prn: 965878541236,
-      voted: false,
-      verified: true,
-      registered: true,
-    },
-    {
-      name: "Saurabh Jadhav",
-      mob: 8459225341,
-      prn: 965878541236,
-      voted: false,
-      verified: true,
-      registered: true,
-    },
-    {
-      name: "Pooja Gadwe",
-      mob: 8459225341,
-      prn: 965878541236,
-      voted: false,
-      verified: false,
-      registered: true,
-    },
-    {
-      name: "Soumya Singh",
-      mob: 8459225341,
-      prn: 965878541236,
-      voted: false,
-      verified: false,
-      registered: true,
-    },
-  ];
+  const allVoterDetails = [];
+  const [voterData, setVoterData] = useState([]);
 
   //------------------------------ Functions -----------------------------------------//
-  const onApproveClick = (key) => {
-    console.log(key);
-    tabledata[key].verified = true;
-    console.log(tabledata[key]);
-    // update verfied = true
-    // reload page using useeffect
-  };
+  const onApproveClick = (key) => {};
 
   const routeValidation = async () => {
     const data = await sol_isAdminAddress();
@@ -63,7 +28,29 @@ const VerificationScreen = () => {
     setIsAdminConnected(data);
   };
 
+  const getAllVoterDetails = async () => {
+    const data = await sol_getAllVoterDetails();
+
+    for (let i = 0; i < data.length; i++) {
+      let temp = {};
+
+      temp["username"] = data[i]["username"];
+      temp["prn"] = data[i]["prn"];
+      temp["mobile"] = data[i]["mobile"];
+      temp["isVerified"] = data[i]["isVerified"];
+      temp["hasApplied"] = data[i]["hasApplied"];
+
+      allVoterDetails.push(temp);
+      //setAllVoterDetails((allVoterDetails) => [...allVoterDetails, temp]);
+    }
+
+    //setVoterData(allVoterDetails);
+    console.log("Modified data: ", allVoterDetails);
+    return allVoterDetails;
+  };
+
   useEffect(() => {
+    setVoterData(getAllVoterDetails());
     routeValidation();
   });
 
@@ -79,12 +66,12 @@ const VerificationScreen = () => {
         >
           List of registered students
         </div>
-        <h4>Total Candidates : {tabledata.length}</h4>
+        <h4>Total Candidates : {allVoterDetails.length}</h4>
         <h3>Pending Approvals : </h3>
-        {tabledata.map((student, key) => {
+        {voterData.map((student, key) => {
           return (
             <div className="container" key={key}>
-              {!student.verified && (
+              {student.hasApplied && (
                 <>
                   <table
                     className="table table-striped mt-5 "
@@ -93,21 +80,15 @@ const VerificationScreen = () => {
                     <tbody>
                       <tr>
                         <th>Student's Name </th>
-                        <td>{student.name}</td>
+                        <td>{student.username}</td>
                         <th>Mobile No </th>
-                        <td>{student.mob}</td>
+                        <td>{student.mobile}</td>
                       </tr>
                       <tr>
                         <th>PRN No </th>
                         <td>{student.prn}</td>
-                        <th>Voted </th>
-                        <td>{student.voted ? "True" : "False"}</td>
-                      </tr>
-                      <tr>
                         <th>Verified</th>
-                        <td> {student.verified ? "True" : "False"}</td>
-                        <th>Registered</th>
-                        <td>{student.registered ? "True" : "False"}</td>
+                        <td> {student.isVerified ? "True" : "False"}</td>
                       </tr>
                       <tr>
                         <td colSpan="4">
@@ -133,10 +114,10 @@ const VerificationScreen = () => {
         })}
 
         <h3 className="mt-4">Approved Students : </h3>
-        {tabledata.map((student, key) => {
+        {voterData.map((student, key) => {
           return (
             <div className="container" key={key}>
-              {student.verified && (
+              {student.isVerified && (
                 <>
                   <table
                     className="table mt-5 "
@@ -149,15 +130,15 @@ const VerificationScreen = () => {
                     <tbody>
                       <tr>
                         <th>Student's Name </th>
-                        <td>{student.name}</td>
-                        <th>PRN No </th>
-                        <td>{student.prn}</td>
+                        <td>{student.username}</td>
+                        <th>Mobile No </th>
+                        <td>{student.mobile}</td>
                       </tr>
                       <tr>
-                        <th>Voted </th>
-                        <td>{student.voted ? "True" : "False"}</td>
+                        <th>PRN No </th>
+                        <td>{student.prn}</td>
                         <th>Verified</th>
-                        <td> {student.verified ? "True" : "False"}</td>
+                        <td> {student.isVerified ? "True" : "False"}</td>
                       </tr>
                     </tbody>
                   </table>
