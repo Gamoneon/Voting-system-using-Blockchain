@@ -6,59 +6,64 @@ import YourAccount from "../../components/YourAccount.js";
 import {
   sol_getAllVoterDetails,
   sol_isAdminAddress,
+  sol_approveVerificationRequests,
 } from "../../webaction/SolidityFunctionModules.js";
 
 const VerificationScreen = () => {
-
   //------------------------------ useState Hooks -----------------------------------------//
 
   const navigate = useNavigate();
-  const [isAdminConnected, setIsAdminConnected] = useState(false);
-  const allVoterDetails = [];
   const [voterData, setVoterData] = useState([]);
+  const [isApproved, setIsApproved] = useState(false);
 
   //------------------------------ Functions -----------------------------------------//
-  const onApproveClick = (key) => {};
+  const onClickApprove = async (voterAddress) => {
+    const data = await sol_approveVerificationRequests(voterAddress);
+    setIsApproved(data);
+  };
 
   const routeValidation = async () => {
     const data = await sol_isAdminAddress();
     if (!data) {
       navigate("/dashboard");
     }
-    setIsAdminConnected(data);
   };
 
   const getAllVoterDetails = async () => {
     const data = await sol_getAllVoterDetails();
+    let allVoterDetails = [];
+    if (data) {
+      for (let i = 0; i < data.length; i++) {
+        let temp = {};
 
-    for (let i = 0; i < data.length; i++) {
-      let temp = {};
+        temp["voterAddress"] = data[i]["voterAddress"];
+        temp["username"] = data[i]["username"];
+        temp["prn"] = data[i]["prn"];
+        temp["mobile"] = data[i]["mobile"];
+        temp["isVerified"] = data[i]["isVerified"];
+        temp["hasApplied"] = data[i]["hasApplied"];
 
-      temp["username"] = data[i]["username"];
-      temp["prn"] = data[i]["prn"];
-      temp["mobile"] = data[i]["mobile"];
-      temp["isVerified"] = data[i]["isVerified"];
-      temp["hasApplied"] = data[i]["hasApplied"];
+        allVoterDetails.push(temp);
+      }
 
-      allVoterDetails.push(temp);
-      //setAllVoterDetails((allVoterDetails) => [...allVoterDetails, temp]);
+      console.log(allVoterDetails);
+      setVoterData([...allVoterDetails]);
     }
-
-    //setVoterData(allVoterDetails);
-    console.log("Modified data: ", allVoterDetails);
-    return allVoterDetails;
   };
 
   useEffect(() => {
-    setVoterData(getAllVoterDetails());
     routeValidation();
   });
+
+  useEffect(() => {
+    getAllVoterDetails();
+  }, [isApproved]);
 
   //------------------------------ Render Content -----------------------------------------//
   return (
     <>
       <YourAccount />
-      <ElectionInitializeMsg isAdmin={isAdminConnected} />
+      <ElectionInitializeMsg />
       <div className="container">
         <div
           className="alert alert-primary text-center fw-bold mt-3"
@@ -66,7 +71,7 @@ const VerificationScreen = () => {
         >
           List of registered students
         </div>
-        <h4>Total Candidates : {allVoterDetails.length}</h4>
+        <h4>Total Candidates : {voterData.length - 1}</h4>
         <h3>Pending Approvals : </h3>
         {voterData.map((student, key) => {
           return (
@@ -97,7 +102,7 @@ const VerificationScreen = () => {
                               className="btn btn-success text-light"
                               type="button"
                               onClick={() => {
-                                onApproveClick(key);
+                                onClickApprove(student.voterAddress);
                               }}
                             >
                               Approve

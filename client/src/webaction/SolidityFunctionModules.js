@@ -176,29 +176,30 @@ export const sol_addVerificationRequest = async (prn, mobile) => {
   }
 };
 
-export const sol_getPendingVerificationRequests = async () => {
+export const sol_approveVerificationRequests = async (approveAccount) => {
   const acc = await sol_getCurrentAccount();
   if (acc) {
     const ElectionInstance = await sol_getElectionInstance();
 
-    const pendingRequests =
-      ElectionInstance.methods.pendingVerfications().call();
+    const approveVerificationReq = await ElectionInstance.methods
+      .approveVerificationRequests(approveAccount)
+      .send({ from: acc, gas: 1000000, gasPrice: 5000000 });
 
-    console.log(pendingRequests);
-    
-    return pendingRequests;
+    return true;
+  } else {
+    return false;
   }
 };
-
 
 export const sol_getAllVoterDetails = async () => {
   const acc = await sol_getCurrentAccount();
   if (acc) {
     const ElectionInstance = await sol_getElectionInstance();
 
-    const allVoterDetails =
-      ElectionInstance.methods.getAllVoterDetails().call();
-    
+    const allVoterDetails = ElectionInstance.methods
+      .getAllVoterDetails()
+      .call();
+
     return allVoterDetails;
   }
 };

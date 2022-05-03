@@ -9,6 +9,7 @@ import {
   sol_addVerificationRequest,
   sol_isAdminAddress,
   sol_getAllVoterDetails,
+  sol_getUserDetails,
 } from "../webaction/SolidityFunctionModules.js";
 
 const VoterRegistrationScreen = () => {
@@ -42,6 +43,7 @@ const VoterRegistrationScreen = () => {
   const [account, setAccount] = useState(null);
   const [prn, setPrn] = useState("");
   const [mobile, setMobile] = useState("");
+  const [isVerified, setIsVerified] = useState(false);
 
   //------------------------------ Functions  -----------------------------------------//
   const submitHandler = (e) => {
@@ -49,6 +51,14 @@ const VoterRegistrationScreen = () => {
     e.preventDefault();
 
     applyForVerification(prn, mobile);
+  };
+
+  const getUserDetails = async () => {
+    const data = await sol_getUserDetails();
+    if (!data) {
+      navigate("/login");
+    }
+    setIsVerified(data[4]);
   };
 
   const applyForVerification = async () => {
@@ -65,6 +75,7 @@ const VoterRegistrationScreen = () => {
 
   useEffect(() => {
     routeValidation();
+    getUserDetails();
   });
 
   //------------------------------ Render Content -----------------------------------------//
@@ -73,95 +84,102 @@ const VoterRegistrationScreen = () => {
       <YourAccount account={account} />
       <ElectionInitializeMsg isAdmin={isAdminConnected} />
       <div className="container-main">
-        <h2>Voter Verification</h2>
-        <div className="container-item">
-          <form onSubmit={submitHandler}>
-            <div className="container" style={divisionstyle}>
-              <div className="mb-2">
-                <label
-                  htmlFor="studentPRNNO"
-                  className="form-label"
-                  style={ystyle}
-                >
-                  PRN No. <RequiredFieldStar />
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="studentPRNNo"
-                    placeholder="e.g. 15562522"
-                    onChange={(e) => setPrn(e.target.value)}
-                    required
-                  />
-                </label>
-              </div>
-              <div className="mb-2">
-                <label
-                  htmlFor="studentPhoneno"
-                  className="form-label"
-                  style={ystyle}
-                >
-                  Phone number <RequiredFieldStar />
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="studentPhoneno"
-                    placeholder="eg. 9841234567"
-                    onChange={(e) => setMobile(e.target.value)}
-                    required
-                  />
-                </label>
-              </div>
-              <p className="note">
-                <span className="text-danger"> Note: </span>
-                <br /> Make sure your PRN is correct. <br /> Admin might not
-                approve your account if the provided PRN does not matches the
-                account registered in admin's catalogue.
-              </p>
-              <div className="d-grid gap-2 mt-3">
-                <button className="btn btn-primary btn-lg" type="submit">
-                  Apply
-                </button>
-              </div>
+        {!isVerified && (
+          <>
+            <h2>Voter Verification</h2>
+            <div className="container-item">
+              <form onSubmit={submitHandler}>
+                <div className="container" style={divisionstyle}>
+                  <div className="mb-2">
+                    <label
+                      htmlFor="studentPRNNO"
+                      className="form-label"
+                      style={ystyle}
+                    >
+                      PRN No. <RequiredFieldStar />
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="studentPRNNo"
+                        placeholder="e.g. 15562522"
+                        onChange={(e) => setPrn(e.target.value)}
+                        required
+                      />
+                    </label>
+                  </div>
+                  <div className="mb-2">
+                    <label
+                      htmlFor="studentPhoneno"
+                      className="form-label"
+                      style={ystyle}
+                    >
+                      Phone number <RequiredFieldStar />
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="studentPhoneno"
+                        placeholder="eg. 9841234567"
+                        onChange={(e) => setMobile(e.target.value)}
+                        required
+                      />
+                    </label>
+                  </div>
+                  <p className="note">
+                    <span className="text-danger"> Note: </span>
+                    <br /> Make sure your PRN is correct. <br /> Admin might not
+                    approve your account if the provided PRN does not matches
+                    the account registered in admin's catalogue.
+                  </p>
+                  <div className="d-grid gap-2 mt-3">
+                    <button className="btn btn-primary btn-lg" type="submit">
+                      Apply
+                    </button>
+                  </div>
+                </div>
+              </form>
             </div>
-          </form>
-        </div>
+          </>
+        )}
       </div>
 
-      <div className="container-main">
-        <h2>Apply For Candidate</h2>
-        <div className="container-item">
-          <form onSubmit={submitHandler}>
-            <div className="container" style={divisionstyle}>
-              <div className="mb-3">
-                <label
-                  htmlFor="studentTagline"
-                  className="form-label"
-                  style={ystyle}
-                >
-                  Enter Your Tagline <RequiredFieldStar />
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="studentTagline"
-                    placeholder="e.g. Vote me!!"
-                    required
-                  />
-                </label>
-              </div>
-              <p className="note">
-                <span style={{ color: "tomato" }}> Note: </span>
-                <br /> You can describe yourself in one line or two.
-              </p>
-              <div className="d-grid gap-2 mt-3">
-                <button className="btn btn-primary btn-lg" type="button">
-                  Apply
-                </button>
-              </div>
+      {isVerified && (
+        <>
+          <div className="container-main">
+            <h2>Apply For Candidate</h2>
+            <div className="container-item">
+              <form onSubmit={submitHandler}>
+                <div className="container" style={divisionstyle}>
+                  <div className="mb-3">
+                    <label
+                      htmlFor="studentTagline"
+                      className="form-label"
+                      style={ystyle}
+                    >
+                      Enter Your Tagline <RequiredFieldStar />
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="studentTagline"
+                        placeholder="e.g. Vote me!!"
+                        required
+                      />
+                    </label>
+                  </div>
+                  <p className="note">
+                    <span style={{ color: "tomato" }}> Note: </span>
+                    <br /> You can describe yourself in one line or two.
+                  </p>
+                  <div className="d-grid gap-2 mt-3">
+                    <button className="btn btn-primary btn-lg" type="button">
+                      Apply
+                    </button>
+                  </div>
+                </div>
+              </form>
             </div>
-          </form>
-        </div>
-      </div>
-
+          </div>
+        </>
+      )}
       <div className={"container-item "}>
         <div
           className="alert alert-primary text-center fw-bold mt-2"
