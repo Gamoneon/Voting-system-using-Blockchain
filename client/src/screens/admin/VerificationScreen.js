@@ -7,6 +7,7 @@ import {
   sol_getAllVoterDetails,
   sol_isAdminAddress,
   sol_approveVerificationRequests,
+  sol_denyVerificationRequests,
 } from "../../webaction/SolidityFunctionModules.js";
 
 const VerificationScreen = () => {
@@ -21,6 +22,11 @@ const VerificationScreen = () => {
     const data = await sol_approveVerificationRequests(voterAddress);
     setIsApproved(data);
   };
+
+  const onClickDeny = async (voterAddress) => {
+    const data = await sol_denyVerificationRequests(voterAddress, "Your credentials are not Verified.");
+    setIsApproved(data);
+  }
 
   const routeValidation = async () => {
     const data = await sol_isAdminAddress();
@@ -97,7 +103,22 @@ const VerificationScreen = () => {
                         <td> {student.isVerified ? "True" : "False"}</td>
                       </tr>
                       <tr>
-                        <td colSpan="4">
+                        <td colSpan="2">
+                          <div className="d-grid p-1">
+                            <button
+                              className="btn btn-danger text-light"
+                              type="button"
+                              data-toggle = "modal"
+                              data-target = "#denyModal"
+                              onClick={() => {
+                                onClickDeny(student.voterAddress);
+                              }}
+                            >
+                              Deny
+                            </button>
+                          </div>
+                        </td>
+                        <td colSpan="2">
                           <div className="d-grid p-1">
                             <button
                               className="btn btn-success text-light"
@@ -150,7 +171,25 @@ const VerificationScreen = () => {
                   </table>
                 </>
               )}
-            </div>
+              
+  <div class="modal fade" id="denyModal" role="dialog">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Modal Header</h4>
+        </div>
+        <div class="modal-body">
+          <p>This is a small modal.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+            
           );
         })}
       </div>

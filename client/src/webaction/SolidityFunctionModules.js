@@ -191,6 +191,22 @@ export const sol_approveVerificationRequests = async (approveAccount) => {
   }
 };
 
+export const sol_denyVerificationRequests = async (denyAccount, deniedFor) => {
+  const acc = await sol_getCurrentAccount();
+  if (acc) {
+    const ElectionInstance = await sol_getElectionInstance();
+
+    const denyVerificationReq = await ElectionInstance.methods
+      .denyVerificationRequests(denyAccount, deniedFor)
+      .send({ from: acc, gas: 1000000, gasPrice: 5000000 });
+
+    return true;
+  } else {
+    return false;
+  }
+};
+
+
 export const sol_getAllVoterDetails = async () => {
   const acc = await sol_getCurrentAccount();
   if (acc) {
@@ -233,6 +249,8 @@ export const sol_approveCandidateRequests = async (approveAccount) => {
     return false;
   }
 };
+
+
 
 /*------------------------ Voting Handlers --------------------------- */
 
