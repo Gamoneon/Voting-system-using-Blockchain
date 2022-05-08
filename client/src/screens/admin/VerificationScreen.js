@@ -24,9 +24,10 @@ const VerificationScreen = () => {
   };
 
   const onClickDeny = async (voterAddress) => {
-    const data = await sol_denyVerificationRequests(voterAddress, "Your credentials are not Verified.");
-    setIsApproved(data);
-  }
+    console.log("Deny the address :", voterAddress);
+    // const data = await sol_denyVerificationRequests(voterAddress, "Your credentials are not Verified.");
+    // setIsApproved(data);
+  };
 
   const routeValidation = async () => {
     const data = await sol_isAdminAddress();
@@ -52,7 +53,6 @@ const VerificationScreen = () => {
         allVoterDetails.push(temp);
       }
 
-      
       // console.log(allVoterDetails);
       setVoterData([...allVoterDetails]);
     }
@@ -63,6 +63,7 @@ const VerificationScreen = () => {
   });
 
   useEffect(() => {
+    setIsApproved(false);
     getAllVoterDetails();
   }, [isApproved]);
 
@@ -108,8 +109,8 @@ const VerificationScreen = () => {
                             <button
                               className="btn btn-danger text-light"
                               type="button"
-                              data-toggle = "modal"
-                              data-target = "#denyModal"
+                              data-toggle="modal"
+                              data-target="#denyModal"
                               onClick={() => {
                                 onClickDeny(student.voterAddress);
                               }}
@@ -171,25 +172,36 @@ const VerificationScreen = () => {
                   </table>
                 </>
               )}
-              
-  <div class="modal fade" id="denyModal" role="dialog">
-    <div class="modal-dialog modal-sm">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Modal Header</h4>
-        </div>
-        <div class="modal-body">
-          <p>This is a small modal.</p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-            
+
+              <div className="modal fade" id="denyModal" role="dialog">
+                <div className="modal-dialog modal-sm">
+                  <div className="modal-content">
+                    <div className="modal-header">
+                      <button
+                        type="button"
+                        className="close"
+                        data-dismiss="modal"
+                      >
+                        &times;
+                      </button>
+                      <h4 className="modal-title">Modal Header</h4>
+                    </div>
+                    <div className="modal-body">
+                      <p>This is a small modal.</p>
+                    </div>
+                    <div className="modal-footer">
+                      <button
+                        type="button"
+                        className="btn btn-default"
+                        data-dismiss="modal"
+                      >
+                        Close
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           );
         })}
       </div>

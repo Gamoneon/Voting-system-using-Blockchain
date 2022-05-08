@@ -77,72 +77,86 @@ const ElectionSetupScreen = () => {
       <div className="container">
         <YourAccount />
         <ElectionInitializeMsg />
-        <h3>About Election</h3>
-        <form onSubmit={submitHandler}>
-          <div className="container" style={aboutelectionstyle}>
-            <div className="mb-3">
-              <label htmlFor="electionTitle" className="form-label">
-                Election Title
-              </label>
-              <input
-                type="text"
-                className="form-control"
-                id="electionTitle"
-                placeholder="e.g. Class Representative"
-                // value={storedElectionTitle}
-                onChange={(e) => setElectionTitle(e.target.value)}
-                required
-              ></input>
-            </div>
-            <div className="mb-3">
-              <label htmlFor="organizationName" className="form-label">
-                Organization Name
-              </label>
-              <input
-                type="text"
-                className="form-control"
-                id="organizationName"
-                placeholder="e.g. S.Y.M.Sc. Computer Science"
-                // value={isElectionStarted && storedOrganizationName}
-                onChange={(e) => setOrganizationName(e.target.value)}
-                required
-              ></input>
-            </div>
-            <div className="mb-3">
-              <div className="d-grid gap-2">
+        {isElectionStarted && (
+          <>
+            <h3>Change Phase</h3>
+            <div className="container" style={aboutelectionstyle}>
+              <h4>
+                Current Phase :{" "}
+                <span className="text-success">{currentElectionPhase}</span>
+              </h4>
+              <h4>
+                Next Phase :{" "}
+                <span className="text-danger">{nextElectionPhase}</span>
+              </h4>
+              <div className="d-grid gap-2 mt-3">
                 <button
                   className="btn btn-primary btn-lg"
-                  type="submit"
-                  disabled={isElectionStarted}
+                  type="button"
+                  onClick={changeElectionPhase}
                 >
-                  Start Election
+                  Change Phase
                 </button>
               </div>
             </div>
-          </div>
-        </form>
-        {isElectionStarted && <>
-        <h3>Change Phase</h3>
-        <div className="container" style={aboutelectionstyle}>
-          <h4>
-            Current Phase :{" "}
-            <span className="text-success">{currentElectionPhase}</span>
-          </h4>
-          <h4>
-            Next Phase :{" "}
-            <span className="text-danger">{nextElectionPhase}</span>
-          </h4>
-          <div className="d-grid gap-2 mt-3">
-            <button
-              className="btn btn-primary btn-lg"
-              type="button"
-              onClick={changeElectionPhase}
-            >
-              Change Phase
-            </button>
-          </div>
-        </div>
-        </>}
+          </>
+        )}
+        {!isElectionStarted && (
+          <>
+            <h3>About Election</h3>
+            <form onSubmit={submitHandler}>
+              <div className="container" style={aboutelectionstyle}>
+                <div className="mb-3">
+                  <label htmlFor="electionTitle" className="form-label">
+                    Election Title
+                  </label>
+                  <select
+                    className="form-select"
+                    aria-label="Default select example"
+                    id="electionTitle"
+                    onChange={(e) => setElectionTitle(e.target.value)}
+                    required
+                  >
+                    <option defaultValue hidden>
+                      Choose Title
+                    </option>
+                    <option value="Class Representative">
+                      Class Representative
+                    </option>
+                    <option value="Placement Coordinator">
+                      Placement Coordinator
+                    </option>
+                  </select>
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="organizationName" className="form-label">
+                    Class Name
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="organizationName"
+                    placeholder="e.g. S.Y.M.Sc. Computer Science"
+                    // value={isElectionStarted && storedOrganizationName}
+                    onChange={(e) => setOrganizationName(e.target.value)}
+                    required
+                  ></input>
+                </div>
+                <div className="mb-3">
+                  <div className="d-grid gap-2">
+                    <button
+                      className="btn btn-primary btn-lg"
+                      type="submit"
+                      disabled={isElectionStarted}
+                    >
+                      Start Election
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </>
+        )}
       </div>
     </>
   );

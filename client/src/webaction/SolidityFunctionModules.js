@@ -153,10 +153,8 @@ export const sol_getUserDetails = async () => {
   if (acc) {
     const ElectionInstance = await sol_getElectionInstance();
 
-    const loginData = await ElectionInstance.methods
-      .getLoginDetails(acc)
-      .call();
-    return loginData;
+    const userData = await ElectionInstance.methods.getVoterDetails(acc).call();
+    return userData;
   }
   return false;
 };
@@ -206,7 +204,6 @@ export const sol_denyVerificationRequests = async (denyAccount, deniedFor) => {
   }
 };
 
-
 export const sol_getAllVoterDetails = async () => {
   const acc = await sol_getCurrentAccount();
   if (acc) {
@@ -249,8 +246,6 @@ export const sol_approveCandidateRequests = async (approveAccount) => {
     return false;
   }
 };
-
-
 
 /*------------------------ Voting Handlers --------------------------- */
 

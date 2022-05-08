@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import Logo from "./Logo.js";
+import { sol_getElectionDetails } from "../webaction/SolidityFunctionModules.js";
 
 const NavbarVertical = (props) => {
   //------------------------------ Style CSS -----------------------------------------//
@@ -22,8 +23,15 @@ const NavbarVertical = (props) => {
   const navigate = useNavigate();
   const [isAdminConnected, setIsAdminConnected] = useState(false);
   const [username, setUsername] = useState("");
+  const [currentElectionPhase, setCurrentElectionPhase] = useState("");
 
   //------------------------------ Functions -----------------------------------------//
+
+  const getElectionDetails = async () => {
+    const data = await sol_getElectionDetails();
+    setCurrentElectionPhase(data[4]);
+  };
+
   const logoutHandler = () => {
     if (window.confirm("Are you sure want to logout ?")) {
       navigate("/");
@@ -33,7 +41,8 @@ const NavbarVertical = (props) => {
   useEffect(() => {
     setIsAdminConnected(props.isAdmin);
     setUsername(props.username);
-  }, [props.isAdmin, props.username]);
+    getElectionDetails();
+  }, [props.isAdmin, props.username, currentElectionPhase]);
 
   return (
     <>
@@ -50,12 +59,6 @@ const NavbarVertical = (props) => {
             Role : {isAdminConnected ? "Admin" : "Student"}
           </div>
 
-          <Link
-            to="/information"
-            className="list-group-item list-group-item-action"
-          >
-            <i className="fa-solid fa-circle-info"></i> Information
-          </Link>
           {isAdminConnected ? (
             <>
               <Link
@@ -64,38 +67,58 @@ const NavbarVertical = (props) => {
               >
                 <i className="fa-solid fa-gears"></i> Election Setup
               </Link>
-              <Link
-                to="/verification"
-                className="list-group-item list-group-item-action"
-              >
-                <i className="fa-solid fa-user-check"></i> Verification
-              </Link>
-              <Link
-                to="/candidateverification"
-                className="list-group-item list-group-item-action"
-              >
-                <i className="fa-solid fa-user-check"></i> Candidate Verification
-              </Link>
+              {currentElectionPhase === "Voter Verification" && (
+                <Link
+                  to="/verification"
+                  className="list-group-item list-group-item-action"
+                >
+                  <i className="fa-solid fa-user-check"></i> Verification
+                </Link>
+              )}
+              {currentElectionPhase === "Apply as a Candidate" && (
+                <Link
+                  to="/candidateverification"
+                  className="list-group-item list-group-item-action"
+                >
+                  <i className="fa-solid fa-user-check"></i> Candidate
+                  Verification
+                </Link>
+              )}
             </>
           ) : (
             <>
               <Link
-                to="/voterregistration"
+                to="/information"
+                className="list-group-item list-group-item-action"
+              >
+                <i className="fa-solid fa-circle-info"></i> Information
+              </Link>
+
+              <Link
+                to="/voterverification"
                 className="list-group-item list-group-item-action"
               >
                 <i className="fa-regular fa-id-card"></i> Voter Verification
               </Link>
-              <Link
-                to="/voting"
-                className="list-group-item list-group-item-action"
-              >
-                <i className="fa-solid fa-box-archive"></i> Voting
-              </Link>
+
+              {currentElectionPhase === "Voting" && (
+                <Link
+                  to="/voting"
+                  className="list-group-item list-group-item-action"
+                >
+                  <i className="fa-solid fa-box-archive"></i> Voting
+                </Link>
+              )}
             </>
           )}
-          <Link to="/result" className="list-group-item list-group-item-action">
-            <i className="fa-solid fa-square-poll-vertical"></i> Result
-          </Link>
+          {currentElectionPhase === "Result" && (
+            <Link
+              to="/result"
+              className="list-group-item list-group-item-action"
+            >
+              <i className="fa-solid fa-square-poll-vertical"></i> Result
+            </Link>
+          )}
           <div
             onClick={logoutHandler}
             className="list-group-item list-group-item-action bg-danger"
