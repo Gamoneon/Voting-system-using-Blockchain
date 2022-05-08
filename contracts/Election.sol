@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: MIT
+ // SPDX-License-Identifier: MIT
 pragma solidity >=0.4.21 <0.9.0;
 pragma experimental ABIEncoderV2;
 
@@ -48,6 +48,8 @@ contract Election {
         bool hasVoted;
         bool hasApplied;
         bool isCandidate;
+        bool isDenied;
+        string deniedFor;
         string tagLine;
         uint256 votesCount;
     }
@@ -69,6 +71,18 @@ contract Election {
     function approveVerificationRequests(address pendingVoterAddress) public{
         voterDetails[pendingVoterAddress].hasApplied = false;
         voterDetails[pendingVoterAddress].isVerified = true;
+        if(voterDetails[pendingVoterAddress].isDenied) 
+            {
+                voterDetails[pendingVoterAddress].deniedFor = "";
+                voterDetails[pendingVoterAddress].isDenied = false;
+            }
+    }   
+
+    // Deny verification requests
+    function denyVerificationRequests(address pendingVoterAddress, string memory _deniedFor) public{
+        voterDetails[pendingVoterAddress].hasApplied = false;
+        voterDetails[pendingVoterAddress].isDenied = true;
+        voterDetails[pendingVoterAddress].deniedFor = _deniedFor;
     }
 
     // sending candidate request
@@ -82,6 +96,11 @@ contract Election {
     function approveCandidateRequests(address pendingVoterAddress) public{
         voterDetails[pendingVoterAddress].hasApplied = false;
         voterDetails[pendingVoterAddress].isCandidate = true;
+         if(voterDetails[pendingVoterAddress].isDenied) 
+        {
+            voterDetails[pendingVoterAddress].deniedFor = "";
+            voterDetails[pendingVoterAddress].isDenied = false;
+        }
     }
 
     // Get all voter details
@@ -113,6 +132,8 @@ contract Election {
             hasVoted: false,
             hasApplied: false,
             isCandidate : false,
+            isDenied : false,
+            deniedFor : "",
             tagLine : ""
         });
         voterDetails[msg.sender] = newVoter;
@@ -222,4 +243,4 @@ contract Election {
         return voterDetails[voterAddress].hasVoted;
     }
 
-}   
+} 
