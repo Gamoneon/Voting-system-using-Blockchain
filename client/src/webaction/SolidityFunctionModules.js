@@ -20,11 +20,11 @@ export const sol_connectwallet = async () => {
 };
 
 export const sol_getElectionInstance = async () => {
-  let web3 = null;
+  // let web3 = null;
 
-  const data = await sol_connectwallet();
-  web3 = data.web3;
-
+  // const data = await sol_connectwallet();
+  // web3 = data.web3;
+  const web3 = await sol_getWeb3();
   // Get the contract instance.
   const networkId = await web3.eth.net.getId();
   const deployedNetwork = Election.networks[networkId];

@@ -52,7 +52,7 @@ const CandidateVerificationScreen = () => {
 
   useEffect(() => {
     routeValidation();
-  });
+  },[]);
 
   useEffect(() => {
     setIsApproved(false);

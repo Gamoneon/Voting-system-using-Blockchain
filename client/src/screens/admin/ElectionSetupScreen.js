@@ -70,7 +70,7 @@ const ElectionSetupScreen = () => {
   useEffect(() => {
     routeValidation();
     getElectionDetails();
-  });
+  },[]);
 
   return (
     <>

@@ -3,6 +3,9 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import Logo from "./Logo.js";
 import { sol_getElectionDetails } from "../webaction/SolidityFunctionModules.js";
+import $ from 'jquery'
+
+
 
 const NavbarVertical = (props) => {
   //------------------------------ Style CSS -----------------------------------------//
@@ -43,6 +46,25 @@ const NavbarVertical = (props) => {
     setUsername(props.username);
     getElectionDetails();
   }, [props.isAdmin, props.username, currentElectionPhase]);
+
+  useEffect(() => {
+    if($){
+      $("a.list-group-item-action").on("click",function() {
+              
+        // Select all list items
+        var listItems = $("a.list-group-item-action");
+          
+        // Remove 'active' tag for all list items
+        for (let i = 0; i < listItems.length; i++) {
+            listItems[i].classList.remove("active");
+        }
+          
+        // Add 'active' tag for currently selected item
+        this.classList.add("active");
+        $(".active").attr("aria-current", true);
+    });
+     }
+   },[$])
 
   return (
     <>
