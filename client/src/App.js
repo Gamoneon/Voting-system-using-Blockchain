@@ -16,6 +16,7 @@ import VotingScreen from "./screens/VotingScreen.js";
 import ResultScreen from "./screens/ResultScreen.js";
 import Footer from "./components/Footer.js";
 import "./App.css";
+import AdminLoginScreen from "./screens/AdminLoginScreen.js";
 
 const App = () => {
   return (
@@ -26,6 +27,7 @@ const App = () => {
             <Routes>
               <Route exact path="/" element={<HomeScreen />} />
               <Route exact path="/register" element={<RegisterScreen />} />
+              <Route exact path="/adminlogin" element={<AdminLoginScreen />} />
               <Route exact path="/login" element={<LoginScreen />} />
               <Route
                 exact

@@ -38,8 +38,13 @@ const Navbar = () => {
                   </Link>
                 </li>
                 <li className="nav-item">
+                  <Link className="nav-link" to="/adminlogin">
+                    Admin Login
+                  </Link>
+                </li>
+                <li className="nav-item">
                   <Link className="nav-link" to="/login">
-                    Login
+                   Student Login
                   </Link>
                 </li>
               </ul>

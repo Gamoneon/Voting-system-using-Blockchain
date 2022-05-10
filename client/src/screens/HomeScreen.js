@@ -27,6 +27,7 @@ const HomeScreen = () => {
     border: "none",
     fontSize: "1.5rem",
     borderRadius: "10px",
+    
     opacity: "0.",
   };
 
