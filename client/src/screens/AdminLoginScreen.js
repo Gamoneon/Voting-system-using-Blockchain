@@ -10,9 +10,9 @@ import {
 } from "../webaction/SolidityFunctionModules";
 import { useNavigate } from "react-router-dom";
 
-const LoginScreen = () => {
+const AdminLoginScreen = () => {
   //------------------------------ Style CSS -----------------------------------------//
-  const Loginscreenstyle = {
+  const AdminLoginscreenstyle = {
     minHeight: "100%",
     backgroundImage: `url("./Images/wallpaper2.png")`,
     backgroundRepeat: "no-repeat",
@@ -22,7 +22,7 @@ const LoginScreen = () => {
     height: "84vh",
   };
 
-  const loginformstyle = {
+  const Adminloginformstyle = {
     width: "25%",
     background: "#23263F",
     padding: "3%",
@@ -54,8 +54,7 @@ const LoginScreen = () => {
   //------------------------------ Functions -----------------------------------------//
   const submitHandler = async (e) => {
     e.preventDefault();
-    // Verify login details
-    if (!(await sol_isAdminAddress())) {
+    if (await sol_isAdminAddress()) {
       if (await sol_isVoterExists(email)) {
         let result = await sol_verifyLoginDetails(email, password);
         if (result) navigate("/dashboard");
@@ -63,9 +62,9 @@ const LoginScreen = () => {
         // navigate to login
       }
       else setErrorLogin("Account does NOT exist. Register first.")
-    } else setErrorLogin("Only Student can Login.");
+    } else setErrorLogin(" Only Admin can Login.");
   };
-
+  
   const onWalletConnection = async () => {
     let data = await sol_connectwallet();
     if (data.error) {
@@ -82,11 +81,11 @@ const LoginScreen = () => {
   return (
     <>
       <Navbar />
-      <div className="LoginPageWallpaper" style={Loginscreenstyle}>
+      <div className="AdminLoginPageWallpaper" style={AdminLoginscreenstyle}>
         <form onSubmit={submitHandler}>
-          <div className="container text-light" style={loginformstyle}>
+          <div className="container text-light" style={Adminloginformstyle}>
             <div className="text-center">
-              <h3>Login</h3>
+              <h3>Admin</h3>
 
               {errorConnectWallet && (
                 <AlertMessage type="danger" message={errorConnectWallet} />
@@ -105,14 +104,14 @@ const LoginScreen = () => {
               </p>
             </div>
             <div className="mb-3">
-              <label htmlFor="studentEmail" className="form-label">
+              <label htmlFor="Email" className="form-label">
                 Email
               </label>
               <input
                 type="email"
                 pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
                 className="form-control"
-                id="studentEmail"
+                id="AdminEmail"
                 placeholder="e.g. xyz@gmail.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -120,13 +119,13 @@ const LoginScreen = () => {
               ></input>
             </div>
             <div className="mb-3">
-              <label htmlFor="studentPassword" className="form-label">
+              <label htmlFor="AdminPassword" className="form-label">
                 Password
               </label>
               <input
                 type="password"
                 className="form-control"
-                id="studentPassword"
+                id="AdminPassword"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
@@ -181,4 +180,4 @@ const LoginScreen = () => {
   );
 };
 
-export default LoginScreen;
+export default AdminLoginScreen;

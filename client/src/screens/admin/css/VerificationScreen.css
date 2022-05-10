@@ -2,7 +2,7 @@ table {
     border: 1px solid #000000 !important;
 }
 
-th{
+th, td{
     width: 20%;
 }
 

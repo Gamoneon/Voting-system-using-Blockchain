@@ -4,6 +4,7 @@ import NavbarVertical from "../components/NavbarVertical.js";
 import {
   sol_getUserDetails,
   sol_isAdminAddress,
+  sol_getElectionDetails,
 } from "../webaction/SolidityFunctionModules.js";
 
 const DashboardScreen = (props) => {
@@ -26,8 +27,14 @@ const DashboardScreen = (props) => {
   const navigate = useNavigate();
   const [isAdminConnected, setIsAdminConnected] = useState(false);
   const [username, setUsername] = useState("");
+  const [currentElectionPhase, setCurrentElectionPhase] = useState("");
 
   //------------------------------ Functions -----------------------------------------//
+
+  const getElectionDetails = async () => {
+    const data = await sol_getElectionDetails();
+    setCurrentElectionPhase(data[4]);
+  };
 
   const isAdmin = async () => {
     const data = await sol_isAdminAddress();
@@ -39,14 +46,14 @@ const DashboardScreen = (props) => {
     if (!data) {
       navigate("/login");
     }
-    setUsername(data[3]);
+    setUsername(data["username"]);
   };
 
   useEffect(() => {
     isAdmin();
     getUserDetails();
-    // console.log(isAdminConnected);
-  });
+    getElectionDetails();
+  }, [currentElectionPhase]);
 
   return (
     <>

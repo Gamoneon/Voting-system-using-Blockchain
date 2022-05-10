@@ -7,6 +7,7 @@ import {
   sol_getAllVoterDetails,
   sol_isAdminAddress,
   sol_approveVerificationRequests,
+  sol_denyVerificationRequests,
 } from "../../webaction/SolidityFunctionModules.js";
 
 const VerificationScreen = () => {
@@ -20,6 +21,12 @@ const VerificationScreen = () => {
   const onClickApprove = async (voterAddress) => {
     const data = await sol_approveVerificationRequests(voterAddress);
     setIsApproved(data);
+  };
+
+  const onClickDeny = async (voterAddress) => {
+    console.log("Deny the address :", voterAddress);
+    // const data = await sol_denyVerificationRequests(voterAddress, "Your credentials are not Verified.");
+    // setIsApproved(data);
   };
 
   const routeValidation = async () => {
@@ -46,7 +53,6 @@ const VerificationScreen = () => {
         allVoterDetails.push(temp);
       }
 
-      
       // console.log(allVoterDetails);
       setVoterData([...allVoterDetails]);
     }
@@ -54,9 +60,10 @@ const VerificationScreen = () => {
 
   useEffect(() => {
     routeValidation();
-  });
+  },[]);
 
   useEffect(() => {
+    setIsApproved(false);
     getAllVoterDetails();
   }, [isApproved]);
 
@@ -97,7 +104,22 @@ const VerificationScreen = () => {
                         <td> {student.isVerified ? "True" : "False"}</td>
                       </tr>
                       <tr>
-                        <td colSpan="4">
+                        <td colSpan="2">
+                          <div className="d-grid p-1">
+                            <button
+                              className="btn btn-danger text-light"
+                              type="button"
+                              data-toggle="modal"
+                              data-target="#denyModal"
+                              onClick={() => {
+                                onClickDeny(student.voterAddress);
+                              }}
+                            >
+                              Deny
+                            </button>
+                          </div>
+                        </td>
+                        <td colSpan="2">
                           <div className="d-grid p-1">
                             <button
                               className="btn btn-success text-light"
@@ -150,6 +172,35 @@ const VerificationScreen = () => {
                   </table>
                 </>
               )}
+
+              <div className="modal fade" id="denyModal" role="dialog">
+                <div className="modal-dialog modal-sm">
+                  <div className="modal-content">
+                    <div className="modal-header">
+                      <button
+                        type="button"
+                        className="close"
+                        data-dismiss="modal"
+                      >
+                        &times;
+                      </button>
+                      <h4 className="modal-title">Modal Header</h4>
+                    </div>
+                    <div className="modal-body">
+                      <p>This is a small modal.</p>
+                    </div>
+                    <div className="modal-footer">
+                      <button
+                        type="button"
+                        className="btn btn-default"
+                        data-dismiss="modal"
+                      >
+                        Close
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           );
         })}

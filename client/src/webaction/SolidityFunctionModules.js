@@ -20,11 +20,11 @@ export const sol_connectwallet = async () => {
 };
 
 export const sol_getElectionInstance = async () => {
-  let web3 = null;
+  // let web3 = null;
 
-  const data = await sol_connectwallet();
-  web3 = data.web3;
-
+  // const data = await sol_connectwallet();
+  // web3 = data.web3;
+  const web3 = await sol_getWeb3();
   // Get the contract instance.
   const networkId = await web3.eth.net.getId();
   const deployedNetwork = Election.networks[networkId];
@@ -114,7 +114,7 @@ export const sol_addLoginDetails = async (username, email, password) => {
   const acc = await sol_getCurrentAccount();
   if (acc) {
     const ElectionInstance = await sol_getElectionInstance();
-    if (!(await ElectionInstance.methods.isVoterExists(acc).call())) {
+    if (!(await ElectionInstance.methods.isVoterExists(acc, email).call())) {
       await ElectionInstance.methods
         .addVoterDetails(username, email, password)
         .send({ from: acc, gas: 1000000, gasPrice: 5000000 });
@@ -153,14 +153,21 @@ export const sol_getUserDetails = async () => {
   if (acc) {
     const ElectionInstance = await sol_getElectionInstance();
 
-    const loginData = await ElectionInstance.methods
-      .getLoginDetails(acc)
-      .call();
-    return loginData;
+    const userData = await ElectionInstance.methods.getVoterDetails(acc).call();
+    return userData;
   }
   return false;
 };
 
+// Check if voter exists or not
+export const sol_isVoterExists = async (email) => {
+  const acc = await sol_getCurrentAccount();
+  const ElectionInstance = await sol_getElectionInstance();
+
+  if (await ElectionInstance.methods.isVoterExists(acc, email).call())
+    return true;
+  else return false;
+};
 /*------------ Voter Verification functions ------------*/
 
 export const sol_addVerificationRequest = async (prn, mobile) => {
@@ -183,6 +190,21 @@ export const sol_approveVerificationRequests = async (approveAccount) => {
 
     const approveVerificationReq = await ElectionInstance.methods
       .approveVerificationRequests(approveAccount)
+      .send({ from: acc, gas: 1000000, gasPrice: 5000000 });
+
+    return true;
+  } else {
+    return false;
+  }
+};
+
+export const sol_denyVerificationRequests = async (denyAccount, deniedFor) => {
+  const acc = await sol_getCurrentAccount();
+  if (acc) {
+    const ElectionInstance = await sol_getElectionInstance();
+
+    const denyVerificationReq = await ElectionInstance.methods
+      .denyVerificationRequests(denyAccount, deniedFor)
       .send({ from: acc, gas: 1000000, gasPrice: 5000000 });
 
     return true;

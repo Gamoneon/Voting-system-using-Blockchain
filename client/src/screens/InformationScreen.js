@@ -34,7 +34,7 @@ const InformationScreen = () => {
                 </li>
                 <li>
                   For registration, the student will have to enter is PRN number
-                  and Adhar Number.
+                  and Mobile Number.
                 </li>
               </ul>
             </div>

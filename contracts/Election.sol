@@ -8,7 +8,6 @@ contract Election {
     uint256 voterCount;
     bool isElectionStarted;
     bool isElectionEnded;
-    bool isVerified;
     string electionTitle;
     string electionOrganization;
     string currentElectionPhase;
@@ -16,7 +15,7 @@ contract Election {
     uint256 electionPhaseIndex;
     string[] public electionPhases;
 
-    constructor() public{
+    constructor() public {
         // Initilizing default values
         admin = msg.sender;
         candidateCount = 0;
@@ -28,13 +27,13 @@ contract Election {
         electionPhaseIndex = 0;
         electionPhases = [
             "None",
-            "Registration",
+            "Voter Verification",
             "Apply as a Candidate",
             "Voting",
             "Result"
         ];
         currentElectionPhase = electionPhases[electionPhaseIndex];
-        nextElectionPhase = electionPhases[electionPhaseIndex + 1]; 
+        nextElectionPhase = electionPhases[electionPhaseIndex + 1];
     }
 
     struct voter {
@@ -48,6 +47,8 @@ contract Election {
         bool hasVoted;
         bool hasApplied;
         bool isCandidate;
+        // bool isDenied;
+        // string deniedFor;
         string tagLine;
         uint256 votesCount;
     }
@@ -55,43 +56,70 @@ contract Election {
     mapping(address => voter) public voterDetails;
     address[] public voters; // Array of address to store address of voters
 
-
     /*------------------------ Voter Verification --------------------------- */
 
     // Update verification details
-    function addVerificationRequest(address pendingVoterAddress, string memory _prn, string memory _mobile) public{
+    function addVerificationRequest(
+        address pendingVoterAddress,
+        string memory _prn,
+        string memory _mobile
+    ) public {
         voterDetails[pendingVoterAddress].hasApplied = true;
         voterDetails[pendingVoterAddress].prn = _prn;
         voterDetails[pendingVoterAddress].mobile = _mobile;
     }
 
     // Approve verification requests
-    function approveVerificationRequests(address pendingVoterAddress) public{
+    function approveVerificationRequests(address pendingVoterAddress) public {
         voterDetails[pendingVoterAddress].hasApplied = false;
         voterDetails[pendingVoterAddress].isVerified = true;
+        // if (voterDetails[pendingVoterAddress].isDenied) {
+        //     voterDetails[pendingVoterAddress].deniedFor = "";
+        //     voterDetails[pendingVoterAddress].isDenied = false;
+        // }
     }
+
+    // Deny verification requests
+    // function denyVerificationRequests(
+    //     address pendingVoterAddress,
+    //     string memory _deniedFor
+    // ) public {
+    //     voterDetails[pendingVoterAddress].hasApplied = false;
+    //     voterDetails[pendingVoterAddress].isDenied = true;
+    //     voterDetails[pendingVoterAddress].deniedFor = _deniedFor;
+    // }
 
     // sending candidate request
 
-    function addCandidateRequest(address pendingVoterAddress, string memory _tagLine) public{
+    function addCandidateRequest(
+        address pendingVoterAddress,
+        string memory _tagLine
+    ) public {
         voterDetails[pendingVoterAddress].hasApplied = true;
         voterDetails[pendingVoterAddress].tagLine = _tagLine;
     }
 
     // Approve candidate requests
-    function approveCandidateRequests(address pendingVoterAddress) public{
+    function approveCandidateRequests(address pendingVoterAddress) public {
         voterDetails[pendingVoterAddress].hasApplied = false;
         voterDetails[pendingVoterAddress].isCandidate = true;
+        // if (voterDetails[pendingVoterAddress].isDenied) {
+        //     voterDetails[pendingVoterAddress].deniedFor = "";
+        //     voterDetails[pendingVoterAddress].isDenied = false;
+        // }
     }
 
     // Get all voter details
-    function getAllVoterDetails() public view returns(voter[] memory){
-       voter[] memory allVoterDetails = new voter[](voterCount);
-       for(uint i = 0; i <voterCount; i++)
-       {
-           allVoterDetails[i] =  voterDetails[voters[i]];
-       }
-       return allVoterDetails;
+    function getAllVoterDetails() public view returns (voter[] memory) {
+        voter[] memory allVoterDetails = new voter[](voterCount);
+        for (uint256 i = 0; i < voterCount; i++) {
+            allVoterDetails[i] = voterDetails[voters[i]];
+        }
+        return allVoterDetails;
+    }
+
+    function getVoterDetails(address voterAddress) public view returns (voter memory){
+        return voterDetails[voterAddress];
     }
 
     /*------------------------ Voter Handlers --------------------------- */
@@ -112,18 +140,21 @@ contract Election {
             isVerified: false,
             hasVoted: false,
             hasApplied: false,
-            isCandidate : false,
-            tagLine : ""
+            isCandidate: false,
+            // isDenied: false,
+            // deniedFor: "",
+            tagLine: ""
         });
         voterDetails[msg.sender] = newVoter;
         voterCount++;
         voters.push(msg.sender);
     }
 
-    function isVoterExists(address voterAddress) public view returns (bool) {
+    function isVoterExists(address voterAddress, string memory mail) public view returns (bool) {
         //Loop through voters array
         for (uint256 i = 0; i < voters.length; i++) {
-            if ((voterAddress) == voters[i]) {
+            if ((voterAddress) == voters[i] ||
+                (keccak256(bytes(mail)) == keccak256(bytes(voterDetails[voters[i]].email)))){
                 return true;
             }
         }
@@ -148,7 +179,7 @@ contract Election {
             voterDetails[loginAddress].username,
             voterDetails[loginAddress].isVerified
         );
-    }   
+    }
 
     /*------------------------ Election Handlers --------------------------- */
 
@@ -209,17 +240,14 @@ contract Election {
         changeElectionPhase();
     }
 
-
-
     /*------------------------ Voting Handlers --------------------------- */
-    
-    function addVote (address voterAddress, address candidateAddress) public{
+
+    function addVote(address voterAddress, address candidateAddress) public {
         voterDetails[voterAddress].hasVoted = true;
-        voterDetails[candidateAddress].votesCount ++;
+        voterDetails[candidateAddress].votesCount++;
     }
 
-    function hasVoted (address voterAddress) public view returns (bool){
+    function hasVoted(address voterAddress) public view returns (bool) {
         return voterDetails[voterAddress].hasVoted;
     }
-
-}   
+}

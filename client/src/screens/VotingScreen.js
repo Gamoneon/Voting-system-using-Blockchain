@@ -65,7 +65,7 @@ const VotingScreen = () => {
 
   useEffect(() => {
     routeValidation();
-  });
+  },[]);
 
   useEffect(() => {
     hasCastedVote();
@@ -81,7 +81,15 @@ const VotingScreen = () => {
         className="alert alert-success text-center fw-bold mt-2"
         role="alert"
       >
-        <h5>Go ahead and cast your vote !</h5>
+        {!hasVoted ? (
+          <h5>Go ahead and cast your vote !</h5>
+        ) : (
+          <>
+            <h5>You have successfully voted. </h5>
+            <h5>Now wait for the results.</h5>
+            <h5> Thank you !</h5>
+          </>
+        )}
       </div>
 
       <h4>Total Candidates : {candidateData.length}</h4>
@@ -101,7 +109,7 @@ const VotingScreen = () => {
                     </div>
                   </div>
                   <div className="col-3">
-                    <div class="d-grid gap-2 col-6 mx-auto">
+                    <div className="d-grid gap-2 col-6 mx-auto">
                       <button
                         type="button"
                         className="btn btn-lg btn-success"

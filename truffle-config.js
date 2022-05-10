@@ -14,4 +14,17 @@ module.exports = {
       port: 7545,
     },
   },
+  settings: {
+    optimizer: {
+      enabled: true,
+      runs: 2000,
+      details: {
+        yul: true,
+        yulDetails: {
+          stackAllocation: true,
+          optimizerSteps: "dhfoDgvulfnTUtnIf",
+        },
+      },
+    },
+  },
 };

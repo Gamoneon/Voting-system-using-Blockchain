@@ -40,7 +40,7 @@ const CandidateVerificationScreen = () => {
         temp["username"] = data[i]["username"];
         temp["tagLine"] = data[i]["tagLine"];
         temp["hasApplied"] = data[i]["hasApplied"];
-        temp["isCandidate"] = data[i]["isCandidate"]; 
+        temp["isCandidate"] = data[i]["isCandidate"];
 
         allCandidateDetails.push(temp);
       }
@@ -52,9 +52,10 @@ const CandidateVerificationScreen = () => {
 
   useEffect(() => {
     routeValidation();
-  });
+  },[]);
 
   useEffect(() => {
+    setIsApproved(false);
     getAllVoterDetails();
   }, [isApproved]);
 

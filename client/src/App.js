@@ -8,7 +8,7 @@ import RegisterScreen from "./screens/RegisterScreen.js";
 import LoginScreen from "./screens/LoginScreen.js";
 import DashboardScreen from "./screens/DashboardScreen.js";
 import InformationScreen from "./screens/InformationScreen.js";
-import VoterRegistrationScreen from "./screens/VoterRegistrationScreen.js";
+import VoterVerificationScreen from "./screens/VoterVerificationScreen.js";
 import ElectionSetupScreen from "./screens/admin/ElectionSetupScreen.js";
 import VerificationScreen from "./screens/admin/VerificationScreen.js";
 import CandidateVerificationScreen from "./screens/admin/CandidateVerificationScreen.js";
@@ -16,6 +16,7 @@ import VotingScreen from "./screens/VotingScreen.js";
 import ResultScreen from "./screens/ResultScreen.js";
 import Footer from "./components/Footer.js";
 import "./App.css";
+import AdminLoginScreen from "./screens/AdminLoginScreen.js";
 
 const App = () => {
   return (
@@ -26,6 +27,7 @@ const App = () => {
             <Routes>
               <Route exact path="/" element={<HomeScreen />} />
               <Route exact path="/register" element={<RegisterScreen />} />
+              <Route exact path="/adminlogin" element={<AdminLoginScreen />} />
               <Route exact path="/login" element={<LoginScreen />} />
               <Route
                 exact
@@ -39,9 +41,9 @@ const App = () => {
               />
               <Route
                 exact
-                path="/voterregistration"
+                path="/voterverification"
                 element={
-                  <DashboardScreen component={<VoterRegistrationScreen />} />
+                  <DashboardScreen component={<VoterVerificationScreen />} />
                 }
               />
               <Route
@@ -67,7 +69,11 @@ const App = () => {
               <Route
                 exact
                 path="/candidateverification"
-                element={<DashboardScreen component={<CandidateVerificationScreen />} />}
+                element={
+                  <DashboardScreen
+                    component={<CandidateVerificationScreen />}
+                  />
+                }
               />
 
               <Route
