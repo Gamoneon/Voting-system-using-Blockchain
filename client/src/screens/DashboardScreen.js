@@ -53,7 +53,6 @@ const DashboardScreen = (props) => {
     isAdmin();
     getUserDetails();
     getElectionDetails();
-    // console.log(isAdminConnected);
   }, [currentElectionPhase]);
 
   return (

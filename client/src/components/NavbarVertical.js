@@ -51,9 +51,12 @@ const NavbarVertical = (props) => {
   useEffect(() => {
     setIsAdminConnected(props.isAdmin);
     setUsername(props.username);
-    getElectionDetails();
-  }, [props.isAdmin, props.username, currentElectionPhase]);
+    
+  }, [props.isAdmin, props.username]);
 
+  useEffect(() => {
+    getElectionDetails();
+  },[currentElectionPhase]);
 
   return (
     <>

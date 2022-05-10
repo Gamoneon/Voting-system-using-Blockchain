@@ -53,6 +53,7 @@ const ElectionSetupScreen = () => {
   const changeElectionPhase = async () => {
     const data = await sol_changeElectionPhase();
     getElectionDetails();
+    window.location.reload(false);
   };
 
   const startElection = async (electionTitle, organizationName) => {
