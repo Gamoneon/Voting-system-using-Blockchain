@@ -150,10 +150,11 @@ contract Election {
         voters.push(msg.sender);
     }
 
-    function isVoterExists(address voterAddress) public view returns (bool) {
+    function isVoterExists(address voterAddress, string memory mail) public view returns (bool) {
         //Loop through voters array
         for (uint256 i = 0; i < voters.length; i++) {
-            if ((voterAddress) == voters[i]) {
+            if ((voterAddress) == voters[i] ||
+                (keccak256(bytes(mail)) == keccak256(bytes(voterDetails[voters[i]].email)))){
                 return true;
             }
         }

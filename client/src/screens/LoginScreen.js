@@ -5,6 +5,7 @@ import AlertMessage from "../components/AlertMessage.js";
 import {
   sol_verifyLoginDetails,
   sol_connectwallet,
+  sol_isAdminAddress,
 } from "../webaction/SolidityFunctionModules";
 import { useNavigate } from "react-router-dom";
 
@@ -53,10 +54,13 @@ const LoginScreen = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
     // Verify login details
-    let result = await sol_verifyLoginDetails(email, password);
-    if (result) navigate("/dashboard");
-    else setErrorLogin("Wrong credentails!");
-    // navigate to login
+    if (!await sol_isAdminAddress()) {
+      let result = await sol_verifyLoginDetails(email, password);
+      if (result) navigate("/dashboard");
+      else setErrorLogin("Wrong credentails!");
+      // navigate to login
+    }
+    else setErrorLogin("Student Login Only !");
   };
 
   const onWalletConnection = async () => {

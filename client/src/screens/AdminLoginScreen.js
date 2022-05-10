@@ -5,6 +5,7 @@ import AlertMessage from "../components/AlertMessage.js";
 import {
   sol_verifyLoginDetails,
   sol_connectwallet,
+  sol_isAdminAddress,
 } from "../webaction/SolidityFunctionModules";
 import { useNavigate } from "react-router-dom";
 
@@ -53,10 +54,13 @@ const AdminLoginScreen = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
     // Verify login details
-    let result = await sol_verifyLoginDetails(email, password);
-    if (result) navigate("/dashboard");
-    else setErrorLogin("Wrong credentails!");
-    // navigate to login
+    if (await sol_isAdminAddress()) {
+      let result = await sol_verifyLoginDetails(email, password);
+      if (result) navigate("/dashboard");
+      else setErrorLogin("Wrong credentails!");
+      // navigate to login
+    }
+    else setErrorLogin("Admin Login Only !");
   };
 
   const onWalletConnection = async () => {
@@ -79,7 +83,7 @@ const AdminLoginScreen = () => {
         <form onSubmit={submitHandler}>
           <div className="container text-light" style={Adminloginformstyle}>
             <div className="text-center">
-              <h3>Admin Login</h3>
+              <h3>Admin</h3>
 
               {errorConnectWallet && (
                 <AlertMessage type="danger" message={errorConnectWallet} />
@@ -99,7 +103,7 @@ const AdminLoginScreen = () => {
             </div>
             <div className="mb-3">
               <label htmlFor="Email" className="form-label">
-                 Admin Email
+                Email
               </label>
               <input
                 type="email"

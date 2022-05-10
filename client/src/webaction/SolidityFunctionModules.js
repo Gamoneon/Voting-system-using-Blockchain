@@ -114,7 +114,7 @@ export const sol_addLoginDetails = async (username, email, password) => {
   const acc = await sol_getCurrentAccount();
   if (acc) {
     const ElectionInstance = await sol_getElectionInstance();
-    if (!(await ElectionInstance.methods.isVoterExists(acc).call())) {
+    if (!(await ElectionInstance.methods.isVoterExists(acc, email).call())) {
       await ElectionInstance.methods
         .addVoterDetails(username, email, password)
         .send({ from: acc, gas: 1000000, gasPrice: 5000000 });
@@ -126,6 +126,7 @@ export const sol_addLoginDetails = async (username, email, password) => {
 
 //Verify login details
 export const sol_verifyLoginDetails = async (email, password) => {
+
   const acc = await sol_getCurrentAccount();
   if (acc) {
     const ElectionInstance = await sol_getElectionInstance();
