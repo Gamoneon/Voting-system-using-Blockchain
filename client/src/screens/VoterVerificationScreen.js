@@ -106,7 +106,7 @@ const VoterVerificationScreen = () => {
     routeValidation();
 
     getElectionDetails();
-  });
+  },[]);
 
   useEffect(() => {
     getUserDetails();

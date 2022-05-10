@@ -65,7 +65,7 @@ const VotingScreen = () => {
 
   useEffect(() => {
     routeValidation();
-  });
+  },[]);
 
   useEffect(() => {
     hasCastedVote();

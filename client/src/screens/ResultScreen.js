@@ -4,6 +4,12 @@ import YourAccount from "../components/YourAccount.js";
 import { sol_getAllVoterDetails } from "../webaction/SolidityFunctionModules.js";
 
 const ResultScreen = () => {
+  const resultscreenstyle =
+  {
+    backgroundImage: `url("./Images/confetti-17.gif")`  ,
+    height : "100vh"
+
+  };
   //------------------------------ style CSS -----------------------------------------//
   const tablestyle = {
     width: "60%",
@@ -11,7 +17,7 @@ const ResultScreen = () => {
     marginleft: "0",
     padding: "1em",
     border: "1px solid #000000 !important",
-    backgroundcolor: "#90EE90",
+    backgroundcolor: "#90EE90", 
   };
 
   const winnerBoxStyle = {
@@ -27,15 +33,16 @@ const ResultScreen = () => {
   const [account, setAccount] = useState(null);
   const [candidateData, setCandidateData] = useState([]);
   const [winnerCandidate, setWinnerCandidate] = useState({});
-  let maxVotes = 0;
-  let candidateID = 1;
-  let winner = {};
+  
 
   /*----------------- WARNING ---------------*/
   /*  Check function for Continous Looping   */
   /*-----------------------------------------*/
 
   const getAllVoterDetails = async () => {
+    let maxVotes = 0;
+  let candidateID = 1;
+  let winner = {};
     const data = await sol_getAllVoterDetails();
     let allCandidateDetails = [];
     if (data) {
@@ -58,7 +65,7 @@ const ResultScreen = () => {
           allCandidateDetails.push(temp);
         }
       }
-
+       console.log("Candidate details : ",allCandidateDetails);
       setCandidateData([...allCandidateDetails]);
     }
 
@@ -66,15 +73,14 @@ const ResultScreen = () => {
 
   useEffect(() => {
     getAllVoterDetails();
-  });
+  },[]);
 
   //------------------------------ Render Content -----------------------------------------//
   return (
     <>
-      <div className="container">
+      <div className="container" style={resultscreenstyle}>
         <YourAccount account={account} />
         <ElectionInitializeMsg isAdmin={isAdmin} />
-
         <h2>Results</h2>
         <h4>Total Candidates : {candidateData.length}</h4>
         <div
@@ -85,7 +91,7 @@ const ResultScreen = () => {
             <h5>Winner</h5>
           </div>
           <div className="col-4 ">
-            <h5>{winnerCandidate.winnerName}</h5>
+             <h5><img src="./Images/winner.png" height="40" width="40"></img>{winnerCandidate.winnerName}</h5> 
           </div>
           <div className="col-4">
             <h5>Total Votes : {winnerCandidate.maxVotes}</h5>
@@ -102,7 +108,8 @@ const ResultScreen = () => {
               {candidateData.map((student, key) => {
                 return (
                   <tr key={key}>
-                    <td>{candidateID++}</td>
+                    {/* <td>{candidateID++}</td> */}
+                    <td>{key+1}</td>
                     <td>{student.username}</td>
                     <td>{student.votesCount}</td>
                   </tr>

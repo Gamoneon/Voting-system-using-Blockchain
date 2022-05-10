@@ -39,7 +39,7 @@ const ElectionInitializeMsg = () => {
     isAdmin();
     getElectionDetails();
     // console.log(isAdminConnected);
-  });
+  },[]);
   //------------------------------ Render Content -----------------------------------------//
   return (
     <div

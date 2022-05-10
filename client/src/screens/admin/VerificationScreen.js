@@ -60,7 +60,7 @@ const VerificationScreen = () => {
 
   useEffect(() => {
     routeValidation();
-  });
+  },[]);
 
   useEffect(() => {
     setIsApproved(false);

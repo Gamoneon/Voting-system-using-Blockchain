@@ -15,7 +15,7 @@ const YourAccount = () => {
 
   useEffect(() => {
     getCurrentAccount();
-  });
+  },[]);
 
   //------------------------------ Render Content -----------------------------------------//
 
