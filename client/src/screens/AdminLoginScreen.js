@@ -6,6 +6,7 @@ import {
   sol_verifyLoginDetails,
   sol_connectwallet,
   sol_isAdminAddress,
+  sol_isVoterExists,
 } from "../webaction/SolidityFunctionModules";
 import { useNavigate } from "react-router-dom";
 
@@ -53,16 +54,17 @@ const AdminLoginScreen = () => {
   //------------------------------ Functions -----------------------------------------//
   const submitHandler = async (e) => {
     e.preventDefault();
-    // Verify login details
     if (await sol_isAdminAddress()) {
-      let result = await sol_verifyLoginDetails(email, password);
-      if (result) navigate("/dashboard");
-      else setErrorLogin("Wrong credentails!");
-      // navigate to login
-    }
-    else setErrorLogin("Admin Login Only !");
+      if (await sol_isVoterExists(email)) {
+        let result = await sol_verifyLoginDetails(email, password);
+        if (result) navigate("/dashboard");
+        else setErrorLogin("Wrong credentails!");
+        // navigate to login
+      }
+      else setErrorLogin("Account does NOT exist. Register first.")
+    } else setErrorLogin("Admin Login Only !");
   };
-
+  
   const onWalletConnection = async () => {
     let data = await sol_connectwallet();
     if (data.error) {

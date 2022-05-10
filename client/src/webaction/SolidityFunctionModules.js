@@ -126,7 +126,6 @@ export const sol_addLoginDetails = async (username, email, password) => {
 
 //Verify login details
 export const sol_verifyLoginDetails = async (email, password) => {
-
   const acc = await sol_getCurrentAccount();
   if (acc) {
     const ElectionInstance = await sol_getElectionInstance();
@@ -160,6 +159,15 @@ export const sol_getUserDetails = async () => {
   return false;
 };
 
+// Check if voter exists or not
+export const sol_isVoterExists = async (email) => {
+  const acc = await sol_getCurrentAccount();
+  const ElectionInstance = await sol_getElectionInstance();
+
+  if (await ElectionInstance.methods.isVoterExists(acc, email).call())
+    return true;
+  else return false;
+};
 /*------------ Voter Verification functions ------------*/
 
 export const sol_addVerificationRequest = async (prn, mobile) => {
