@@ -34,6 +34,7 @@ contract Election {
         ];
         currentElectionPhase = electionPhases[electionPhaseIndex];
         nextElectionPhase = electionPhases[electionPhaseIndex + 1];
+        
     }
 
     struct voter {

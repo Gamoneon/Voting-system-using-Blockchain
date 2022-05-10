@@ -104,7 +104,7 @@ const VerificationScreen = () => {
                         <td> {student.isVerified ? "True" : "False"}</td>
                       </tr>
                       <tr>
-                        <td colSpan="2">
+                        {/* <td colSpan="2">
                           <div className="d-grid p-1">
                             <button
                               className="btn btn-danger text-light"
@@ -118,8 +118,8 @@ const VerificationScreen = () => {
                               Deny
                             </button>
                           </div>
-                        </td>
-                        <td colSpan="2">
+                        </td> */}
+                        <td colSpan="4">
                           <div className="d-grid p-1">
                             <button
                               className="btn btn-success text-light"
