@@ -63,7 +63,7 @@ const LoginScreen = () => {
         // navigate to login
       }
       else setErrorLogin("Account does NOT exist. Register first.")
-    } else setErrorLogin("Student Login Only !");
+    } else setErrorLogin("Only Student can Login.");
   };
 
   const onWalletConnection = async () => {

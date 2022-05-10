@@ -62,7 +62,7 @@ const AdminLoginScreen = () => {
         // navigate to login
       }
       else setErrorLogin("Account does NOT exist. Register first.")
-    } else setErrorLogin("Admin Login Only !");
+    } else setErrorLogin(" Only Admin can Login.");
   };
   
   const onWalletConnection = async () => {
