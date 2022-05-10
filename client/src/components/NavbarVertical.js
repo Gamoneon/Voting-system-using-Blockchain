@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { useNavigate , useLocation } from "react-router-dom";
 import Logo from "./Logo.js";
 import { sol_getElectionDetails } from "../webaction/SolidityFunctionModules.js";
-import $ from 'jquery'
+
 
 
 
@@ -27,6 +27,13 @@ const NavbarVertical = (props) => {
   const [isAdminConnected, setIsAdminConnected] = useState(false);
   const [username, setUsername] = useState("");
   const [currentElectionPhase, setCurrentElectionPhase] = useState("");
+   //assigning location variable
+   const location = useLocation();
+
+   //destructuring pathname from location
+   const { pathname } = location;
+    //Javascript split method to get the name of the path in array
+    const splitLocation = pathname.split("/");
 
   //------------------------------ Functions -----------------------------------------//
 
@@ -47,24 +54,6 @@ const NavbarVertical = (props) => {
     getElectionDetails();
   }, [props.isAdmin, props.username, currentElectionPhase]);
 
-  useEffect(() => {
-    if($){
-      $("a.list-group-item-action").on("click",function() {
-              
-        // Select all list items
-        var listItems = $("a.list-group-item-action");
-          
-        // Remove 'active' tag for all list items
-        for (let i = 0; i < listItems.length; i++) {
-            listItems[i].classList.remove("active");
-        }
-          
-        // Add 'active' tag for currently selected item
-        this.classList.add("active");
-        $(".active").attr("aria-current", true);
-    });
-     }
-   },[$])
 
   return (
     <>
@@ -85,14 +74,15 @@ const NavbarVertical = (props) => {
             <>
               <Link
                 to="/electionsetup"
-                className="list-group-item list-group-item-action"
+                className={`list-group-item list-group-item-action ${splitLocation[splitLocation.length-1] === "electionsetup" ? "active" : ""}`} 
               >
                 <i className="fa-solid fa-gears"></i> Election Setup
               </Link>
               {currentElectionPhase === "Voter Verification" && (
                 <Link
                   to="/verification"
-                  className="list-group-item list-group-item-action"
+                  className={`list-group-item list-group-item-action ${splitLocation[splitLocation.length-1] === "verification" ? "active" : ""}`} 
+
                 >
                   <i className="fa-solid fa-user-check"></i> Verification
                 </Link>
@@ -100,7 +90,8 @@ const NavbarVertical = (props) => {
               {currentElectionPhase === "Apply as a Candidate" && (
                 <Link
                   to="/candidateverification"
-                  className="list-group-item list-group-item-action"
+                  className={`list-group-item list-group-item-action ${splitLocation[splitLocation.length-1] === "candidateverification" ? "active" : ""}`} 
+
                 >
                   <i className="fa-solid fa-user-check"></i> Candidate
                   Verification
@@ -111,14 +102,16 @@ const NavbarVertical = (props) => {
             <>
               <Link
                 to="/information"
-                className="list-group-item list-group-item-action"
+                className={`list-group-item list-group-item-action ${splitLocation[splitLocation.length-1] === "information" ? "active" : ""}`} 
+
               >
                 <i className="fa-solid fa-circle-info"></i> Information
               </Link>
 
               <Link
                 to="/voterverification"
-                className="list-group-item list-group-item-action"
+                className={`list-group-item list-group-item-action ${splitLocation[splitLocation.length-1] === "voterverification" ? "active" : ""}`} 
+
               >
                 <i className="fa-regular fa-id-card"></i> Voter Verification
               </Link>
@@ -126,7 +119,8 @@ const NavbarVertical = (props) => {
               {currentElectionPhase === "Voting" && (
                 <Link
                   to="/voting"
-                  className="list-group-item list-group-item-action"
+                  className={`list-group-item list-group-item-action ${splitLocation[splitLocation.length-1] === "voting" ? "active" : ""}`} 
+
                 >
                   <i className="fa-solid fa-box-archive"></i> Voting
                 </Link>
@@ -136,7 +130,8 @@ const NavbarVertical = (props) => {
           {currentElectionPhase === "Result" && (
             <Link
               to="/result"
-              className="list-group-item list-group-item-action"
+              className={`list-group-item list-group-item-action ${splitLocation[splitLocation.length-1] === "result" ? "active" : ""}`} 
+          
             >
               <i className="fa-solid fa-square-poll-vertical"></i> Result
             </Link>
