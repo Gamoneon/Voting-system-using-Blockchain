@@ -71,8 +71,6 @@ const VoterVerificationScreen = () => {
 
   const getUserDetails = async () => {
     const data = await sol_getUserDetails();
-
-    console.log(data);
     if (!data) {
       navigate("/login");
     }

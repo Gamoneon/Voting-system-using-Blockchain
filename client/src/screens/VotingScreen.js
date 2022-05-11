@@ -101,7 +101,7 @@ const VotingScreen = () => {
               <>
                 <div className="row align-items-center">
                   <div className="col-9 ">
-                    <h5>Candiate</h5>
+                    <h5>Candidate</h5>
                     <div>
                       <h5>Name : {candidate.username}</h5>
                       <hr />

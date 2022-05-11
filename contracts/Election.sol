@@ -14,12 +14,14 @@ contract Election {
     string nextElectionPhase;
     uint256 electionPhaseIndex;
     string[] public electionPhases;
+    uint256 pendingRequests;
 
     constructor() public {
         // Initilizing default values
         admin = msg.sender;
         candidateCount = 0;
         voterCount = 0;
+        pendingRequests = 0;
         isElectionStarted = false;
         isElectionEnded = false;
         electionTitle = "";
@@ -28,7 +30,7 @@ contract Election {
         electionPhases = [
             "None",
             "Voter Verification",
-            "Apply as a Candidate",
+            "Candidate Application",
             "Voting",
             "Result"
         ];
@@ -68,12 +70,14 @@ contract Election {
         voterDetails[pendingVoterAddress].hasApplied = true;
         voterDetails[pendingVoterAddress].prn = _prn;
         voterDetails[pendingVoterAddress].mobile = _mobile;
+        pendingRequests ++;
     }
 
     // Approve verification requests
     function approveVerificationRequests(address pendingVoterAddress) public {
         voterDetails[pendingVoterAddress].hasApplied = false;
         voterDetails[pendingVoterAddress].isVerified = true;
+        pendingRequests --;
         // if (voterDetails[pendingVoterAddress].isDenied) {
         //     voterDetails[pendingVoterAddress].deniedFor = "";
         //     voterDetails[pendingVoterAddress].isDenied = false;
@@ -98,12 +102,14 @@ contract Election {
     ) public {
         voterDetails[pendingVoterAddress].hasApplied = true;
         voterDetails[pendingVoterAddress].tagLine = _tagLine;
+        pendingRequests ++;
     }
 
     // Approve candidate requests
     function approveCandidateRequests(address pendingVoterAddress) public {
         voterDetails[pendingVoterAddress].hasApplied = false;
         voterDetails[pendingVoterAddress].isCandidate = true;
+        pendingRequests--;
         // if (voterDetails[pendingVoterAddress].isDenied) {
         //     voterDetails[pendingVoterAddress].deniedFor = "";
         //     voterDetails[pendingVoterAddress].isDenied = false;
@@ -209,6 +215,9 @@ contract Election {
         }
     }
 
+    function isPendingRequest() public view returns(bool) {
+       return (pendingRequests != 0) ? true : false ;
+    }
     function getElectionDetails()
         public
         view
