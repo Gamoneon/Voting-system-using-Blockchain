@@ -82,17 +82,17 @@ const VotingScreen = () => {
         role="alert"
       >
         {!hasVoted ? (
-          <h5>Go ahead and cast your vote !</h5>
+          <h5>Go ahead and cast your vote!</h5>
         ) : (
           <>
             <h5>You have successfully voted. </h5>
             <h5>Now wait for the results.</h5>
-            <h5> Thank you !</h5>
+            <h5> Thank you!</h5>
           </>
         )}
       </div>
 
-      <h4>Total Candidates : {candidateData.length}</h4>
+      <h4>Total Candidates: {candidateData.length}</h4>
 
       {candidateData.map((candidate, key) => {
         return (
@@ -103,7 +103,7 @@ const VotingScreen = () => {
                   <div className="col-9 ">
                     <h5>Candidate</h5>
                     <div>
-                      <h5>Name : {candidate.username}</h5>
+                      <h5>Name: {candidate.username}</h5>
                       <hr />
                       <p>{candidate.tagLine}</p>
                     </div>

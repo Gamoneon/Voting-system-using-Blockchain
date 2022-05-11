@@ -7,7 +7,8 @@ const ResultScreen = () => {
   const resultscreenstyle =
   {
     backgroundImage: `url("./Images/confetti-17.gif")`  ,
-    height : "100vh"
+    height : "90vh",
+    width: "100vw"
 
   };
   //------------------------------ style CSS -----------------------------------------//
@@ -17,7 +18,7 @@ const ResultScreen = () => {
     marginleft: "0",
     padding: "1em",
     border: "1px solid #000000 !important",
-    backgroundcolor: "#90EE90", 
+    background: "#C2DAF7", 
   };
 
   const winnerBoxStyle = {
@@ -82,23 +83,23 @@ const ResultScreen = () => {
         <YourAccount account={account} />
         <ElectionInitializeMsg isAdmin={isAdmin} />
         <h2>Results</h2>
-        <h4>Total Candidates : {candidateData.length}</h4>
+        <h4>Total Candidates: {candidateData.length}</h4>
         <div
-          className="row align-items-center bg-success mt-4"
+          className="row align-items-center bg-info text-light mt-4"
           style={winnerBoxStyle}
         >
-          <div className="col-4 ">
-            <h5>Winner</h5>
+          <div className="col-6" >
+            <h5 className="fs-1">Winner</h5>
           </div>
-          <div className="col-4 ">
-             <h5><img src="./Images/winner.png" height="40" width="40"></img>{winnerCandidate.winnerName}</h5> 
+          <div className="col-6">
+             <h5 className="fs-1"><img src="./Images/winner.png" height="40" width="40"></img>{winnerCandidate.winnerName}</h5> 
           </div>
-          <div className="col-4">
-            <h5>Total Votes : {winnerCandidate.maxVotes}</h5>
-          </div>
+          {/* <div className="col-4">
+            <h5 className="fs-3">Total Votes: {winnerCandidate.maxVotes}</h5>
+          </div> */}
         </div>
         <div className="container-list ">
-          <table className="table table-striped mt-5 " style={tablestyle}>
+          <table className="table mt-5 " style={tablestyle}>
             <tbody>
               <tr>
                 <th>ID</th>

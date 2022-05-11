@@ -16,6 +16,7 @@ const VerificationScreen = () => {
   const navigate = useNavigate();
   const [voterData, setVoterData] = useState([]);
   const [isApproved, setIsApproved] = useState(false);
+  
 
   //------------------------------ Functions -----------------------------------------//
   const onClickApprove = async (voterAddress) => {
@@ -80,7 +81,7 @@ const VerificationScreen = () => {
           List of registered students
         </div>
         {/* <h4>Total Candidates : {voterData.length - 1}</h4> */}
-        <h3>Pending Approvals : </h3>
+        <h3>Pending Approvals: </h3>
         {voterData.map((student, key) => {
           return (
             <div className="container" key={key}>
@@ -98,7 +99,7 @@ const VerificationScreen = () => {
                         <td>{student.mobile}</td>
                       </tr>
                       <tr>
-                        <th>PRN No </th>
+                        <th>PRN </th>
                         <td>{student.prn}</td>
                         <th>Verified</th>
                         <td> {student.isVerified ? "True" : "False"}</td>
@@ -141,33 +142,44 @@ const VerificationScreen = () => {
           );
         })}
 
-        <h3 className="mt-4">Approved Students : </h3>
-        {voterData.map((student, key) => {
-          return (
-            <div className="container" key={key}>
-              {student.isVerified && (
-                <>
-                  <table
-                    className="table mt-5 "
+        <h3 className="mt-4">Approved Students: </h3>
+        <table
+                    className="table mt-4"
                     style={{
                       width: "75%",
                       margin: "auto",
                       background: "#a3ffb4",
                     }}
                   >
-                    <tbody>
+                  <tbody>
                       <tr>
+                        <th>Sr no. </th>
                         <th>Student's Name </th>
-                        <td>{student.username}</td>
-                        <th>Mobile No </th>
-                        <td>{student.mobile}</td>
+                         <th>PRN </th>
                       </tr>
-                      <tr>
-                        <th>PRN No </th>
-                        <td>{student.prn}</td>
-                        <th>Verified</th>
-                        <td> {student.isVerified ? "True" : "False"}</td>
-                      </tr>
+                  </tbody>
+        </table>
+        {voterData.map((student, key) => {
+          return (
+            <div className="container" key={key}>
+              {student.isVerified && (
+                <>
+                  <table
+                    className="table"
+                    style={{
+                      width: "76.5%",
+                      margin: "auto",
+                      background: "#a3ffb4",
+                    }}
+                  >
+                    <tbody>
+                    <tr key={key}>
+                     <td>{key++}</td>
+                     <td>{student.username}</td>
+                     <td>{student.prn}</td> 
+                     </tr>
+                   
+                   
                     </tbody>
                   </table>
                 </>

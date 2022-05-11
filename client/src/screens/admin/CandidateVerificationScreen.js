@@ -72,7 +72,7 @@ const CandidateVerificationScreen = () => {
           List of registered Candidates
         </div>
         {/* <h4>Total Candidates : {candidateData.length - 1}</h4> */}
-        <h3>Pending Approvals : </h3>
+        <h3>Pending Approvals: </h3>
         {candidateData.map((student, key) => {
           return (
             <div className="container" key={key}>
@@ -114,27 +114,36 @@ const CandidateVerificationScreen = () => {
           );
         })}
 
-        <h3 className="mt-4">Approved Candidates : </h3>
+        <h3 className="mt-4">Approved Candidates: </h3>
+        <table className="table mt-4"
+                    style={{
+                      width: "75%",
+                      margin: "auto",
+                      background: " #aaf0d1",
+                    }}>
+        <tbody>
+                      <tr>
+                        <th>Student's Name </th>
+                        <th>Tag Line </th>
+                      </tr>
+        </tbody>
+        </table>
         {candidateData.map((student, key) => {
           return (
             <div className="container" key={key}>
               {student.isCandidate && (
                 <>
                   <table
-                    className="table mt-5 "
+                    className="table"
                     style={{
-                      width: "75%",
+                      width: "76.5%",
                       margin: "auto",
                       background: " #aaf0d1",
                     }}
                   >
-                    <tbody>
+                   <tbody>
                       <tr>
-                        <th>Student's Name </th>
-                        <td>{student.username}</td>
-                      </tr>
-                      <tr>
-                        <th>Tag Line </th>
+                      <td>{student.username}</td>
                         <td>{student.tagLine}</td>
                       </tr>
                     </tbody>

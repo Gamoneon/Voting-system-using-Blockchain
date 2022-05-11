@@ -24,6 +24,7 @@ const LoginScreen = () => {
 
   const loginformstyle = {
     width: "25%",
+    minWidth: "300px",
     background: "#23263F",
     padding: "3%",
     float: "left",
@@ -97,7 +98,7 @@ const LoginScreen = () => {
             </div>
             <div>
               <p>
-                Don't have an account ?
+                Don't have an account?
                 <Link style={registerlinkstyle} to="/register">
                   {" "}
                   Register Here

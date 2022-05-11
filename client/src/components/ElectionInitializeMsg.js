@@ -50,17 +50,16 @@ const ElectionInitializeMsg = () => {
       {isElectionStarted ? (
         <>
           <h3>
-            The election for the role of {storedElectionTitle} has been started
-            !
+            The election for the role of {storedElectionTitle} has been started!
           </h3>
           <p>
-            Current Election Phase is :{" "}
+            Current Election Phase is:{" "}
             <span className="text-success">{currentElectionPhase}</span>
           </p>
         </>
       ) : (
         <>
-          <h3>The election has not been initialized yet !</h3>
+          <h3>The election has not been initialized yet!</h3>
           {isAdminConnected ? (
             <p>Set up the election.</p>
           ) : (

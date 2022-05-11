@@ -23,6 +23,7 @@ const RegisterScreen = () => {
 
   const registerformstyle = {
     width: "25%",
+    minWidth: "300px",
     background: "#23263F",
     padding: "3%",
     margin: "3%",
@@ -96,7 +97,7 @@ const RegisterScreen = () => {
             </div>
             <div>
               <p>
-                Already have an account ?
+                Already have an account?
                 <Link style={loginlinkstyle} to="/login">
                   {" "}
                   Login Here

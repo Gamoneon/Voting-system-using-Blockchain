@@ -124,7 +124,7 @@ const VoterVerificationScreen = () => {
                 className="text-center bg-info text-light fw-bold fs-4"
                 style={divisionstyle}
               >
-                <div>Applied Successfully !</div>
+                <div>Applied Successfully!</div>
                 <div>Please wait for admin to verify your details.</div>
               </div>
             ) : (
@@ -137,13 +137,13 @@ const VoterVerificationScreen = () => {
                         className="form-label"
                         style={ystyle}
                       >
-                        PRN No. (8 digit) <RequiredFieldStar />
+                        PRN (8 digit) <RequiredFieldStar />
                         <input
                           type="tel"
                           pattern="[0-9]{8}"
                           className="form-control"
                           id="studentPRNNo"
-                          placeholder="e.g. 15562522 (8 digit)"
+                          placeholder="enter your permanent registration number"
                           value={prn}
                           onChange={(e) => setPrn(e.target.value)}
                           required
@@ -162,7 +162,7 @@ const VoterVerificationScreen = () => {
                           pattern="[0-9]{10}"
                           className="form-control"
                           id="studentPhoneno"
-                          placeholder="eg. 9841234567"
+                          placeholder="enter your phone number"
                           value={mobile}
                           onChange={(e) => setMobile(e.target.value)}
                           required
@@ -193,7 +193,7 @@ const VoterVerificationScreen = () => {
           className="text-center bg-info text-light fw-bold fs-4"
           style={divisionstyle}
         >
-          <div>You are verified successfully !</div>
+          <div>You are verified successfully!</div>
           {currentElectionPhase === "Voter Verification" ? (
             <div>Please wait for the next phase of the election.</div>
           ) : (
@@ -204,7 +204,7 @@ const VoterVerificationScreen = () => {
 
       {isVerified &&
         !isCandidate &&
-        currentElectionPhase === "Apply as a Candidate" && (
+        currentElectionPhase === "Candidate Application" && (
           <>
             <div className="container-main">
               {hasApplied ? (
@@ -212,7 +212,7 @@ const VoterVerificationScreen = () => {
                   className="text-center bg-info text-light fw-bold fs-4"
                   style={divisionstyle}
                 >
-                  <div>Applied Successfully !</div>
+                  <div>Applied Successfully!</div>
                   <div>Please wait for admin's approval.</div>
                 </div>
               ) : (
@@ -269,9 +269,9 @@ const VoterVerificationScreen = () => {
           className="text-center bg-info text-light fw-bold fs-4"
           style={divisionstyle}
         >
-          <div>Congratulations !!! </div>
-          <div>Approved as a Candidate by Admin !</div>
-          <div>Students can vote you now in the next voting phase !</div>
+          <div>Congratulations!!! </div>
+          <div>Approved as a Candidate by Admin!</div>
+          <div>Students can vote you now in the next voting phase!</div>
           <div>All the best.</div>
         </div>
       )}

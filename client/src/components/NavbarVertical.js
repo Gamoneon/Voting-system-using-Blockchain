@@ -90,7 +90,7 @@ const NavbarVertical = (props) => {
                   <i className="fa-solid fa-user-check"></i> Verification
                 </Link>
               )}
-              {currentElectionPhase === "Apply as a Candidate" && (
+              {currentElectionPhase === "Candidate Application" && (
                 <Link
                   to="/candidateverification"
                   className={`list-group-item list-group-item-action ${splitLocation[splitLocation.length-1] === "candidateverification" ? "active" : ""}`} 
