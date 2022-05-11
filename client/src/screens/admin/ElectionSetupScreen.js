@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ElectionInitializeMsg from "../../components/ElectionInitializeMsg.js";
 import YourAccount from "../../components/YourAccount.js";
+import AlertMessage from "../../components/AlertMessage.js";
+
 import {
   sol_isAdminAddress,
   sol_startElection,
@@ -21,6 +23,7 @@ const ElectionSetupScreen = () => {
   //------------------------------ useState Hooks -----------------------------------------//
   const [isAdminConnected, setIsAdminConnected] = useState(false);
   const [account, setAccount] = useState(null);
+  const [errorPendingRequests, setErrorPendingRequests] = useState("");
   const [electionTitle, setElectionTitle] = useState("");
   const [organizationName, setOrganizationName] = useState("");
   const [storedElectionTitle, setStoredElectionTitle] = useState("");
@@ -52,8 +55,9 @@ const ElectionSetupScreen = () => {
 
   const changeElectionPhase = async () => {
     const data = await sol_changeElectionPhase();
+    if(!data) setErrorPendingRequests("Please clear all pending requests first.")
     getElectionDetails();
-    window.location.reload(false);
+    // window.location.reload(false);
   };
 
   const startElection = async (electionTitle, organizationName) => {
@@ -73,6 +77,8 @@ const ElectionSetupScreen = () => {
     getElectionDetails();
   },[]);
 
+  // useEffect(() => {}, [errorPendingRequests]);
+
   return (
     <>
       <div className="container">
@@ -80,6 +86,9 @@ const ElectionSetupScreen = () => {
         <ElectionInitializeMsg />
         {isElectionStarted && (
           <>
+            {errorPendingRequests && (
+              <AlertMessage type="danger" message={errorPendingRequests} />
+            )}
             <h3>Change Phase</h3>
             <div className="container" style={aboutelectionstyle}>
               <h4>

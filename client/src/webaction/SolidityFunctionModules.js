@@ -78,7 +78,6 @@ export const sol_startElection = async (electionTitle, organizationName) => {
   const ElectionInstance = await sol_getElectionInstance();
   let data = sol_getElectionDetails();
   const isElectionStarted = data[0];
-  console.log("Start status before election start: ", isElectionStarted);
   if (acc) {
     if (!isElectionStarted) {
       await ElectionInstance.methods
@@ -93,16 +92,18 @@ export const sol_startElection = async (electionTitle, organizationName) => {
 };
 
 export const sol_changeElectionPhase = async () => {
+
   const acc = await sol_getCurrentAccount();
-  const web3 = await sol_getWeb3();
-  if (acc) {
-    const ElectionInstance = await sol_getElectionInstance();
+  const ElectionInstance = await sol_getElectionInstance();
+  const isPendingRequest = await ElectionInstance.methods.isPendingRequest().call();
+
+  if (!isPendingRequest) {
     let data = await ElectionInstance.methods.changeElectionPhase().send({
       from: acc,
       gas: 1000000,
       gasPrice: 5000000,
     });
-    // console.log("Election Details: ", data);
+    
     return true;
   } else {
     return false;
