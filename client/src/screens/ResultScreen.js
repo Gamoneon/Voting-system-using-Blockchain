@@ -49,7 +49,7 @@ const ResultScreen = () => {
         let temp = {};
 
         temp["username"] = data[i]["username"];
-        temp["isCandidate"] = data[i]["isCandidate"];
+        temp["isCandidate"] = data[i]["voterElectionDetails"]["isCandidate"];
         temp["votesCount"] = data[i]["votesCount"];
 
         if (temp["votesCount"] > maxVotes) {

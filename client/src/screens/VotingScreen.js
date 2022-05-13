@@ -44,17 +44,11 @@ const VotingScreen = () => {
 
         temp["voterAddress"] = data[i]["voterAddress"];
         temp["username"] = data[i]["username"];
-        temp["isCandidate"] = data[i]["isCandidate"];
-        temp["tagLine"] = data[i]["tagLine"];
+        temp["isCandidate"] = data[i]["voterElectionDetails"]["isCandidate"];
+        temp["tagLine"] = data[i]["voterElectionDetails"]["tagLine"];
         temp["votesCount"] = data[i]["votesCount"];
 
         if (temp["isCandidate"]) {
-          console.log(
-            "Username: ",
-            temp["username"],
-            "Votes: ",
-            temp["votesCount"]
-          );
           allCandidateDetails.push(temp);
         }
       }

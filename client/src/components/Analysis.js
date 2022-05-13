@@ -18,11 +18,10 @@ const Analysis = () => {
         let temp = {};
 
         temp["username"] = data[i]["username"];
-        temp["isCandidate"] = data[i]["isCandidate"];
-        temp["isVerified"] = data[i]["isVerified"];
+        temp["isCandidate"] = data[i]["voterElectionDetails"]["isCandidate"];
+        temp["isVerified"] = data[i]["voterElectionDetails"]["isVerified"];
         temp["votesCount"] = data[i]["votesCount"];
-        temp["hasVoted"] = data[i]["hasVoted"]
-        // console.log(temp["votesCount"]);
+        temp["hasVoted"] = data[i]["voterElectionDetails"]["hasVoted"]
 
         if (temp["isCandidate"]) {
           setP2_CandidateCount(P2_candidateCount=>P2_candidateCount+1);

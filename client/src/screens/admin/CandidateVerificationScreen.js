@@ -38,9 +38,9 @@ const CandidateVerificationScreen = () => {
 
         temp["voterAddress"] = data[i]["voterAddress"];
         temp["username"] = data[i]["username"];
-        temp["tagLine"] = data[i]["tagLine"];
-        temp["hasApplied"] = data[i]["hasApplied"];
-        temp["isCandidate"] = data[i]["isCandidate"];
+        temp["tagLine"] = data[i]["voterElectionDetails"]["tagLine"];
+        temp["hasApplied"] = data[i]["voterElectionDetails"]["hasApplied"];
+        temp["isCandidate"] = data[i]["voterElectionDetails"]["isCandidate"];
 
         allCandidateDetails.push(temp);
       }

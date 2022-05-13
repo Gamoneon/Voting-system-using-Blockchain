@@ -6,7 +6,7 @@ contract Election {
     address public admin;
     uint256 candidateCount;
     uint256 voterCount;
-
+    uint256 pendingRequests;
 
     struct electionSetup{
 
@@ -20,7 +20,7 @@ contract Election {
         string[5] electionPhases;
     }
 
-    struct voterExtraDetails {
+    struct voterElectionData {
         bool isVerified;
         bool hasVoted;
         bool hasApplied;
@@ -38,7 +38,7 @@ contract Election {
         string mobile;
         address voterAddress;
         uint256 votesCount;
-        voterExtraDetails voterElectionDetails;
+        voterElectionData voterElectionDetails;
         
     }
 
@@ -51,6 +51,7 @@ contract Election {
         admin = msg.sender;
         candidateCount = 0;
         voterCount = 0;
+        pendingRequests = 0;
 
         electionInstance = electionSetup({
         isElectionStarted : false,
@@ -82,15 +83,18 @@ contract Election {
         voterDetails[pendingVoterAddress].voterElectionDetails.hasApplied = true;
         voterDetails[pendingVoterAddress].prn = _prn;
         voterDetails[pendingVoterAddress].mobile = _mobile;
+        pendingRequests ++;
     }
 
     // Approve verification requests
     function approveVerificationRequests(address pendingVoterAddress) public {
         voterDetails[pendingVoterAddress].voterElectionDetails.hasApplied = false;
         voterDetails[pendingVoterAddress].voterElectionDetails.isVerified = true;
+        pendingRequests --;
         if (voterDetails[pendingVoterAddress].voterElectionDetails.isDenied) {
             voterDetails[pendingVoterAddress].voterElectionDetails.deniedFor = "";
             voterDetails[pendingVoterAddress].voterElectionDetails.isDenied = false;
+
         }
     }
 
@@ -112,16 +116,23 @@ contract Election {
     ) public {
         voterDetails[pendingVoterAddress].voterElectionDetails.hasApplied = true;
         voterDetails[pendingVoterAddress].voterElectionDetails.tagLine = _tagLine;
+        pendingRequests ++;
     }
 
     // Approve candidate requests
     function approveCandidateRequests(address pendingVoterAddress) public {
         voterDetails[pendingVoterAddress].voterElectionDetails.hasApplied = false;
         voterDetails[pendingVoterAddress].voterElectionDetails.isCandidate = true;
+        pendingRequests --;
+
         if (voterDetails[pendingVoterAddress].voterElectionDetails.isDenied) {
             voterDetails[pendingVoterAddress].voterElectionDetails.deniedFor = "";
             voterDetails[pendingVoterAddress].voterElectionDetails.isDenied = false;
         }
+    }
+    
+    function isPendingRequest() public view returns(bool) {
+       return (pendingRequests != 0) ? true : false ;
     }
 
     // Get all voter details
@@ -148,7 +159,7 @@ contract Election {
         string memory _email,
         string memory _password
     ) public {
-        voterExtraDetails memory newVoterExtraDetails = voterExtraDetails({
+        voterElectionData memory newvoterElectionData = voterElectionData({
             isVerified : false,
             hasVoted: false,
             hasApplied: false,
@@ -165,7 +176,7 @@ contract Election {
             prn: "",
             mobile: "",
             votesCount: 0,
-            voterElectionDetails: newVoterExtraDetails
+            voterElectionDetails: newvoterElectionData
             
         });
         voterDetails[msg.sender] = newVoter;

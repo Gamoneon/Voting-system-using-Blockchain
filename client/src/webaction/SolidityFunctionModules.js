@@ -96,6 +96,8 @@ export const sol_changeElectionPhase = async () => {
   const acc = await sol_getCurrentAccount();
   const ElectionInstance = await sol_getElectionInstance();
   const isPendingRequest = await ElectionInstance.methods.isPendingRequest().call();
+  
+  console.log("isPendingRequest:", isPendingRequest);
 
   if (!isPendingRequest) {
     let data = await ElectionInstance.methods.changeElectionPhase().send({
