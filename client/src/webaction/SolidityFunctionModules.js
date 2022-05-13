@@ -132,12 +132,12 @@ export const sol_verifyLoginDetails = async (email, password) => {
     const ElectionInstance = await sol_getElectionInstance();
 
     const loginData = await ElectionInstance.methods
-      .getLoginDetails(acc)
+      .getVoterDetails(acc)
       .call();
 
-    const storedEmail = loginData[0];
-    const storedPassowrd = loginData[1];
-    const storedAccount = loginData[2];
+    const storedEmail = loginData.email;
+    const storedPassowrd = loginData.password;
+    const storedAccount = loginData.voterAddress;
     if (
       storedEmail === email &&
       storedPassowrd === password &&

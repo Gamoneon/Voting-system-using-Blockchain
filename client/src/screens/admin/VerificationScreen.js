@@ -48,8 +48,8 @@ const VerificationScreen = () => {
         temp["username"] = data[i]["username"];
         temp["prn"] = data[i]["prn"];
         temp["mobile"] = data[i]["mobile"];
-        temp["isVerified"] = data[i]["isVerified"];
-        temp["hasApplied"] = data[i]["hasApplied"];
+        temp["isVerified"] = data[i]["voterElectionDetails"]["isVerified"];
+        temp["hasApplied"] = data[i]["voterElectionDetails"]["hasApplied"];
 
         allVoterDetails.push(temp);
       }
