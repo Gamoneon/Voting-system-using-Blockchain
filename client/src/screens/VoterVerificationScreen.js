@@ -165,7 +165,6 @@ const VoterVerificationScreen = () => {
                           className="form-control"
                           id="studentPhoneno"
                           placeholder="Enter your phone number"
-                          maxLength={10}
                           value={mobile}
                           onChange={(e) => setMobile(e.target.value)}
                           required
