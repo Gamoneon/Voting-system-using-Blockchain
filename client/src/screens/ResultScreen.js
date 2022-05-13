@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from "react";
 import ElectionInitializeMsg from "../components/ElectionInitializeMsg.js";
 import YourAccount from "../components/YourAccount.js";
+import Analysis from "../components/Analysis.js";
 import { sol_getAllVoterDetails } from "../webaction/SolidityFunctionModules.js";
 
 const ResultScreen = () => {
-  const resultscreenstyle =
-  {
-    backgroundImage: `url("./Images/confetti-17.gif")`  ,
-    height : "90vh",
-    width: "100vw"
-
+  const resultscreenstyle = {
+    backgroundImage: `url("./Images/confetti-17.gif")`,
+    height: "90vh",
+    width: "100vw",
   };
   //------------------------------ style CSS -----------------------------------------//
   const tablestyle = {
@@ -18,7 +17,7 @@ const ResultScreen = () => {
     marginleft: "0",
     padding: "1em",
     border: "1px solid #000000 !important",
-    background: "#C2DAF7", 
+    background: "#C2DAF7",
   };
 
   const winnerBoxStyle = {
@@ -34,7 +33,6 @@ const ResultScreen = () => {
   const [account, setAccount] = useState(null);
   const [candidateData, setCandidateData] = useState([]);
   const [winnerCandidate, setWinnerCandidate] = useState({});
-  
 
   /*----------------- WARNING ---------------*/
   /*  Check function for Continous Looping   */
@@ -42,8 +40,8 @@ const ResultScreen = () => {
 
   const getAllVoterDetails = async () => {
     let maxVotes = 0;
-  let candidateID = 1;
-  let winner = {};
+    let candidateID = 1;
+    let winner = {};
     const data = await sol_getAllVoterDetails();
     let allCandidateDetails = [];
     if (data) {
@@ -54,27 +52,28 @@ const ResultScreen = () => {
         temp["isCandidate"] = data[i]["isCandidate"];
         temp["votesCount"] = data[i]["votesCount"];
 
-        if(temp["votesCount"]>maxVotes)
-        {
+        if (temp["votesCount"] > maxVotes) {
           maxVotes = data[i]["votesCount"];
           winner["winnerName"] = data[i]["username"];
           winner["maxVotes"] = data[i]["votesCount"];
-          setWinnerCandidate(winner)
+          setWinnerCandidate(winner);
         }
 
         if (temp["isCandidate"]) {
           allCandidateDetails.push(temp);
         }
       }
-       console.log("Candidate details : ",allCandidateDetails);
+
+      console.log("Candidate details : ", allCandidateDetails);
       setCandidateData([...allCandidateDetails]);
     }
-
   };
 
   useEffect(() => {
     getAllVoterDetails();
-  },[]);
+  }, []);
+
+  //const data=[{username,votesCount}];
 
   //------------------------------ Render Content -----------------------------------------//
   return (
@@ -88,11 +87,14 @@ const ResultScreen = () => {
           className="row align-items-center bg-info text-light mt-4"
           style={winnerBoxStyle}
         >
-          <div className="col-6" >
+          <div className="col-6">
             <h5 className="fs-1">Winner</h5>
           </div>
           <div className="col-6">
-             <h5 className="fs-1"><img src="./Images/winner.png" height="40" width="40"></img>{winnerCandidate.winnerName}</h5> 
+            <h5 className="fs-1">
+              <img src="./Images/winner.png" height="40" width="40"></img>
+              {winnerCandidate.winnerName}
+            </h5>
           </div>
           {/* <div className="col-4">
             <h5 className="fs-3">Total Votes: {winnerCandidate.maxVotes}</h5>
@@ -110,7 +112,7 @@ const ResultScreen = () => {
                 return (
                   <tr key={key}>
                     {/* <td>{candidateID++}</td> */}
-                    <td>{key+1}</td>
+                    <td>{key + 1}</td>
                     <td>{student.username}</td>
                     <td>{student.votesCount}</td>
                   </tr>
@@ -119,6 +121,10 @@ const ResultScreen = () => {
             </tbody>
           </table>
         </div>
+        <div>
+            <h1>Analysis</h1>
+            <Analysis/>
+          </div>
       </div>
     </>
   );

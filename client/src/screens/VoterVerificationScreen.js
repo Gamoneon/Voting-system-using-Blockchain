@@ -141,6 +141,7 @@ const VoterVerificationScreen = () => {
                         <input
                           type="tel"
                           pattern="[0-9]{8}"
+                          maxLength={8}
                           className="form-control"
                           id="studentPRNNo"
                           placeholder="enter your permanent registration number"
@@ -160,6 +161,7 @@ const VoterVerificationScreen = () => {
                         <input
                           type="tel"
                           pattern="[0-9]{10}"
+                          maxLength={10}
                           className="form-control"
                           id="studentPhoneno"
                           placeholder="enter your phone number"
