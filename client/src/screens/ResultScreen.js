@@ -82,7 +82,7 @@ const ResultScreen = () => {
         <YourAccount account={account} />
         <ElectionInitializeMsg isAdmin={isAdmin} />
         <h2>Results</h2>
-        <h4>Total Candidates: {candidateData.length}</h4>
+        <h3 className="bg-light" style={{display: "inline-block"}}>Total Candidates: {candidateData.length}</h3>
         <div
           className="row align-items-center bg-info text-light mt-4"
           style={winnerBoxStyle}

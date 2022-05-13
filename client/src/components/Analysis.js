@@ -53,10 +53,12 @@ const Analysis = () => {
   ];
   var P2_data = [
     {
-      x: ["Total", "Verified","Voted", "Candidates"],
-      y: [P2_totalCount,P2_verifiedCount,P2_votedCount,P2_candidateCount],
+      x: ["Total", "Verified","Not Verified","Voted","Not Voted", "Candidates"],
+      y: [P2_totalCount,P2_verifiedCount,P2_totalCount-P2_verifiedCount,P2_votedCount,P2_totalCount-P2_votedCount,P2_candidateCount],
       type: "bar",
-      marker: { color: ["#7C98AB","#F9968B","#8675A9","#98D4BB"] },
+      marker: { color: ["#7C98AB","#E4BAD4","#F34F41","#8675A9","#F34F41","#98D4BB"] },
+      text: [P2_totalCount,P2_verifiedCount,P2_totalCount-P2_verifiedCount,P2_votedCount,P2_totalCount-P2_votedCount,P2_candidateCount].map(String),
+      textposition: "auto"
     },
   ];
   return (
@@ -71,7 +73,7 @@ const Analysis = () => {
           width: 500,
           height: 500,
           title: "Student's participation in the Election",
-          yaxis: { title: "Count of Students" },
+          yaxis: { title: "Count of Students",range: [0,P2_totalCount] },
         }}
       />
     </div>
