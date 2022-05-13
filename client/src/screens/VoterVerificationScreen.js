@@ -77,9 +77,9 @@ const VoterVerificationScreen = () => {
     setUsername(data["username"]);
     setPrn(data["prn"]);
     setMobile(data["mobile"]);
-    setIsVerified(data["isVerified"]);
-    setIsCandidate(data["isCandidate"]);
-    setHasApplied(data["hasApplied"]);
+    setIsVerified(data["voterElectionDetails"]["isVerified"]);
+    setIsCandidate(data["voterElectionDetails"]["isCandidate"]);
+    setHasApplied(data["voterElectionDetails"]["hasApplied"]);
   };
 
   const applyForVerification = async () => {
@@ -144,7 +144,7 @@ const VoterVerificationScreen = () => {
                           maxLength={8}
                           className="form-control"
                           id="studentPRNNo"
-                          placeholder="enter your permanent registration number"
+                          placeholder="Enter your permanent registration number"
                           value={prn}
                           onChange={(e) => setPrn(e.target.value)}
                           required
@@ -164,7 +164,7 @@ const VoterVerificationScreen = () => {
                           maxLength={10}
                           className="form-control"
                           id="studentPhoneno"
-                          placeholder="enter your phone number"
+                          placeholder="Enter your phone number"
                           value={mobile}
                           onChange={(e) => setMobile(e.target.value)}
                           required
