@@ -55,10 +55,11 @@ const ElectionSetupScreen = () => {
 
   const changeElectionPhase = async () => {
     const data = await sol_changeElectionPhase();
-    if (!data)
+    if (!data) {
       setErrorPendingRequests("Please clear all pending requests first.");
+    }
     getElectionDetails();
-    // window.location.reload(false);
+    window.location.reload(false);
   };
 
   const startElection = async (electionTitle, organizationName) => {
@@ -76,15 +77,13 @@ const ElectionSetupScreen = () => {
   useEffect(() => {
     routeValidation();
     getElectionDetails();
-  }, []);
-
-  // useEffect(() => {}, [errorPendingRequests]);
+  }, [currentElectionPhase]);
 
   return (
     <>
       <div className="container">
         <YourAccount />
-        <ElectionInitializeMsg />
+        <ElectionInitializeMsg currentElectionPhase={currentElectionPhase} />
         {isElectionStarted && (
           <>
             {errorPendingRequests && (
@@ -128,9 +127,7 @@ const ElectionSetupScreen = () => {
                     onChange={(e) => setElectionTitle(e.target.value)}
                     required
                   >
-                    <option hidden>
-                      Choose Title
-                    </option>
+                    <option hidden>Choose Title</option>
                     <option value="Class Representative">
                       Class Representative
                     </option>
@@ -142,19 +139,19 @@ const ElectionSetupScreen = () => {
 
                 <div className="row align-items-center">
                   <div className="col-4 ">
-                  <label htmlFor="electionClassYear" className="form-label">
-                  Class Year
-                </label>
+                    <label htmlFor="electionClassYear" className="form-label">
+                      Class Year
+                    </label>
                   </div>
                   <div className="col-4">
-                  <label htmlFor="electionClassDegree" className="form-label">
-                  Choose Degree
-                </label>
+                    <label htmlFor="electionClassDegree" className="form-label">
+                      Choose Degree
+                    </label>
                   </div>
                   <div className="col-4">
-                  <label htmlFor="electionStream" className="form-label">
-                  Choose Stream
-                </label>
+                    <label htmlFor="electionStream" className="form-label">
+                      Choose Stream
+                    </label>
                   </div>
                 </div>
                 <div className="row align-items-center mb-3">
@@ -166,9 +163,7 @@ const ElectionSetupScreen = () => {
                       // onChange={(e) => setElectionClass(e.target.value)}
                       required
                     >
-                      <option hidden>
-                        Choose Class Year
-                      </option>
+                      <option hidden>Choose Class Year</option>
                       <option value="Class Representative">FY</option>
                       <option value="Placement Coordinator">SY</option>
                       <option value="Class Representative">TY</option>
@@ -182,9 +177,7 @@ const ElectionSetupScreen = () => {
                       // onChange={(e) => setElectionClass(e.target.value)}
                       required
                     >
-                      <option hidden>
-                        Choose Degree
-                      </option>
+                      <option hidden>Choose Degree</option>
                       <option value="B.Sc">B.Sc</option>
                       <option value="M.Sc">M.Sc</option>
                     </select>
@@ -197,9 +190,7 @@ const ElectionSetupScreen = () => {
                       // onChange={(e) => setElectionClass(e.target.value)}
                       required
                     >
-                      <option hidden>
-                        Choose Stream
-                      </option>
+                      <option hidden>Choose Stream</option>
                       <option value="Computer Science">Computer Science</option>
                       <option value="Computer Application">
                         Computer Application

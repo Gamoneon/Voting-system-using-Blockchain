@@ -4,7 +4,7 @@ import {
   sol_getElectionDetails,
 } from "../webaction/SolidityFunctionModules.js";
 
-const ElectionInitializeMsg = () => {
+const ElectionInitializeMsg = (props) => {
   //------------------------------ style CSS -----------------------------------------//
   const bgstyle = {
     background: "#ffdd99",
@@ -13,11 +13,10 @@ const ElectionInitializeMsg = () => {
   //------------------------------ useState Hooks -----------------------------------------//
   const [isAdminConnected, setIsAdminConnected] = useState(false);
   const [storedElectionTitle, setStoredElectionTitle] = useState("");
-  const [storedOrganizationName, setStoredOrganizationName] = useState("");
   const [isElectionStarted, setIsElectionStarted] = useState(false);
   const [isElectionEnded, setIsElectionEnded] = useState(false);
   const [currentElectionPhase, setCurrentElectionPhase] = useState("");
-  const [nextElectionPhase, setNextElectionPhase] = useState("");
+
   //------------------------------ Functions -----------------------------------------//
 
   const getElectionDetails = async () => {
@@ -25,9 +24,8 @@ const ElectionInitializeMsg = () => {
     setIsElectionStarted(data[0]);
     setIsElectionEnded(data[1]);
     setStoredElectionTitle(data[2]);
-    setStoredOrganizationName(data[3]);
     setCurrentElectionPhase(data[4]);
-    setNextElectionPhase(data[5]);
+    console.log("I am here");
   };
 
   const isAdmin = async () => {
@@ -37,9 +35,12 @@ const ElectionInitializeMsg = () => {
 
   useEffect(() => {
     isAdmin();
+  }, []);
+
+  useEffect(() => {
     getElectionDetails();
-    // console.log(isAdminConnected);
-  },[]);
+  }, [props]);
+
   //------------------------------ Render Content -----------------------------------------//
   return (
     <div
