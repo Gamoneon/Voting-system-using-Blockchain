@@ -26,8 +26,8 @@ const VerificationScreen = () => {
 
   const onClickDeny = async (voterAddress) => {
     console.log("Deny the address :", voterAddress);
-    // const data = await sol_denyVerificationRequests(voterAddress, "Your credentials are not Verified.");
-    // setIsApproved(data);
+    const data = await sol_denyVerificationRequests(voterAddress, "Your credentials are not Verified.");
+    setIsApproved(data);
   };
 
   const routeValidation = async () => {
@@ -105,13 +105,11 @@ const VerificationScreen = () => {
                         <td> {student.isVerified ? "True" : "False"}</td>
                       </tr>
                       <tr>
-                        {/* <td colSpan="2">
+                        <td colSpan="2">
                           <div className="d-grid p-1">
                             <button
                               className="btn btn-danger text-light"
                               type="button"
-                              data-toggle="modal"
-                              data-target="#denyModal"
                               onClick={() => {
                                 onClickDeny(student.voterAddress);
                               }}
@@ -119,8 +117,8 @@ const VerificationScreen = () => {
                               Deny
                             </button>
                           </div>
-                        </td> */}
-                        <td colSpan="4">
+                        </td>
+                        <td colSpan="2">
                           <div className="d-grid p-1">
                             <button
                               className="btn btn-success text-light"

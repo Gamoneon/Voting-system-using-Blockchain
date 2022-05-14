@@ -106,6 +106,7 @@ contract Election {
         voterDetails[pendingVoterAddress].voterElectionDetails.hasApplied = false;
         voterDetails[pendingVoterAddress].voterElectionDetails.isDenied = true;
         voterDetails[pendingVoterAddress].voterElectionDetails.deniedFor = _deniedFor;
+        pendingRequests --;
     }
 
     // sending candidate request
