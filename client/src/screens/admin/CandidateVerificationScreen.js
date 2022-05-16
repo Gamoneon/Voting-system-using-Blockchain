@@ -7,6 +7,7 @@ import {
   sol_getAllVoterDetails,
   sol_isAdminAddress,
   sol_approveCandidateRequests,
+  sol_denyVerificationRequests,
 } from "../../webaction/SolidityFunctionModules.js";
 
 const CandidateVerificationScreen = () => {
@@ -19,6 +20,11 @@ const CandidateVerificationScreen = () => {
   //------------------------------ Functions -----------------------------------------//
   const onClickApprove = async (voterAddress) => {
     const data = await sol_approveCandidateRequests(voterAddress);
+    setIsApproved(data);
+  };
+
+  const onClickDeny = async (voterAddress) => {
+    const data = await sol_denyVerificationRequests(voterAddress);
     setIsApproved(data);
   };
 
@@ -71,7 +77,6 @@ const CandidateVerificationScreen = () => {
         >
           List of registered Candidates
         </div>
-        {/* <h4>Total Candidates : {candidateData.length - 1}</h4> */}
         <h3>Pending Approvals: </h3>
         {candidateData.map((student, key) => {
           return (
@@ -92,7 +97,20 @@ const CandidateVerificationScreen = () => {
                         <td>{student.tagLine}</td>
                       </tr>
                       <tr>
-                        <td colSpan="4">
+                      <td>
+                          <div className="d-grid p-1">
+                            <button
+                              className="btn btn-danger text-light"
+                              type="button"
+                              onClick={() => {
+                                onClickDeny(student.voterAddress);
+                              }}
+                            >
+                              Deny
+                            </button>
+                          </div>
+                        </td>
+                        <td>
                           <div className="d-grid p-1">
                             <button
                               className="btn btn-success text-light"

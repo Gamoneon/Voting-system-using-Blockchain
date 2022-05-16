@@ -95,19 +95,27 @@ const ElectionSetupScreen = () => {
                 Current Phase:{" "}
                 <span className="text-success">{currentElectionPhase}</span>
               </h4>
-              <h4>
-                Next Phase:{" "}
-                <span className="text-danger">{nextElectionPhase}</span>
-              </h4>
-              <div className="d-grid gap-2 mt-3">
-                <button
-                  className="btn btn-primary btn-lg"
-                  type="button"
-                  onClick={changeElectionPhase}
-                >
-                  Change Phase
-                </button>
-              </div>
+              {nextElectionPhase === "Setup Election" ? (
+                <h4>
+                  <span className="text-danger">Election Ended.</span>
+                </h4>
+              ) : (
+                <>
+                  <h4>
+                    Next Phase:{" "}
+                    <span className="text-danger">{nextElectionPhase}</span>
+                  </h4>
+                  <div className="d-grid gap-2 mt-3">
+                    <button
+                      className="btn btn-primary btn-lg"
+                      type="button"
+                      onClick={changeElectionPhase}
+                    >
+                      Change Phase
+                    </button>
+                  </div>
+                </>
+              )}
             </div>
           </>
         )}

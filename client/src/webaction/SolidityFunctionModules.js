@@ -86,7 +86,6 @@ export const sol_startElection = async (electionTitle, organizationName) => {
       return true;
     }
   } else {
-    console.log("Election start - failed!");
     return false;
   }
 };

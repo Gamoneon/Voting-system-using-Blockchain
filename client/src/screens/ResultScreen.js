@@ -29,8 +29,6 @@ const ResultScreen = () => {
 
   //------------------------------ useState hooks -----------------------------------------//
 
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [account, setAccount] = useState(null);
   const [candidateData, setCandidateData] = useState([]);
   const [winnerCandidate, setWinnerCandidate] = useState({});
 
@@ -40,7 +38,6 @@ const ResultScreen = () => {
 
   const getAllVoterDetails = async () => {
     let maxVotes = 0;
-    let candidateID = 1;
     let winner = {};
     const data = await sol_getAllVoterDetails();
     let allCandidateDetails = [];
@@ -63,8 +60,6 @@ const ResultScreen = () => {
           allCandidateDetails.push(temp);
         }
       }
-
-      console.log("Candidate details : ", allCandidateDetails);
       setCandidateData([...allCandidateDetails]);
     }
   };
@@ -73,14 +68,13 @@ const ResultScreen = () => {
     getAllVoterDetails();
   }, []);
 
-  //const data=[{username,votesCount}];
 
   //------------------------------ Render Content -----------------------------------------//
   return (
     <>
       <div className="container" style={resultscreenstyle}>
-        <YourAccount account={account} />
-        <ElectionInitializeMsg isAdmin={isAdmin} />
+        <YourAccount/>
+        <ElectionInitializeMsg/>
         <h2>Results</h2>
         <h3 className="bg-light" style={{display: "inline-block"}}>Total Candidates: {candidateData.length}</h3>
         <div
@@ -96,9 +90,6 @@ const ResultScreen = () => {
               {winnerCandidate.winnerName}
             </h5>
           </div>
-          {/* <div className="col-4">
-            <h5 className="fs-3">Total Votes: {winnerCandidate.maxVotes}</h5>
-          </div> */}
         </div>
         <div className="container-list ">
           <table className="table mt-5 " style={tablestyle}>
@@ -111,7 +102,6 @@ const ResultScreen = () => {
               {candidateData.map((student, key) => {
                 return (
                   <tr key={key}>
-                    {/* <td>{candidateID++}</td> */}
                     <td>{key + 1}</td>
                     <td>{student.username}</td>
                     <td>{student.votesCount}</td>

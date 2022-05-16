@@ -57,7 +57,8 @@ const Analysis = () => {
       type: "bar",
       marker: { color: ["#7C98AB","#E4BAD4","#F34F41","#8675A9","#F34F41","#98D4BB"] },
       text: [P2_totalCount,P2_verifiedCount,P2_totalCount-P2_verifiedCount,P2_votedCount,P2_totalCount-P2_votedCount,P2_candidateCount].map(String),
-      textposition: "auto"
+      textposition: "auto",
+      hoverinfo: "x+y",
     },
   ];
   return (

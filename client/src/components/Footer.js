@@ -10,7 +10,7 @@ const Footer = () => {
 
   return (
     <footer className="footer bg-primary text-light p-3" style={footerStyle}>
-      <div className="container">&copy; Copyright Blockchain</div>
+      <div className="container">&copy; Voting System using Blockchain</div>
     </footer>
   );
 };

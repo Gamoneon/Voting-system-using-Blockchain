@@ -4,7 +4,6 @@ import Navbar from "../components/Navbar.js";
 import AlertMessage from "../components/AlertMessage.js";
 import {
   sol_addLoginDetails,
-  sol_isAdminAddress,
   sol_connectwallet,
 } from "../webaction/SolidityFunctionModules.js";
 import { useNavigate } from "react-router-dom";
@@ -68,11 +67,6 @@ const RegisterScreen = () => {
     } else {
       setCurrentAcc(data.acc[0]);
       setIsAccountConnected(true);
-      //console.log("Current Account is: ", currentAcc);
-
-      // const adminConnected = await sol_isAdminAddress();
-      // setIsAdmin(adminConnected);
-      //console.log("Is admin connected: ", isAdmin);
     }
   };
 

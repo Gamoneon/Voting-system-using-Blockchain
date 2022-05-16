@@ -40,8 +40,6 @@ const VoterVerificationScreen = () => {
   //------------------------------ userState Hooks  -----------------------------------------//
   const navigate = useNavigate();
   const [isAdminConnected, setIsAdminConnected] = useState(false);
-  const [account, setAccount] = useState(null);
-  const [email, setEmail] = useState("");
   const [prn, setPrn] = useState("");
   const [mobile, setMobile] = useState("");
   const [username, setUsername] = useState("");
@@ -115,7 +113,7 @@ const VoterVerificationScreen = () => {
   //------------------------------ Render Content -----------------------------------------//
   return (
     <>
-      <YourAccount account={account} />
+      <YourAccount/>
       <ElectionInitializeMsg isAdmin={isAdminConnected} />
       <div className="container-main">
         {!isVerified && currentElectionPhase === "Voter Verification" && (
@@ -201,7 +199,7 @@ const VoterVerificationScreen = () => {
           </>
         )}
       </div>
-      {!hasApplied && !isCandidate && isVerified && (
+      {!hasApplied && !isCandidate && isVerified && !isDenied &&(
         <div
           className="text-center bg-info text-light fw-bold fs-4"
           style={divisionstyle}
@@ -217,7 +215,7 @@ const VoterVerificationScreen = () => {
 
       {isVerified &&
         !isCandidate &&
-        currentElectionPhase === "Candidate Application" && (
+        currentElectionPhase === "Candidate Application" && !isDenied &&(
           <>
             <div className="container-main">
               {hasApplied ? (
@@ -276,8 +274,17 @@ const VoterVerificationScreen = () => {
             </div>
           </>
         )}
+        {isDenied && currentElectionPhase === "Candidate Application" && (
+              <div
+                className="text-center bg-danger text-light fw-bold fs-4"
+                style={divisionstyle}
+              >
+                <div>Your Candidate application has been denied by the Admin!</div>
+                <div>But you can still vote for other candidates.</div>
+              </div>
+            )}
 
-      {isCandidate && currentElectionPhase === "Apply as a Candidate" && (
+      {isCandidate && currentElectionPhase === "Candidate Application" && (
         <div
           className="text-center bg-info text-light fw-bold fs-4"
           style={divisionstyle}

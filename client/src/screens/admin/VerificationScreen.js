@@ -51,8 +51,7 @@ const VerificationScreen = () => {
 
         allVoterDetails.push(temp);
       }
-
-      // console.log(allVoterDetails);
+      
       setVoterData([...allVoterDetails]);
     }
   };
@@ -78,7 +77,6 @@ const VerificationScreen = () => {
         >
           List of registered students
         </div>
-        {/* <h4>Total Candidates : {voterData.length - 1}</h4> */}
         <h3>Pending Approvals: </h3>
         {voterData.map((student, key) => {
           return (

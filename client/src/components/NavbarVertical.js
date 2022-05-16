@@ -5,8 +5,6 @@ import Logo from "./Logo.js";
 import { sol_getElectionDetails } from "../webaction/SolidityFunctionModules.js";
 
 
-
-
 const NavbarVertical = (props) => {
   //------------------------------ Style CSS -----------------------------------------//
   const navbarStyle = {
@@ -116,9 +114,8 @@ const NavbarVertical = (props) => {
                 className={`list-group-item list-group-item-action ${splitLocation[splitLocation.length-1] === "voterverification" ? "active" : ""}`} 
 
               >
-                <i className="fa-regular fa-id-card"></i> Voter Verification
+                <i className="fa-regular fa-id-card"></i>{currentElectionPhase === "Voter Verification" ? " Voter Verification" : " Candidate Application"}
               </Link>
-
               {currentElectionPhase === "Voting" && (
                 <Link
                   to="/voting"

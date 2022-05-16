@@ -1,7 +1,4 @@
 import React from "react";
-// import SimpleStorageContract from "./contracts/SimpleStorage.json";
-// import getWeb3 from "./getWeb3";
-
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import HomeScreen from "./screens/HomeScreen.js";
 import RegisterScreen from "./screens/RegisterScreen.js";

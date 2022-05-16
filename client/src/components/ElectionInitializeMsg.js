@@ -20,11 +20,9 @@ const ElectionInitializeMsg = (props) => {
 
   const getElectionDetails = async () => {
     const data = await sol_getElectionDetails();
-    console.log("Received data from Solidity.");
     setIsElectionStarted(data[0]);
     setStoredElectionTitle(data[2]);
     setCurrentElectionPhase(data[4]);
-    console.log("I am here");
   };
 
   const isAdmin = async () => {
