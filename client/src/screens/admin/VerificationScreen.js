@@ -16,7 +16,6 @@ const VerificationScreen = () => {
   const navigate = useNavigate();
   const [voterData, setVoterData] = useState([]);
   const [isApproved, setIsApproved] = useState(false);
-  
 
   //------------------------------ Functions -----------------------------------------//
   const onClickApprove = async (voterAddress) => {
@@ -25,8 +24,7 @@ const VerificationScreen = () => {
   };
 
   const onClickDeny = async (voterAddress) => {
-    console.log("Deny the address :", voterAddress);
-    const data = await sol_denyVerificationRequests(voterAddress, "Your credentials are not Verified.");
+    const data = await sol_denyVerificationRequests(voterAddress);
     setIsApproved(data);
   };
 
@@ -61,7 +59,7 @@ const VerificationScreen = () => {
 
   useEffect(() => {
     routeValidation();
-  },[]);
+  }, []);
 
   useEffect(() => {
     setIsApproved(false);
@@ -142,20 +140,20 @@ const VerificationScreen = () => {
 
         <h3 className="mt-4">Approved Students: </h3>
         <table
-                    className="table mt-4"
-                    style={{
-                      width: "75%",
-                      margin: "auto",
-                      background: "#a3ffb4",
-                    }}
-                  >
-                  <tbody>
-                      <tr>
-                        <th>Sr no. </th>
-                        <th>Student's Name </th>
-                         <th>PRN </th>
-                      </tr>
-                  </tbody>
+          className="table mt-4"
+          style={{
+            width: "75%",
+            margin: "auto",
+            background: "#a3ffb4",
+          }}
+        >
+          <tbody>
+            <tr>
+              <th>Sr no. </th>
+              <th>Student's Name </th>
+              <th>PRN </th>
+            </tr>
+          </tbody>
         </table>
         {voterData.map((student, key) => {
           return (
@@ -171,13 +169,11 @@ const VerificationScreen = () => {
                     }}
                   >
                     <tbody>
-                    <tr key={key}>
-                     <td>{key++}</td>
-                     <td>{student.username}</td>
-                     <td>{student.prn}</td> 
-                     </tr>
-                   
-                   
+                      <tr key={key}>
+                        <td>{key++}</td>
+                        <td>{student.username}</td>
+                        <td>{student.prn}</td>
+                      </tr>
                     </tbody>
                   </table>
                 </>

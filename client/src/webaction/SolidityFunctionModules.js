@@ -69,7 +69,7 @@ export const sol_isAdminAddress = async () => {
 export const sol_getElectionDetails = async () => {
   const ElectionInstance = await sol_getElectionInstance();
   let data = await ElectionInstance.methods.getElectionDetails().call();
-  // console.log("Election Details: ", data);
+
   return data;
 };
 
@@ -92,18 +92,19 @@ export const sol_startElection = async (electionTitle, organizationName) => {
 };
 
 export const sol_changeElectionPhase = async () => {
-
   const acc = await sol_getCurrentAccount();
   const ElectionInstance = await sol_getElectionInstance();
-  const isPendingRequest = await ElectionInstance.methods.isPendingRequest().call();
-  
+  const isPendingRequest = await ElectionInstance.methods
+    .isPendingRequest()
+    .call();
+
   if (!isPendingRequest) {
     let data = await ElectionInstance.methods.changeElectionPhase().send({
       from: acc,
       gas: 1000000,
       gasPrice: 5000000,
     });
-    
+
     return true;
   } else {
     return false;
@@ -199,13 +200,13 @@ export const sol_approveVerificationRequests = async (approveAccount) => {
   }
 };
 
-export const sol_denyVerificationRequests = async (denyAccount, deniedFor) => {
+export const sol_denyVerificationRequests = async (denyAccount) => {
   const acc = await sol_getCurrentAccount();
   if (acc) {
     const ElectionInstance = await sol_getElectionInstance();
 
     const denyVerificationReq = await ElectionInstance.methods
-      .denyVerificationRequests(denyAccount, deniedFor)
+      .denyVerificationRequests(denyAccount)
       .send({ from: acc, gas: 1000000, gasPrice: 5000000 });
 
     return true;

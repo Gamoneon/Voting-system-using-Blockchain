@@ -26,7 +26,6 @@ contract Election {
         bool hasApplied;
         bool isCandidate;
         bool isDenied;
-        string deniedFor;
         string tagLine;
     }
 
@@ -92,7 +91,7 @@ contract Election {
         voterDetails[pendingVoterAddress].voterElectionDetails.isVerified = true;
         pendingRequests --;
         if (voterDetails[pendingVoterAddress].voterElectionDetails.isDenied) {
-            voterDetails[pendingVoterAddress].voterElectionDetails.deniedFor = "";
+        
             voterDetails[pendingVoterAddress].voterElectionDetails.isDenied = false;
 
         }
@@ -100,12 +99,12 @@ contract Election {
 
     // Deny verification requests
     function denyVerificationRequests(
-        address pendingVoterAddress,
-        string memory _deniedFor
+        address pendingVoterAddress
+        
     ) public {
         voterDetails[pendingVoterAddress].voterElectionDetails.hasApplied = false;
         voterDetails[pendingVoterAddress].voterElectionDetails.isDenied = true;
-        voterDetails[pendingVoterAddress].voterElectionDetails.deniedFor = _deniedFor;
+       
         pendingRequests --;
     }
 
@@ -127,7 +126,6 @@ contract Election {
         pendingRequests --;
 
         if (voterDetails[pendingVoterAddress].voterElectionDetails.isDenied) {
-            voterDetails[pendingVoterAddress].voterElectionDetails.deniedFor = "";
             voterDetails[pendingVoterAddress].voterElectionDetails.isDenied = false;
         }
     }
@@ -166,7 +164,6 @@ contract Election {
             hasApplied: false,
             isCandidate: false,
             isDenied: false,
-            deniedFor: "",
             tagLine: ""
         });
         voter memory newVoter = voter({

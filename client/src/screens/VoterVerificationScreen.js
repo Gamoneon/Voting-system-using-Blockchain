@@ -46,6 +46,7 @@ const VoterVerificationScreen = () => {
   const [mobile, setMobile] = useState("");
   const [username, setUsername] = useState("");
   const [isVerified, setIsVerified] = useState(false);
+  const [isDenied, setIsDenied] = useState(false);
   const [isCandidate, setIsCandidate] = useState(false);
   const [tagLine, setTagLine] = useState("");
   const [currentElectionPhase, setCurrentElectionPhase] = useState("");
@@ -78,6 +79,7 @@ const VoterVerificationScreen = () => {
     setPrn(data["prn"]);
     setMobile(data["mobile"]);
     setIsVerified(data["voterElectionDetails"]["isVerified"]);
+    setIsDenied(data["voterElectionDetails"]["isDenied"]);
     setIsCandidate(data["voterElectionDetails"]["isCandidate"]);
     setHasApplied(data["voterElectionDetails"]["hasApplied"]);
   };
@@ -104,7 +106,7 @@ const VoterVerificationScreen = () => {
     routeValidation();
 
     getElectionDetails();
-  },[]);
+  }, []);
 
   useEffect(() => {
     getUserDetails();
@@ -118,6 +120,15 @@ const VoterVerificationScreen = () => {
       <div className="container-main">
         {!isVerified && currentElectionPhase === "Voter Verification" && (
           <>
+            {isDenied && (
+              <div
+                className="text-center bg-danger text-light fw-bold fs-4"
+                style={divisionstyle}
+              >
+                <div>Your application has been denied by the Admin!</div>
+                <div>Please submit valid details to get verified as voter.</div>
+              </div>
+            )}
             <h2>Apply for Voter Verification</h2>
             {hasApplied ? (
               <div

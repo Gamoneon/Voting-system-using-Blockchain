@@ -4,7 +4,7 @@ import {
   sol_getElectionDetails,
 } from "../webaction/SolidityFunctionModules.js";
 
-const ElectionInitializeMsg = () => {
+const ElectionInitializeMsg = (props) => {
   //------------------------------ style CSS -----------------------------------------//
   const bgstyle = {
     background: "#ffdd99",
@@ -24,6 +24,7 @@ const ElectionInitializeMsg = () => {
     setIsElectionStarted(data[0]);
     setStoredElectionTitle(data[2]);
     setCurrentElectionPhase(data[4]);
+    console.log("I am here");
   };
 
   const isAdmin = async () => {
@@ -34,11 +35,10 @@ const ElectionInitializeMsg = () => {
   useEffect(() => {
     isAdmin();
   }, []);
-  
 
-  useEffect(()=>{
+  useEffect(() => {
     getElectionDetails();
-  },[currentElectionPhase])
+  }, [props]);
 
   //------------------------------ Render Content -----------------------------------------//
   return (
