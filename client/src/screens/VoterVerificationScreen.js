@@ -65,7 +65,7 @@ const VoterVerificationScreen = () => {
   };
   const getElectionDetails = async () => {
     const data = await sol_getElectionDetails();
-    setCurrentElectionPhase(data[4]);
+    setCurrentElectionPhase(data[3]);
   };
 
   const getUserDetails = async () => {
@@ -74,8 +74,8 @@ const VoterVerificationScreen = () => {
       navigate("/login");
     }
     setUsername(data["username"]);
-    setPrn(data["prn"]);
-    setMobile(data["mobile"]);
+    setPrn(data["voterElectionDetails"]["prn"]);
+    setMobile(data["voterElectionDetails"]["mobile"]);
     setIsVerified(data["voterElectionDetails"]["isVerified"]);
     setIsDenied(data["voterElectionDetails"]["isDenied"]);
     setIsCandidate(data["voterElectionDetails"]["isCandidate"]);

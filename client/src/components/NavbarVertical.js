@@ -37,7 +37,7 @@ const NavbarVertical = (props) => {
 
   const getElectionDetails = async () => {
     const data = await sol_getElectionDetails();
-    setCurrentElectionPhase(data[4]);
+    setCurrentElectionPhase(data[3]);
   };
 
   const logoutHandler = () => {
@@ -114,7 +114,7 @@ const NavbarVertical = (props) => {
                 className={`list-group-item list-group-item-action ${splitLocation[splitLocation.length-1] === "voterverification" ? "active" : ""}`} 
 
               >
-                <i className="fa-regular fa-id-card"></i>{currentElectionPhase === "Voter Verification" ? " Voter Verification" : " Candidate Application"}
+                <i className="fa-regular fa-id-card"></i>{currentElectionPhase === "Candidate Application" ? " Candidate Application" : " Voter Verification"}
               </Link>
               {currentElectionPhase === "Voting" && (
                 <Link

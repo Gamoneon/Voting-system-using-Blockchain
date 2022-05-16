@@ -25,7 +25,8 @@ const RegisterScreen = () => {
     minWidth: "300px",
     background: "#23263F",
     padding: "3%",
-    margin: "3%",
+    margin: "1%",
+    marginLeft: "3%",
     borderRadius: "20px",
   };
   const metmamaskBtnStyle = {
@@ -34,6 +35,14 @@ const RegisterScreen = () => {
   };
   const loginlinkstyle = {
     textDecoration: "none",
+  };
+
+   const bgstyle = {
+    width: "50%",
+    margin: "1% auto",
+    background: "rgba(0, 0, 0, 0.5)",
+    padding: "1%",
+    color: "#FFFFFF",
   };
 
   //------------------------------ useStates Hooks -----------------------------------------//
@@ -77,6 +86,10 @@ const RegisterScreen = () => {
     <>
       <Navbar />
       <div className="RegiterPageWallpaper" style={registerscreenstyle}>
+        <div
+          className="text-center fw-bold mt-2" style={bgstyle}>
+        A MetaMask wallet is required for registration. <a style={loginlinkstyle} href="https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?hl=en" target="_blank">Click here to download.</a>
+        </div>
         <form onSubmit={submitHandler}>
           <div className="container text-light" style={registerformstyle}>
             <div className="text-center">

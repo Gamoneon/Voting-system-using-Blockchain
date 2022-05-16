@@ -47,12 +47,12 @@ const ResultScreen = () => {
 
         temp["username"] = data[i]["username"];
         temp["isCandidate"] = data[i]["voterElectionDetails"]["isCandidate"];
-        temp["votesCount"] = data[i]["votesCount"];
+        temp["votesCount"] = data[i]["voterElectionDetails"]["votesCount"];
 
         if (temp["votesCount"] > maxVotes) {
-          maxVotes = data[i]["votesCount"];
+          maxVotes = data[i]["voterElectionDetails"]["votesCount"];
           winner["winnerName"] = data[i]["username"];
-          winner["maxVotes"] = data[i]["votesCount"];
+          winner["maxVotes"] = data[i]["voterElectionDetails"]["votesCount"];
           setWinnerCandidate(winner);
         }
 

@@ -20,7 +20,7 @@ const Analysis = () => {
         temp["username"] = data[i]["username"];
         temp["isCandidate"] = data[i]["voterElectionDetails"]["isCandidate"];
         temp["isVerified"] = data[i]["voterElectionDetails"]["isVerified"];
-        temp["votesCount"] = data[i]["votesCount"];
+        temp["votesCount"] = data[i]["voterElectionDetails"]["votesCount"];
         temp["hasVoted"] = data[i]["voterElectionDetails"]["hasVoted"]
 
         if (temp["isCandidate"]) {

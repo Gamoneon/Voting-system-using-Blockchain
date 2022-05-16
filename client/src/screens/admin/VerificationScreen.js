@@ -44,8 +44,8 @@ const VerificationScreen = () => {
 
         temp["voterAddress"] = data[i]["voterAddress"];
         temp["username"] = data[i]["username"];
-        temp["prn"] = data[i]["prn"];
-        temp["mobile"] = data[i]["mobile"];
+        temp["prn"] = data[i]["voterElectionDetails"]["prn"];
+        temp["mobile"] = data[i]["voterElectionDetails"]["mobile"];
         temp["isVerified"] = data[i]["voterElectionDetails"]["isVerified"];
         temp["hasApplied"] = data[i]["voterElectionDetails"]["hasApplied"];
 

@@ -9,6 +9,7 @@ import {
   sol_startElection,
   sol_getElectionDetails,
   sol_changeElectionPhase,
+  sol_resetElection,
 } from "../../webaction/SolidityFunctionModules.js";
 
 const ElectionSetupScreen = () => {
@@ -21,15 +22,11 @@ const ElectionSetupScreen = () => {
   };
 
   //------------------------------ useState Hooks -----------------------------------------//
-  const [isAdminConnected, setIsAdminConnected] = useState(false);
-  const [account, setAccount] = useState(null);
+
   const [errorPendingRequests, setErrorPendingRequests] = useState("");
   const [electionTitle, setElectionTitle] = useState("");
   const [organizationName, setOrganizationName] = useState("");
-  const [storedElectionTitle, setStoredElectionTitle] = useState("");
-  const [storedOrganizationName, setStoredOrganizationName] = useState("");
   const [isElectionStarted, setIsElectionStarted] = useState(false);
-  const [isElectionEnded, setIsElectionEnded] = useState(false);
   const [currentElectionPhase, setCurrentElectionPhase] = useState("");
   const [nextElectionPhase, setNextElectionPhase] = useState("");
   const navigate = useNavigate();
@@ -40,17 +37,13 @@ const ElectionSetupScreen = () => {
     if (!data) {
       navigate("/dashboard");
     }
-    setIsAdminConnected(data);
   };
 
   const getElectionDetails = async () => {
     const data = await sol_getElectionDetails();
     setIsElectionStarted(data[0]);
-    setIsElectionEnded(data[1]);
-    setStoredElectionTitle(data[2]);
-    setStoredOrganizationName(data[3]);
-    setCurrentElectionPhase(data[4]);
-    setNextElectionPhase(data[5]);
+    setCurrentElectionPhase(data[3]);
+    setNextElectionPhase(data[4]);
   };
 
   const changeElectionPhase = async () => {
@@ -67,6 +60,13 @@ const ElectionSetupScreen = () => {
     if (data) {
       getElectionDetails();
     }
+    window.location.reload(false);
+  };
+
+  const resetElection = async () => {
+    await sol_resetElection();
+    getElectionDetails();
+    window.location.reload(false);
   };
 
   const submitHandler = (e) => {
@@ -96,9 +96,20 @@ const ElectionSetupScreen = () => {
                 <span className="text-success">{currentElectionPhase}</span>
               </h4>
               {nextElectionPhase === "Setup Election" ? (
-                <h4>
-                  <span className="text-danger">Election Ended.</span>
-                </h4>
+                <>
+                  <h4>
+                    <span className="text-danger">Election Ended.</span>
+                  </h4>
+                  <div className="d-grid gap-2 mt-3">
+                    <button
+                      className="btn btn-primary btn-lg"
+                      type="button"
+                      onClick={resetElection}
+                    >
+                      Reset Election
+                    </button>
+                  </div>
+                </>
               ) : (
                 <>
                   <h4>

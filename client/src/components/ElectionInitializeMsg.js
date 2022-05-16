@@ -21,8 +21,8 @@ const ElectionInitializeMsg = (props) => {
   const getElectionDetails = async () => {
     const data = await sol_getElectionDetails();
     setIsElectionStarted(data[0]);
-    setStoredElectionTitle(data[2]);
-    setCurrentElectionPhase(data[4]);
+    setStoredElectionTitle(data[1]);
+    setCurrentElectionPhase(data[3]);
   };
 
   const isAdmin = async () => {

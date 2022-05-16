@@ -1,5 +1,7 @@
 import Web3 from "web3";
 import Election from "../contracts/Election.json";
+const _gas = 1000000;
+const _gasPrice = 5000000;
 
 export const sol_connectwallet = async () => {
   let web3 = null,
@@ -16,6 +18,8 @@ export const sol_connectwallet = async () => {
     }
   } else {
     console.log("Please install MetaMask");
+    error = "Please install MetaMask!";
+    return { acc, web3, error };
   }
 };
 
@@ -82,7 +86,7 @@ export const sol_startElection = async (electionTitle, organizationName) => {
     if (!isElectionStarted) {
       await ElectionInstance.methods
         .startElection(electionTitle, organizationName)
-        .send({ from: acc, gas: 1000000, gasPrice: 5000000 });
+        .send({ from: acc, gas: _gasPrice, gasPrice: _gasPrice });
       return true;
     }
   } else {
@@ -100,8 +104,8 @@ export const sol_changeElectionPhase = async () => {
   if (!isPendingRequest) {
     let data = await ElectionInstance.methods.changeElectionPhase().send({
       from: acc,
-      gas: 1000000,
-      gasPrice: 5000000,
+      gas: _gasPrice,
+      gasPrice: _gasPrice,
     });
 
     return true;
@@ -118,7 +122,7 @@ export const sol_addLoginDetails = async (username, email, password) => {
     if (!(await ElectionInstance.methods.isVoterExists(acc, email).call())) {
       await ElectionInstance.methods
         .addVoterDetails(username, email, password)
-        .send({ from: acc, gas: 1000000, gasPrice: 5000000 });
+        .send({ from: acc, gas: _gas, gasPrice: _gasPrice });
       return true;
     }
   }
@@ -178,7 +182,7 @@ export const sol_addVerificationRequest = async (prn, mobile) => {
 
     const addVerificationReq = await ElectionInstance.methods
       .addVerificationRequest(acc, prn, mobile)
-      .send({ from: acc, gas: 1000000, gasPrice: 5000000 });
+      .send({ from: acc, gas: _gas, gasPrice: _gasPrice });
 
     return addVerificationReq;
   }
@@ -191,7 +195,7 @@ export const sol_approveVerificationRequests = async (approveAccount) => {
 
     const approveVerificationReq = await ElectionInstance.methods
       .approveVerificationRequests(approveAccount)
-      .send({ from: acc, gas: 1000000, gasPrice: 5000000 });
+      .send({ from: acc, gas: _gas, gasPrice: _gasPrice });
 
     return true;
   } else {
@@ -206,7 +210,7 @@ export const sol_denyVerificationRequests = async (denyAccount) => {
 
     const denyVerificationReq = await ElectionInstance.methods
       .denyVerificationRequests(denyAccount)
-      .send({ from: acc, gas: 1000000, gasPrice: 5000000 });
+      .send({ from: acc, gas: _gas, gasPrice: _gasPrice });
 
     return true;
   } else {
@@ -236,7 +240,7 @@ export const sol_addCandidateRequest = async (tagLine) => {
 
     const addCandidateReq = await ElectionInstance.methods
       .addCandidateRequest(acc, tagLine)
-      .send({ from: acc, gas: 1000000, gasPrice: 5000000 });
+      .send({ from: acc, gas: _gas, gasPrice: _gasPrice });
 
     return addCandidateReq;
   }
@@ -249,7 +253,7 @@ export const sol_approveCandidateRequests = async (approveAccount) => {
 
     const approveCandidateReq = await ElectionInstance.methods
       .approveCandidateRequests(approveAccount)
-      .send({ from: acc, gas: 1000000, gasPrice: 5000000 });
+      .send({ from: acc, gas: _gas, gasPrice: _gasPrice });
 
     return true;
   } else {
@@ -265,7 +269,7 @@ export const sol_addVote = async (candidateAddress) => {
     const ElectionInstance = await sol_getElectionInstance();
     const voteSuccess = await ElectionInstance.methods
       .addVote(acc, candidateAddress)
-      .send({ from: acc, gas: 1000000, gasPrice: 5000000 });
+      .send({ from: acc, gas: _gas, gasPrice: _gasPrice });
   }
 };
 
@@ -276,4 +280,14 @@ export const sol_hasVoted = async () => {
     const hasCastedVote = await ElectionInstance.methods.hasVoted(acc).call();
     return hasCastedVote;
   } else return false;
+};
+
+/*------------------------ Reset Voter & Elections Details --------------------------- */
+
+export const sol_resetElection = async () => {
+  const acc = await sol_getCurrentAccount();
+  const ElectionInstance = await sol_getElectionInstance();
+  await ElectionInstance.methods
+    .resetElection()
+    .send({ from: acc, gas: _gas, gasPrice: _gasPrice });
 };
