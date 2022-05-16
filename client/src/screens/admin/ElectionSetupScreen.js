@@ -78,8 +78,6 @@ const ElectionSetupScreen = () => {
     getElectionDetails();
   }, []);
 
-  // useEffect(() => {}, [errorPendingRequests]);
-
   return (
     <>
       <div className="container">
