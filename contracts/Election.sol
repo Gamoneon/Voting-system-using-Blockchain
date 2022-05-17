@@ -145,7 +145,7 @@ contract Election {
     }
 
     function isPendingRequest() public view returns (bool) {
-        return (pendingRequests != 0) ? true : false;
+        return (pendingRequests == 0) ? false : true ;
     }
 
     // Get all voter details

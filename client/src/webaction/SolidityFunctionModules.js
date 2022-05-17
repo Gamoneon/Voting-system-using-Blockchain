@@ -30,21 +30,27 @@ export const sol_getElectionInstance = async () => {
   // web3 = data.web3;
   const web3 = await sol_getWeb3();
   // Get the contract instance.
-  const networkId = await web3.eth.net.getId();
-  const deployedNetwork = Election.networks[networkId];
-  const ElectionInstance = new web3.eth.Contract(
-    Election.abi,
-    deployedNetwork && deployedNetwork.address
-  );
-  return ElectionInstance;
+  if (web3) {
+    const networkId = await web3.eth.net.getId();
+    const deployedNetwork = Election.networks[networkId];
+    const ElectionInstance = new web3.eth.Contract(
+      Election.abi,
+      deployedNetwork && deployedNetwork.address
+    );
+    return ElectionInstance;
+  }
+  return false;
 };
 
 export const sol_getWeb3 = async () => {
   let web3 = null;
 
   const data = await sol_connectwallet();
-  web3 = data.web3;
-  return web3;
+  if (!data.error) {
+    web3 = data.web3;
+    return web3;
+  }
+  return false;
 };
 
 //Get current accout
@@ -72,9 +78,12 @@ export const sol_isAdminAddress = async () => {
 
 export const sol_getElectionDetails = async () => {
   const ElectionInstance = await sol_getElectionInstance();
-  let data = await ElectionInstance.methods.getElectionDetails().call();
+  if (ElectionInstance) {
+    let data = await ElectionInstance.methods.getElectionDetails().call();
 
-  return data;
+    return data;
+  }
+  return false;
 };
 
 export const sol_startElection = async (electionTitle, organizationName) => {
@@ -94,24 +103,26 @@ export const sol_startElection = async (electionTitle, organizationName) => {
   }
 };
 
-export const sol_changeElectionPhase = async () => {
-  const acc = await sol_getCurrentAccount();
+export const sol_isPendingRequest = async () => {
   const ElectionInstance = await sol_getElectionInstance();
   const isPendingRequest = await ElectionInstance.methods
     .isPendingRequest()
     .call();
+    if(isPendingRequest) {
+      return true;
+    }
+    return false;
+}
 
-  if (!isPendingRequest) {
+export const sol_changeElectionPhase = async () => {
+  const acc = await sol_getCurrentAccount();
+  const ElectionInstance = await sol_getElectionInstance();
+  
     let data = await ElectionInstance.methods.changeElectionPhase().send({
       from: acc,
       gas: _gasPrice,
       gasPrice: _gasPrice,
     });
-
-    return true;
-  } else {
-    return false;
-  }
 };
 
 //Add login details

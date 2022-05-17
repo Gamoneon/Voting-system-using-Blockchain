@@ -10,6 +10,7 @@ import {
   sol_getElectionDetails,
   sol_changeElectionPhase,
   sol_resetElection,
+  sol_isPendingRequest,
 } from "../../webaction/SolidityFunctionModules.js";
 
 const ElectionSetupScreen = () => {
@@ -47,12 +48,13 @@ const ElectionSetupScreen = () => {
   };
 
   const changeElectionPhase = async () => {
-    const data = await sol_changeElectionPhase();
+    const data = await sol_isPendingRequest();
     if (!data) {
+      const data = await sol_changeElectionPhase();
+      window.location.reload(false);
+    } else {
       setErrorPendingRequests("Please clear all pending requests first.");
     }
-    getElectionDetails();
-    window.location.reload(false);
   };
 
   const startElection = async (electionTitle, organizationName) => {

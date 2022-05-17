@@ -8,6 +8,7 @@ import {
   sol_isAdminAddress,
   sol_approveVerificationRequests,
   sol_denyVerificationRequests,
+  sol_getElectionDetails
 } from "../../webaction/SolidityFunctionModules.js";
 
 const VerificationScreen = () => {
@@ -16,6 +17,8 @@ const VerificationScreen = () => {
   const navigate = useNavigate();
   const [voterData, setVoterData] = useState([]);
   const [isApproved, setIsApproved] = useState(false);
+  const [atLeastOneVerified, setAtLeastOneVerified] = useState(false)
+  const [currentElectionPhase, setCurrentElectionPhase] = useState("");
 
   //------------------------------ Functions -----------------------------------------//
   const onClickApprove = async (voterAddress) => {
@@ -35,6 +38,11 @@ const VerificationScreen = () => {
     }
   };
 
+  const getElectionDetails = async () => {
+    const data = await sol_getElectionDetails();
+    setCurrentElectionPhase(data[3]);
+  };
+
   const getAllVoterDetails = async () => {
     const data = await sol_getAllVoterDetails();
     let allVoterDetails = [];
@@ -48,7 +56,9 @@ const VerificationScreen = () => {
         temp["mobile"] = data[i]["voterElectionDetails"]["mobile"];
         temp["isVerified"] = data[i]["voterElectionDetails"]["isVerified"];
         temp["hasApplied"] = data[i]["voterElectionDetails"]["hasApplied"];
-
+        if(!atLeastOneVerified && temp["isVerified"]) {
+          setAtLeastOneVerified(true);
+        }
         allVoterDetails.push(temp);
       }
       
@@ -57,6 +67,7 @@ const VerificationScreen = () => {
   };
 
   useEffect(() => {
+    getElectionDetails();
     routeValidation();
   }, []);
 
@@ -70,6 +81,7 @@ const VerificationScreen = () => {
     <>
       <YourAccount />
       <ElectionInitializeMsg />
+      {currentElectionPhase === "Voter Verification" &&
       <div className="container">
         <div
           className="alert alert-primary text-center fw-bold mt-3"
@@ -146,11 +158,13 @@ const VerificationScreen = () => {
           }}
         >
           <tbody>
+            {atLeastOneVerified &&
             <tr>
               <th>Sr no. </th>
               <th>Student's Name </th>
               <th>PRN </th>
             </tr>
+            }
           </tbody>
         </table>
         {voterData.map((student, key) => {
@@ -209,6 +223,7 @@ const VerificationScreen = () => {
           );
         })}
       </div>
+      }
     </>
   );
 };

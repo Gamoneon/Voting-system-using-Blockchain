@@ -7,6 +7,7 @@ import {
   sol_isAdminAddress,
   sol_hasVoted,
   sol_addVote,
+  sol_getElectionDetails
 } from "../webaction/SolidityFunctionModules.js";
 
 const VotingScreen = () => {
@@ -16,6 +17,7 @@ const VotingScreen = () => {
   const [account, setAccount] = useState(null);
   const [candidateData, setCandidateData] = useState([]);
   const [hasVoted, setHasVoted] = useState(false);
+  const [currentElectionPhase, setCurrentElectionPhase] = useState("");
 
   //------------------------------ Functions -----------------------------------------//
 
@@ -56,7 +58,13 @@ const VotingScreen = () => {
     }
   };
 
+  const getElectionDetails = async () => {
+    const data = await sol_getElectionDetails();
+    setCurrentElectionPhase(data[3]);
+  };
+
   useEffect(() => {
+    getElectionDetails();
     routeValidation();
   },[]);
 
@@ -68,8 +76,10 @@ const VotingScreen = () => {
   //------------------------------ Render Content -----------------------------------------//
   return (
     <>
-      <YourAccount account={account} />
-      <ElectionInitializeMsg isAdmin={isAdminConnected} />
+      <YourAccount/>
+      <ElectionInitializeMsg/>
+      { currentElectionPhase === "Voting" && 
+      <>
       <div
         className="alert alert-success text-center fw-bold mt-2"
         role="alert"
@@ -84,7 +94,7 @@ const VotingScreen = () => {
           </>
         )}
       </div>
-
+      
       <h4>Total Candidates: {candidateData.length}</h4>
 
       {candidateData.map((candidate, key) => {
@@ -119,6 +129,8 @@ const VotingScreen = () => {
           </div>
         );
       })}
+      </>
+      }
     </>
   );
 };

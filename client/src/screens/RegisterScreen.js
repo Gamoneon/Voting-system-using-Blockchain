@@ -65,7 +65,7 @@ const RegisterScreen = () => {
     // if not then add to list
     let result = await sol_addLoginDetails(username, email, password);
     if (result) navigate("/dashboard");
-    else setErrorRegister("Voter address already exists!");
+    else setErrorRegister("User already exist!");
     // navigate to login
   };
 

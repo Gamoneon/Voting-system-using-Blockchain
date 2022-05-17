@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import ElectionInitializeMsg from "../components/ElectionInitializeMsg.js";
 import YourAccount from "../components/YourAccount.js";
 import Analysis from "../components/Analysis.js";
-import { sol_getAllVoterDetails } from "../webaction/SolidityFunctionModules.js";
+import { sol_getAllVoterDetails, sol_getElectionDetails } from "../webaction/SolidityFunctionModules.js";
 
 const ResultScreen = () => {
   const resultscreenstyle = {
@@ -31,6 +31,7 @@ const ResultScreen = () => {
 
   const [candidateData, setCandidateData] = useState([]);
   const [winnerCandidate, setWinnerCandidate] = useState({});
+  const [currentElectionPhase, setCurrentElectionPhase] = useState("");
 
   /*----------------- WARNING ---------------*/
   /*  Check function for Continous Looping   */
@@ -64,6 +65,15 @@ const ResultScreen = () => {
     }
   };
 
+  const getElectionDetails = async () => {
+    const data = await sol_getElectionDetails();
+    setCurrentElectionPhase(data[3]);
+  };
+
+  useEffect(() => {
+    getElectionDetails();
+  }, []);
+
   useEffect(() => {
     getAllVoterDetails();
   }, []);
@@ -72,9 +82,11 @@ const ResultScreen = () => {
   //------------------------------ Render Content -----------------------------------------//
   return (
     <>
+    <YourAccount/>
+    <ElectionInitializeMsg/>
+    {currentElectionPhase === "Result" &&
       <div className="container" style={resultscreenstyle}>
-        <YourAccount/>
-        <ElectionInitializeMsg/>
+        
         <h2>Results</h2>
         <h3 className="bg-light" style={{display: "inline-block"}}>Total Candidates: {candidateData.length}</h3>
         <div
@@ -116,6 +128,7 @@ const ResultScreen = () => {
             <Analysis/>
           </div>
       </div>
+      }
     </>
   );
 };
