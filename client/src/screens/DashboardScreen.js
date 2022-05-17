@@ -33,7 +33,7 @@ const DashboardScreen = (props) => {
 
   const getElectionDetails = async () => {
     const data = await sol_getElectionDetails();
-    setCurrentElectionPhase(data[4]);
+    setCurrentElectionPhase(data[3]);
   };
 
   const isAdmin = async () => {

@@ -5,7 +5,7 @@ const HomeScreen = () => {
   //------------------------------ Style CSS -----------------------------------------//
   const homescreenstyle = {
     minHeight: "100%",
-    backgroundImage: `url("./Images/wallpaper4.png")`,
+    backgroundImage: `url("./Images/BriefGrandioseKillifish.gif")`,
     backgroundRepeat: "no-repeat",
     backgroundPosition: "center center",
     backgroundSize: "cover",

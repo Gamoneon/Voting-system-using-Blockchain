@@ -8,6 +8,7 @@ import {
   sol_isAdminAddress,
   sol_approveVerificationRequests,
   sol_denyVerificationRequests,
+  sol_getElectionDetails
 } from "../../webaction/SolidityFunctionModules.js";
 
 const VerificationScreen = () => {
@@ -16,6 +17,8 @@ const VerificationScreen = () => {
   const navigate = useNavigate();
   const [voterData, setVoterData] = useState([]);
   const [isApproved, setIsApproved] = useState(false);
+  const [atLeastOneVerified, setAtLeastOneVerified] = useState(false)
+  const [currentElectionPhase, setCurrentElectionPhase] = useState("");
 
   //------------------------------ Functions -----------------------------------------//
   const onClickApprove = async (voterAddress) => {
@@ -24,9 +27,8 @@ const VerificationScreen = () => {
   };
 
   const onClickDeny = async (voterAddress) => {
-    console.log("Deny the address :", voterAddress);
-    // const data = await sol_denyVerificationRequests(voterAddress, "Your credentials are not Verified.");
-    // setIsApproved(data);
+    const data = await sol_denyVerificationRequests(voterAddress);
+    setIsApproved(data);
   };
 
   const routeValidation = async () => {
@@ -34,6 +36,11 @@ const VerificationScreen = () => {
     if (!data) {
       navigate("/dashboard");
     }
+  };
+
+  const getElectionDetails = async () => {
+    const data = await sol_getElectionDetails();
+    setCurrentElectionPhase(data[3]);
   };
 
   const getAllVoterDetails = async () => {
@@ -45,22 +52,24 @@ const VerificationScreen = () => {
 
         temp["voterAddress"] = data[i]["voterAddress"];
         temp["username"] = data[i]["username"];
-        temp["prn"] = data[i]["prn"];
-        temp["mobile"] = data[i]["mobile"];
-        temp["isVerified"] = data[i]["isVerified"];
-        temp["hasApplied"] = data[i]["hasApplied"];
-
+        temp["prn"] = data[i]["voterElectionDetails"]["prn"];
+        temp["mobile"] = data[i]["voterElectionDetails"]["mobile"];
+        temp["isVerified"] = data[i]["voterElectionDetails"]["isVerified"];
+        temp["hasApplied"] = data[i]["voterElectionDetails"]["hasApplied"];
+        if(!atLeastOneVerified && temp["isVerified"]) {
+          setAtLeastOneVerified(true);
+        }
         allVoterDetails.push(temp);
       }
-
-      // console.log(allVoterDetails);
+      
       setVoterData([...allVoterDetails]);
     }
   };
 
   useEffect(() => {
+    getElectionDetails();
     routeValidation();
-  },[]);
+  }, []);
 
   useEffect(() => {
     setIsApproved(false);
@@ -72,6 +81,7 @@ const VerificationScreen = () => {
     <>
       <YourAccount />
       <ElectionInitializeMsg />
+      {currentElectionPhase === "Voter Verification" &&
       <div className="container">
         <div
           className="alert alert-primary text-center fw-bold mt-3"
@@ -79,8 +89,7 @@ const VerificationScreen = () => {
         >
           List of registered students
         </div>
-        {/* <h4>Total Candidates : {voterData.length - 1}</h4> */}
-        <h3>Pending Approvals : </h3>
+        <h3>Pending Approvals: </h3>
         {voterData.map((student, key) => {
           return (
             <div className="container" key={key}>
@@ -98,19 +107,17 @@ const VerificationScreen = () => {
                         <td>{student.mobile}</td>
                       </tr>
                       <tr>
-                        <th>PRN No </th>
+                        <th>PRN </th>
                         <td>{student.prn}</td>
                         <th>Verified</th>
                         <td> {student.isVerified ? "True" : "False"}</td>
                       </tr>
                       <tr>
-                        {/* <td colSpan="2">
+                        <td colSpan="2">
                           <div className="d-grid p-1">
                             <button
                               className="btn btn-danger text-light"
                               type="button"
-                              data-toggle="modal"
-                              data-target="#denyModal"
                               onClick={() => {
                                 onClickDeny(student.voterAddress);
                               }}
@@ -118,8 +125,8 @@ const VerificationScreen = () => {
                               Deny
                             </button>
                           </div>
-                        </td> */}
-                        <td colSpan="4">
+                        </td>
+                        <td colSpan="2">
                           <div className="d-grid p-1">
                             <button
                               className="btn btn-success text-light"
@@ -141,32 +148,43 @@ const VerificationScreen = () => {
           );
         })}
 
-        <h3 className="mt-4">Approved Students : </h3>
+        <h3 className="mt-4">Approved Students: </h3>
+        <table
+          className="table mt-4"
+          style={{
+            width: "75%",
+            margin: "auto",
+            background: "#a3ffb4",
+          }}
+        >
+          <tbody>
+            {atLeastOneVerified &&
+            <tr>
+              <th>Sr no. </th>
+              <th>Student's Name </th>
+              <th>PRN </th>
+            </tr>
+            }
+          </tbody>
+        </table>
         {voterData.map((student, key) => {
           return (
             <div className="container" key={key}>
               {student.isVerified && (
                 <>
                   <table
-                    className="table mt-5 "
+                    className="table"
                     style={{
-                      width: "75%",
+                      width: "76.5%",
                       margin: "auto",
                       background: "#a3ffb4",
                     }}
                   >
                     <tbody>
-                      <tr>
-                        <th>Student's Name </th>
+                      <tr key={key}>
+                        <td>{key++}</td>
                         <td>{student.username}</td>
-                        <th>Mobile No </th>
-                        <td>{student.mobile}</td>
-                      </tr>
-                      <tr>
-                        <th>PRN No </th>
                         <td>{student.prn}</td>
-                        <th>Verified</th>
-                        <td> {student.isVerified ? "True" : "False"}</td>
                       </tr>
                     </tbody>
                   </table>
@@ -205,6 +223,7 @@ const VerificationScreen = () => {
           );
         })}
       </div>
+      }
     </>
   );
 };

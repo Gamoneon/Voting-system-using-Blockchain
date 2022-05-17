@@ -6,15 +6,41 @@ contract Election {
     address public admin;
     uint256 candidateCount;
     uint256 voterCount;
-    bool isElectionStarted;
-    bool isElectionEnded;
-    string electionTitle;
-    string electionOrganization;
-    string currentElectionPhase;
-    string nextElectionPhase;
-    uint256 electionPhaseIndex;
-    string[] public electionPhases;
     uint256 pendingRequests;
+
+    struct electionSetup {
+        bool isElectionStarted;
+        string electionTitle;
+        string electionOrganization;
+        string currentElectionPhase;
+        string nextElectionPhase;
+        uint256 electionPhaseIndex;
+        string[5] electionPhases;
+    }
+
+    struct voter {
+        string username;
+        string email;
+        string password;
+        address voterAddress;
+        voterElectionData voterElectionDetails;
+    }
+
+    struct voterElectionData {
+        string prn;
+        string mobile;
+        uint256 votesCount;
+        bool isVerified;
+        bool hasVoted;
+        bool hasApplied;
+        bool isCandidate;
+        bool isDenied;
+        string tagLine;
+    }
+
+    mapping(address => voter) public voterDetails;
+    address[] public voters; // Array of address to store address of voters
+    electionSetup public electionInstance;
 
     constructor() public {
         // Initilizing default values
@@ -22,42 +48,27 @@ contract Election {
         candidateCount = 0;
         voterCount = 0;
         pendingRequests = 0;
-        isElectionStarted = false;
-        isElectionEnded = false;
-        electionTitle = "";
-        electionOrganization = "";
-        electionPhaseIndex = 0;
-        electionPhases = [
-            "None",
-            "Voter Verification",
-            "Candidate Application",
-            "Voting",
-            "Result"
-        ];
-        currentElectionPhase = electionPhases[electionPhaseIndex];
-        nextElectionPhase = electionPhases[electionPhaseIndex + 1];
-        
-    }
 
-    struct voter {
-        string username;
-        string email;
-        string password;
-        string prn;
-        string mobile;
-        address voterAddress;
-        bool isVerified;
-        bool hasVoted;
-        bool hasApplied;
-        bool isCandidate;
-        // bool isDenied;
-        // string deniedFor;
-        string tagLine;
-        uint256 votesCount;
+        electionInstance = electionSetup({
+            isElectionStarted: false,
+            electionTitle: "",
+            electionOrganization: "",
+            electionPhaseIndex: 0,
+            electionPhases: [
+                "Setup Election",
+                "Voter Verification",
+                "Candidate Application",
+                "Voting",
+                "Result"
+            ],
+            currentElectionPhase: electionInstance.electionPhases[
+                electionInstance.electionPhaseIndex
+            ],
+            nextElectionPhase: electionInstance.electionPhases[
+                electionInstance.electionPhaseIndex + 1
+            ]
+        });
     }
-
-    mapping(address => voter) public voterDetails;
-    address[] public voters; // Array of address to store address of voters
 
     /*------------------------ Voter Verification --------------------------- */
 
@@ -67,32 +78,39 @@ contract Election {
         string memory _prn,
         string memory _mobile
     ) public {
-        voterDetails[pendingVoterAddress].hasApplied = true;
-        voterDetails[pendingVoterAddress].prn = _prn;
-        voterDetails[pendingVoterAddress].mobile = _mobile;
-        pendingRequests ++;
+        voterDetails[pendingVoterAddress]
+            .voterElectionDetails
+            .hasApplied = true;
+        voterDetails[pendingVoterAddress].voterElectionDetails.prn = _prn;
+        voterDetails[pendingVoterAddress].voterElectionDetails.mobile = _mobile;
+        pendingRequests++;
     }
 
     // Approve verification requests
     function approveVerificationRequests(address pendingVoterAddress) public {
-        voterDetails[pendingVoterAddress].hasApplied = false;
-        voterDetails[pendingVoterAddress].isVerified = true;
-        pendingRequests --;
-        // if (voterDetails[pendingVoterAddress].isDenied) {
-        //     voterDetails[pendingVoterAddress].deniedFor = "";
-        //     voterDetails[pendingVoterAddress].isDenied = false;
-        // }
+        voterDetails[pendingVoterAddress]
+            .voterElectionDetails
+            .hasApplied = false;
+        voterDetails[pendingVoterAddress]
+            .voterElectionDetails
+            .isVerified = true;
+        pendingRequests--;
+        if (voterDetails[pendingVoterAddress].voterElectionDetails.isDenied) {
+            voterDetails[pendingVoterAddress]
+                .voterElectionDetails
+                .isDenied = false;
+        }
     }
 
     // Deny verification requests
-    // function denyVerificationRequests(
-    //     address pendingVoterAddress,
-    //     string memory _deniedFor
-    // ) public {
-    //     voterDetails[pendingVoterAddress].hasApplied = false;
-    //     voterDetails[pendingVoterAddress].isDenied = true;
-    //     voterDetails[pendingVoterAddress].deniedFor = _deniedFor;
-    // }
+    function denyVerificationRequests(address pendingVoterAddress) public {
+        voterDetails[pendingVoterAddress]
+            .voterElectionDetails
+            .hasApplied = false;
+        voterDetails[pendingVoterAddress].voterElectionDetails.isDenied = true;
+
+        pendingRequests--;
+    }
 
     // sending candidate request
 
@@ -100,20 +118,34 @@ contract Election {
         address pendingVoterAddress,
         string memory _tagLine
     ) public {
-        voterDetails[pendingVoterAddress].hasApplied = true;
-        voterDetails[pendingVoterAddress].tagLine = _tagLine;
-        pendingRequests ++;
+        voterDetails[pendingVoterAddress]
+            .voterElectionDetails
+            .hasApplied = true;
+        voterDetails[pendingVoterAddress]
+            .voterElectionDetails
+            .tagLine = _tagLine;
+        pendingRequests++;
     }
 
     // Approve candidate requests
     function approveCandidateRequests(address pendingVoterAddress) public {
-        voterDetails[pendingVoterAddress].hasApplied = false;
-        voterDetails[pendingVoterAddress].isCandidate = true;
+        voterDetails[pendingVoterAddress]
+            .voterElectionDetails
+            .hasApplied = false;
+        voterDetails[pendingVoterAddress]
+            .voterElectionDetails
+            .isCandidate = true;
         pendingRequests--;
-        // if (voterDetails[pendingVoterAddress].isDenied) {
-        //     voterDetails[pendingVoterAddress].deniedFor = "";
-        //     voterDetails[pendingVoterAddress].isDenied = false;
-        // }
+
+        if (voterDetails[pendingVoterAddress].voterElectionDetails.isDenied) {
+            voterDetails[pendingVoterAddress]
+                .voterElectionDetails
+                .isDenied = false;
+        }
+    }
+
+    function isPendingRequest() public view returns (bool) {
+        return (pendingRequests == 0) ? false : true ;
     }
 
     // Get all voter details
@@ -125,7 +157,11 @@ contract Election {
         return allVoterDetails;
     }
 
-    function getVoterDetails(address voterAddress) public view returns (voter memory){
+    function getVoterDetails(address voterAddress)
+        public
+        view
+        returns (voter memory)
+    {
         return voterDetails[voterAddress];
     }
 
@@ -136,11 +172,7 @@ contract Election {
         string memory _email,
         string memory _password
     ) public {
-        voter memory newVoter = voter({
-            username: _username,
-            email: _email,
-            password: _password,
-            voterAddress: msg.sender,
+        voterElectionData memory newvoterElectionData = voterElectionData({
             prn: "",
             mobile: "",
             votesCount: 0,
@@ -148,44 +180,38 @@ contract Election {
             hasVoted: false,
             hasApplied: false,
             isCandidate: false,
-            // isDenied: false,
-            // deniedFor: "",
+            isDenied: false,
             tagLine: ""
+        });
+
+        voter memory newVoter = voter({
+            username: _username,
+            email: _email,
+            password: _password,
+            voterAddress: msg.sender,
+            voterElectionDetails: newvoterElectionData
         });
         voterDetails[msg.sender] = newVoter;
         voterCount++;
         voters.push(msg.sender);
     }
 
-    function isVoterExists(address voterAddress, string memory mail) public view returns (bool) {
+    function isVoterExists(address voterAddress, string memory mail)
+        public
+        view
+        returns (bool)
+    {
         //Loop through voters array
         for (uint256 i = 0; i < voters.length; i++) {
-            if ((voterAddress) == voters[i] ||
-                (keccak256(bytes(mail)) == keccak256(bytes(voterDetails[voters[i]].email)))){
+            if (
+                (voterAddress) == voters[i] ||
+                (keccak256(bytes(mail)) ==
+                    keccak256(bytes(voterDetails[voters[i]].email)))
+            ) {
                 return true;
             }
         }
         return false;
-    }
-
-    function getLoginDetails(address loginAddress)
-        public
-        view
-        returns (
-            string memory,
-            string memory,
-            address,
-            string memory,
-            bool
-        )
-    {
-        return (
-            voterDetails[loginAddress].email,
-            voterDetails[loginAddress].password,
-            voterDetails[loginAddress].voterAddress,
-            voterDetails[loginAddress].username,
-            voterDetails[loginAddress].isVerified
-        );
     }
 
     /*------------------------ Election Handlers --------------------------- */
@@ -195,34 +221,23 @@ contract Election {
         return admin;
     }
 
-    // Get election isElectionStarted and isElectionEnded values
-    function getStart() public view returns (bool) {
-        return isElectionStarted;
-    }
-
-    function getEnd() public view returns (bool) {
-        return isElectionEnded;
-    }
-
     function changeElectionPhase() public {
-        electionPhaseIndex = (electionPhaseIndex + 1) % electionPhases.length;
-        currentElectionPhase = electionPhases[electionPhaseIndex];
-        nextElectionPhase = electionPhases[
-            (electionPhaseIndex + 1) % electionPhases.length
+        electionInstance.electionPhaseIndex =
+            (electionInstance.electionPhaseIndex + 1) %
+            electionInstance.electionPhases.length;
+        electionInstance.currentElectionPhase = electionInstance.electionPhases[
+            electionInstance.electionPhaseIndex
         ];
-        if (electionPhaseIndex == electionPhases.length - 1) {
-            isElectionEnded = true;
-        }
+        electionInstance.nextElectionPhase = electionInstance.electionPhases[
+            (electionInstance.electionPhaseIndex + 1) %
+                electionInstance.electionPhases.length
+        ];
     }
 
-    function isPendingRequest() public view returns(bool) {
-       return (pendingRequests != 0) ? true : false ;
-    }
     function getElectionDetails()
         public
         view
         returns (
-            bool,
             bool,
             string memory,
             string memory,
@@ -231,12 +246,11 @@ contract Election {
         )
     {
         return (
-            isElectionStarted,
-            isElectionEnded,
-            electionTitle,
-            electionOrganization,
-            currentElectionPhase,
-            nextElectionPhase
+            electionInstance.isElectionStarted,
+            electionInstance.electionTitle,
+            electionInstance.electionOrganization,
+            electionInstance.currentElectionPhase,
+            electionInstance.nextElectionPhase
         );
     }
 
@@ -244,20 +258,51 @@ contract Election {
         string memory _electionTitle,
         string memory _electionOrganization
     ) public {
-        isElectionStarted = true;
-        electionTitle = _electionTitle;
-        electionOrganization = _electionOrganization;
+        electionInstance.isElectionStarted = true;
+        electionInstance.electionTitle = _electionTitle;
+        electionInstance.electionOrganization = _electionOrganization;
         changeElectionPhase();
     }
 
     /*------------------------ Voting Handlers --------------------------- */
 
     function addVote(address voterAddress, address candidateAddress) public {
-        voterDetails[voterAddress].hasVoted = true;
-        voterDetails[candidateAddress].votesCount++;
+        voterDetails[voterAddress].voterElectionDetails.hasVoted = true;
+        voterDetails[candidateAddress].voterElectionDetails.votesCount++;
     }
 
     function hasVoted(address voterAddress) public view returns (bool) {
-        return voterDetails[voterAddress].hasVoted;
+        return voterDetails[voterAddress].voterElectionDetails.hasVoted;
+    }
+
+    /*------------------------ Reset Voter & Elections Details --------------------------- */
+
+    function resetElection() public {
+        
+        //Reset Election Details
+        electionInstance.isElectionStarted = false;
+        electionInstance.electionTitle = "";
+        electionInstance.electionOrganization = "";
+        electionInstance.electionPhaseIndex = 0;
+        electionInstance.currentElectionPhase = electionInstance.electionPhases[
+            electionInstance.electionPhaseIndex
+        ];
+        electionInstance.nextElectionPhase = electionInstance.electionPhases[
+            electionInstance.electionPhaseIndex + 1
+        ];
+
+        //Reset Voter Election Details
+        for (uint256 i = 0; i < voters.length; i++) {
+        address voterAddress = voters[i];
+        voterDetails[voterAddress].voterElectionDetails.prn= "";
+        voterDetails[voterAddress].voterElectionDetails.mobile= "";
+        voterDetails[voterAddress].voterElectionDetails.votesCount= 0;
+        voterDetails[voterAddress].voterElectionDetails.isVerified= false;
+        voterDetails[voterAddress].voterElectionDetails.hasVoted= false;
+        voterDetails[voterAddress].voterElectionDetails.hasApplied= false;
+        voterDetails[voterAddress].voterElectionDetails.isCandidate= false;
+        voterDetails[voterAddress].voterElectionDetails.isDenied= false;
+        voterDetails[voterAddress].voterElectionDetails.tagLine= "";
+        }
     }
 }

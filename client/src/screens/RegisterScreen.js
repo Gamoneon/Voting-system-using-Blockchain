@@ -4,7 +4,6 @@ import Navbar from "../components/Navbar.js";
 import AlertMessage from "../components/AlertMessage.js";
 import {
   sol_addLoginDetails,
-  sol_isAdminAddress,
   sol_connectwallet,
 } from "../webaction/SolidityFunctionModules.js";
 import { useNavigate } from "react-router-dom";
@@ -23,9 +22,11 @@ const RegisterScreen = () => {
 
   const registerformstyle = {
     width: "25%",
+    minWidth: "300px",
     background: "#23263F",
     padding: "3%",
-    margin: "3%",
+    margin: "1%",
+    marginLeft: "3%",
     borderRadius: "20px",
   };
   const metmamaskBtnStyle = {
@@ -34,6 +35,14 @@ const RegisterScreen = () => {
   };
   const loginlinkstyle = {
     textDecoration: "none",
+  };
+
+   const bgstyle = {
+    width: "50%",
+    margin: "1% auto",
+    background: "rgba(0, 0, 0, 0.5)",
+    padding: "1%",
+    color: "#FFFFFF",
   };
 
   //------------------------------ useStates Hooks -----------------------------------------//
@@ -56,7 +65,7 @@ const RegisterScreen = () => {
     // if not then add to list
     let result = await sol_addLoginDetails(username, email, password);
     if (result) navigate("/dashboard");
-    else setErrorRegister("Voter address already exists!");
+    else setErrorRegister("User already exist!");
     // navigate to login
   };
 
@@ -67,11 +76,6 @@ const RegisterScreen = () => {
     } else {
       setCurrentAcc(data.acc[0]);
       setIsAccountConnected(true);
-      //console.log("Current Account is: ", currentAcc);
-
-      // const adminConnected = await sol_isAdminAddress();
-      // setIsAdmin(adminConnected);
-      //console.log("Is admin connected: ", isAdmin);
     }
   };
 
@@ -82,6 +86,10 @@ const RegisterScreen = () => {
     <>
       <Navbar />
       <div className="RegiterPageWallpaper" style={registerscreenstyle}>
+        <div
+          className="text-center fw-bold mt-2" style={bgstyle}>
+        A MetaMask wallet is required for registration. <a style={loginlinkstyle} href="https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?hl=en" target="_blank">Click here to download.</a>
+        </div>
         <form onSubmit={submitHandler}>
           <div className="container text-light" style={registerformstyle}>
             <div className="text-center">
@@ -96,7 +104,7 @@ const RegisterScreen = () => {
             </div>
             <div>
               <p>
-                Already have an account ?
+                Already have an account?
                 <Link style={loginlinkstyle} to="/login">
                   {" "}
                   Login Here

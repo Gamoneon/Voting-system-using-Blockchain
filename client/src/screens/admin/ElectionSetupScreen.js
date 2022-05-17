@@ -9,6 +9,8 @@ import {
   sol_startElection,
   sol_getElectionDetails,
   sol_changeElectionPhase,
+  sol_resetElection,
+  sol_isPendingRequest,
 } from "../../webaction/SolidityFunctionModules.js";
 
 const ElectionSetupScreen = () => {
@@ -21,15 +23,11 @@ const ElectionSetupScreen = () => {
   };
 
   //------------------------------ useState Hooks -----------------------------------------//
-  const [isAdminConnected, setIsAdminConnected] = useState(false);
-  const [account, setAccount] = useState(null);
+
   const [errorPendingRequests, setErrorPendingRequests] = useState("");
   const [electionTitle, setElectionTitle] = useState("");
   const [organizationName, setOrganizationName] = useState("");
-  const [storedElectionTitle, setStoredElectionTitle] = useState("");
-  const [storedOrganizationName, setStoredOrganizationName] = useState("");
   const [isElectionStarted, setIsElectionStarted] = useState(false);
-  const [isElectionEnded, setIsElectionEnded] = useState(false);
   const [currentElectionPhase, setCurrentElectionPhase] = useState("");
   const [nextElectionPhase, setNextElectionPhase] = useState("");
   const navigate = useNavigate();
@@ -40,24 +38,23 @@ const ElectionSetupScreen = () => {
     if (!data) {
       navigate("/dashboard");
     }
-    setIsAdminConnected(data);
   };
 
   const getElectionDetails = async () => {
     const data = await sol_getElectionDetails();
     setIsElectionStarted(data[0]);
-    setIsElectionEnded(data[1]);
-    setStoredElectionTitle(data[2]);
-    setStoredOrganizationName(data[3]);
-    setCurrentElectionPhase(data[4]);
-    setNextElectionPhase(data[5]);
+    setCurrentElectionPhase(data[3]);
+    setNextElectionPhase(data[4]);
   };
 
   const changeElectionPhase = async () => {
-    const data = await sol_changeElectionPhase();
-    if(!data) setErrorPendingRequests("Please clear all pending requests first.")
-    getElectionDetails();
-    // window.location.reload(false);
+    const data = await sol_isPendingRequest();
+    if (!data) {
+      const data = await sol_changeElectionPhase();
+      window.location.reload(false);
+    } else {
+      setErrorPendingRequests("Please clear all pending requests first.");
+    }
   };
 
   const startElection = async (electionTitle, organizationName) => {
@@ -65,6 +62,13 @@ const ElectionSetupScreen = () => {
     if (data) {
       getElectionDetails();
     }
+    window.location.reload(false);
+  };
+
+  const resetElection = async () => {
+    await sol_resetElection();
+    getElectionDetails();
+    window.location.reload(false);
   };
 
   const submitHandler = (e) => {
@@ -75,15 +79,13 @@ const ElectionSetupScreen = () => {
   useEffect(() => {
     routeValidation();
     getElectionDetails();
-  },[]);
-
-  // useEffect(() => {}, [errorPendingRequests]);
+  }, [currentElectionPhase]);
 
   return (
     <>
       <div className="container">
         <YourAccount />
-        <ElectionInitializeMsg />
+        <ElectionInitializeMsg currentElectionPhase={currentElectionPhase} />
         {isElectionStarted && (
           <>
             {errorPendingRequests && (
@@ -92,22 +94,41 @@ const ElectionSetupScreen = () => {
             <h3>Change Phase</h3>
             <div className="container" style={aboutelectionstyle}>
               <h4>
-                Current Phase :{" "}
+                Current Phase:{" "}
                 <span className="text-success">{currentElectionPhase}</span>
               </h4>
-              <h4>
-                Next Phase :{" "}
-                <span className="text-danger">{nextElectionPhase}</span>
-              </h4>
-              <div className="d-grid gap-2 mt-3">
-                <button
-                  className="btn btn-primary btn-lg"
-                  type="button"
-                  onClick={changeElectionPhase}
-                >
-                  Change Phase
-                </button>
-              </div>
+              {nextElectionPhase === "Setup Election" ? (
+                <>
+                  <h4>
+                    <span className="text-danger">Election Ended.</span>
+                  </h4>
+                  <div className="d-grid gap-2 mt-3">
+                    <button
+                      className="btn btn-primary btn-lg"
+                      type="button"
+                      onClick={resetElection}
+                    >
+                      Reset Election
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <h4>
+                    Next Phase:{" "}
+                    <span className="text-danger">{nextElectionPhase}</span>
+                  </h4>
+                  <div className="d-grid gap-2 mt-3">
+                    <button
+                      className="btn btn-primary btn-lg"
+                      type="button"
+                      onClick={changeElectionPhase}
+                    >
+                      Change Phase
+                    </button>
+                  </div>
+                </>
+              )}
             </div>
           </>
         )}
@@ -127,9 +148,7 @@ const ElectionSetupScreen = () => {
                     onChange={(e) => setElectionTitle(e.target.value)}
                     required
                   >
-                    <option defaultValue hidden>
-                      Choose Title
-                    </option>
+                    <option hidden>Choose Title</option>
                     <option value="Class Representative">
                       Class Representative
                     </option>
@@ -138,19 +157,68 @@ const ElectionSetupScreen = () => {
                     </option>
                   </select>
                 </div>
-                <div className="mb-3">
-                  <label htmlFor="organizationName" className="form-label">
-                    Class Name
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="organizationName"
-                    placeholder="e.g. S.Y.M.Sc. Computer Science"
-                    // value={isElectionStarted && storedOrganizationName}
-                    onChange={(e) => setOrganizationName(e.target.value)}
-                    required
-                  ></input>
+
+                <div className="row align-items-center">
+                  <div className="col-4 ">
+                    <label htmlFor="electionClassYear" className="form-label">
+                      Class Year
+                    </label>
+                  </div>
+                  <div className="col-4">
+                    <label htmlFor="electionClassDegree" className="form-label">
+                      Choose Degree
+                    </label>
+                  </div>
+                  <div className="col-4">
+                    <label htmlFor="electionStream" className="form-label">
+                      Choose Stream
+                    </label>
+                  </div>
+                </div>
+                <div className="row align-items-center mb-3">
+                  <div className="col-4 ">
+                    <select
+                      className="form-select"
+                      aria-label="Default select example"
+                      id="electionClassYear"
+                      // onChange={(e) => setElectionClass(e.target.value)}
+                      required
+                    >
+                      <option hidden>Choose Class Year</option>
+                      <option value="Class Representative">FY</option>
+                      <option value="Placement Coordinator">SY</option>
+                      <option value="Class Representative">TY</option>
+                    </select>
+                  </div>
+                  <div className="col-4">
+                    <select
+                      className="form-select"
+                      aria-label="Default select example"
+                      id="electionClassDegree"
+                      // onChange={(e) => setElectionClass(e.target.value)}
+                      required
+                    >
+                      <option hidden>Choose Degree</option>
+                      <option value="B.Sc">B.Sc</option>
+                      <option value="M.Sc">M.Sc</option>
+                    </select>
+                  </div>
+                  <div className="col-4">
+                    <select
+                      className="form-select"
+                      aria-label="Default select example"
+                      id="electionStream"
+                      // onChange={(e) => setElectionClass(e.target.value)}
+                      required
+                    >
+                      <option hidden>Choose Stream</option>
+                      <option value="Computer Science">Computer Science</option>
+                      <option value="Computer Application">
+                        Computer Application
+                      </option>
+                      <option value="IMCA">IMCA</option>
+                    </select>
+                  </div>
                 </div>
                 <div className="mb-3">
                   <div className="d-grid gap-2">

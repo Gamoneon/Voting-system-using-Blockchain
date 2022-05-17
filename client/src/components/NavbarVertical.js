@@ -5,8 +5,6 @@ import Logo from "./Logo.js";
 import { sol_getElectionDetails } from "../webaction/SolidityFunctionModules.js";
 
 
-
-
 const NavbarVertical = (props) => {
   //------------------------------ Style CSS -----------------------------------------//
   const navbarStyle = {
@@ -39,7 +37,7 @@ const NavbarVertical = (props) => {
 
   const getElectionDetails = async () => {
     const data = await sol_getElectionDetails();
-    setCurrentElectionPhase(data[4]);
+    setCurrentElectionPhase(data[3]);
   };
 
   const logoutHandler = () => {
@@ -90,7 +88,7 @@ const NavbarVertical = (props) => {
                   <i className="fa-solid fa-user-check"></i> Verification
                 </Link>
               )}
-              {currentElectionPhase === "Apply as a Candidate" && (
+              {currentElectionPhase === "Candidate Application" && (
                 <Link
                   to="/candidateverification"
                   className={`list-group-item list-group-item-action ${splitLocation[splitLocation.length-1] === "candidateverification" ? "active" : ""}`} 
@@ -116,9 +114,8 @@ const NavbarVertical = (props) => {
                 className={`list-group-item list-group-item-action ${splitLocation[splitLocation.length-1] === "voterverification" ? "active" : ""}`} 
 
               >
-                <i className="fa-regular fa-id-card"></i> Voter Verification
+                <i className="fa-regular fa-id-card"></i>{currentElectionPhase === "Candidate Application" ? " Candidate Application" : " Voter Verification"}
               </Link>
-
               {currentElectionPhase === "Voting" && (
                 <Link
                   to="/voting"

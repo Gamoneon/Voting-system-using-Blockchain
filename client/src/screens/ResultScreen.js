@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import ElectionInitializeMsg from "../components/ElectionInitializeMsg.js";
 import YourAccount from "../components/YourAccount.js";
-import { sol_getAllVoterDetails } from "../webaction/SolidityFunctionModules.js";
+import Analysis from "../components/Analysis.js";
+import { sol_getAllVoterDetails, sol_getElectionDetails } from "../webaction/SolidityFunctionModules.js";
 
 const ResultScreen = () => {
-  const resultscreenstyle =
-  {
-    backgroundImage: `url("./Images/confetti-17.gif")`  ,
-    height : "100vh"
-
+  const resultscreenstyle = {
+    backgroundImage: `url("./Images/confetti-17.gif")`,
+    height: "90vh",
+    width: "100vw",
   };
   //------------------------------ style CSS -----------------------------------------//
   const tablestyle = {
@@ -17,7 +17,7 @@ const ResultScreen = () => {
     marginleft: "0",
     padding: "1em",
     border: "1px solid #000000 !important",
-    backgroundcolor: "#90EE90", 
+    background: "#C2DAF7",
   };
 
   const winnerBoxStyle = {
@@ -29,11 +29,9 @@ const ResultScreen = () => {
 
   //------------------------------ useState hooks -----------------------------------------//
 
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [account, setAccount] = useState(null);
   const [candidateData, setCandidateData] = useState([]);
   const [winnerCandidate, setWinnerCandidate] = useState({});
-  
+  const [currentElectionPhase, setCurrentElectionPhase] = useState("");
 
   /*----------------- WARNING ---------------*/
   /*  Check function for Continous Looping   */
@@ -41,8 +39,7 @@ const ResultScreen = () => {
 
   const getAllVoterDetails = async () => {
     let maxVotes = 0;
-  let candidateID = 1;
-  let winner = {};
+    let winner = {};
     const data = await sol_getAllVoterDetails();
     let allCandidateDetails = [];
     if (data) {
@@ -50,55 +47,64 @@ const ResultScreen = () => {
         let temp = {};
 
         temp["username"] = data[i]["username"];
-        temp["isCandidate"] = data[i]["isCandidate"];
-        temp["votesCount"] = data[i]["votesCount"];
+        temp["isCandidate"] = data[i]["voterElectionDetails"]["isCandidate"];
+        temp["votesCount"] = data[i]["voterElectionDetails"]["votesCount"];
 
-        if(temp["votesCount"]>maxVotes)
-        {
-          maxVotes = data[i]["votesCount"];
+        if (temp["votesCount"] > maxVotes) {
+          maxVotes = data[i]["voterElectionDetails"]["votesCount"];
           winner["winnerName"] = data[i]["username"];
-          winner["maxVotes"] = data[i]["votesCount"];
-          setWinnerCandidate(winner)
+          winner["maxVotes"] = data[i]["voterElectionDetails"]["votesCount"];
+          setWinnerCandidate(winner);
         }
 
         if (temp["isCandidate"]) {
           allCandidateDetails.push(temp);
         }
       }
-       console.log("Candidate details : ",allCandidateDetails);
       setCandidateData([...allCandidateDetails]);
     }
+  };
 
+  const getElectionDetails = async () => {
+    const data = await sol_getElectionDetails();
+    setCurrentElectionPhase(data[3]);
   };
 
   useEffect(() => {
+    getElectionDetails();
+  }, []);
+
+  useEffect(() => {
     getAllVoterDetails();
-  },[]);
+  }, []);
+
 
   //------------------------------ Render Content -----------------------------------------//
   return (
     <>
+    <YourAccount/>
+    <ElectionInitializeMsg/>
+    {currentElectionPhase === "Result" &&
       <div className="container" style={resultscreenstyle}>
-        <YourAccount account={account} />
-        <ElectionInitializeMsg isAdmin={isAdmin} />
+        
         <h2>Results</h2>
-        <h4>Total Candidates : {candidateData.length}</h4>
+        <h3 className="bg-light" style={{display: "inline-block"}}>Total Candidates: {candidateData.length}</h3>
         <div
-          className="row align-items-center bg-success mt-4"
+          className="row align-items-center bg-info text-light mt-4"
           style={winnerBoxStyle}
         >
-          <div className="col-4 ">
-            <h5>Winner</h5>
+          <div className="col-6">
+            <h5 className="fs-1">Winner</h5>
           </div>
-          <div className="col-4 ">
-             <h5><img src="./Images/winner.png" height="40" width="40"></img>{winnerCandidate.winnerName}</h5> 
-          </div>
-          <div className="col-4">
-            <h5>Total Votes : {winnerCandidate.maxVotes}</h5>
+          <div className="col-6">
+            <h5 className="fs-1">
+              <img src="./Images/winner.png" height="40" width="40"></img>
+              {winnerCandidate.winnerName}
+            </h5>
           </div>
         </div>
         <div className="container-list ">
-          <table className="table table-striped mt-5 " style={tablestyle}>
+          <table className="table mt-5 " style={tablestyle}>
             <tbody>
               <tr>
                 <th>ID</th>
@@ -108,8 +114,7 @@ const ResultScreen = () => {
               {candidateData.map((student, key) => {
                 return (
                   <tr key={key}>
-                    {/* <td>{candidateID++}</td> */}
-                    <td>{key+1}</td>
+                    <td>{key + 1}</td>
                     <td>{student.username}</td>
                     <td>{student.votesCount}</td>
                   </tr>
@@ -118,7 +123,12 @@ const ResultScreen = () => {
             </tbody>
           </table>
         </div>
+        <div>
+            <h1>Analysis</h1>
+            <Analysis/>
+          </div>
       </div>
+      }
     </>
   );
 };
