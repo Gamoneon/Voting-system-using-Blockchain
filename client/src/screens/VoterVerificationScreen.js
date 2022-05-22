@@ -118,7 +118,7 @@ const VoterVerificationScreen = () => {
       <div className="container-main">
         {!isVerified && currentElectionPhase === "Voter Verification" && (
           <>
-            {isDenied && (
+            {isDenied && !hasApplied&&(
               <div
                 className="text-center bg-danger text-light fw-bold fs-4"
                 style={divisionstyle}
