@@ -5,6 +5,7 @@ import YourAccount from "../components/YourAccount.js";
 import {
   sol_getAllVoterDetails,
   sol_isAdminAddress,
+  sol_getUserDetails,
   sol_hasVoted,
   sol_addVote,
   sol_getElectionDetails
@@ -16,8 +17,18 @@ const VotingScreen = () => {
   const [isAdminConnected, setIsAdminConnected] = useState(false);
   const [account, setAccount] = useState(null);
   const [candidateData, setCandidateData] = useState([]);
+  const [isVerified, setIsVerified] = useState(false);
   const [hasVoted, setHasVoted] = useState(false);
   const [currentElectionPhase, setCurrentElectionPhase] = useState("");
+
+ //------------------------------ style CSS -----------------------------------------//
+
+  const divisionstyle = {
+    width: "50%",
+    background: "#C2DAF7",
+    padding: "2%",
+    margin: "3% auto",
+  };
 
   //------------------------------ Functions -----------------------------------------//
 
@@ -35,6 +46,14 @@ const VotingScreen = () => {
   const onClickVote = async (candidateAddress) => {
     const vote = await sol_addVote(candidateAddress);
     hasCastedVote();
+  };
+
+  const getUserDetails = async () => {
+    const data = await sol_getUserDetails();
+    if (!data) {
+      navigate("/login");
+    }
+    setIsVerified(data["voterElectionDetails"]["isVerified"]);
   };
 
   const getAllVoterDetails = async () => {
@@ -64,6 +83,10 @@ const VotingScreen = () => {
   };
 
   useEffect(() => {
+    getUserDetails();
+  },[]);
+
+  useEffect(() => {
     getElectionDetails();
     routeValidation();
   },[]);
@@ -78,7 +101,16 @@ const VotingScreen = () => {
     <>
       <YourAccount/>
       <ElectionInitializeMsg/>
-      { currentElectionPhase === "Voting" && 
+      {!isVerified && (
+              <div
+                className="text-center bg-danger text-light fw-bold fs-4"
+                style={divisionstyle}
+              >
+                <div>You are not verified as a voter.</div>
+                <div>You can not cast vote.</div>
+              </div>
+            )}
+      { currentElectionPhase === "Voting" && isVerified &&
       <>
       <div
         className="alert alert-success text-center fw-bold mt-2"

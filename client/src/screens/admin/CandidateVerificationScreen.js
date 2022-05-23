@@ -9,6 +9,7 @@ import {
   sol_approveCandidateRequests,
   sol_denyVerificationRequests,
   sol_getElectionDetails,
+  sol_isPendingRequest,
 } from "../../webaction/SolidityFunctionModules.js";
 
 const CandidateVerificationScreen = () => {
@@ -19,16 +20,26 @@ const CandidateVerificationScreen = () => {
   const [isApproved, setIsApproved] = useState(false);
   const [currentElectionPhase, setCurrentElectionPhase] = useState("");
   const [atLeastOneCandidate, setAtLeastOneCandidate] = useState(false);
+  const [atLeastOnePending, setAtLeastOnePending] = useState(false);
+
+  //---------------------------------style----------------------------------------------//
+
+  const buttonStyle = {
+    width: "40%",
+    marginRight: "10%",
+  };
 
   //------------------------------ Functions -----------------------------------------//
   const onClickApprove = async (voterAddress) => {
     const data = await sol_approveCandidateRequests(voterAddress);
     setIsApproved(data);
+    isPendingRequest();
   };
 
   const onClickDeny = async (voterAddress) => {
     const data = await sol_denyVerificationRequests(voterAddress);
     setIsApproved(data);
+    isPendingRequest();
   };
 
   const getElectionDetails = async () => {
@@ -42,6 +53,14 @@ const CandidateVerificationScreen = () => {
       navigate("/dashboard");
     }
   };
+
+  const isPendingRequest = async () => {
+    const data = await sol_isPendingRequest();
+    if(!data)
+    {
+      setAtLeastOnePending(false);
+    }
+  }
 
   const getAllVoterDetails = async () => {
     const data = await sol_getAllVoterDetails();
@@ -57,6 +76,10 @@ const CandidateVerificationScreen = () => {
         temp["isCandidate"] = data[i]["voterElectionDetails"]["isCandidate"];
         if (!atLeastOneCandidate && temp["isCandidate"]) {
           setAtLeastOneCandidate(true);
+        }
+
+        if (!atLeastOnePending && temp["hasApplied"]) {
+          setAtLeastOnePending(true);
         }
 
         allCandidateDetails.push(temp);
@@ -91,59 +114,57 @@ const CandidateVerificationScreen = () => {
             List of registered Candidates
           </div>
           <h3>Pending Approvals: </h3>
-          {candidateData.map((student, key) => {
-            return (
-              <div className="container" key={key}>
-                {student.hasApplied && (
+          <table
+            className="table table-striped mt-5 "
+            style={{ width: "75%", margin: "auto" }}
+          >
+            <tbody>
+              {atLeastOnePending && (
+                <tr>
+                  <th>Student's Name </th>
+                  <th>Tag Line </th>
+                  <th></th>
+                  <th></th>
+                </tr>
+              )}
+              {candidateData.map((student, key) => {
+                return (
                   <>
-                    <table
-                      className="table table-striped mt-5 "
-                      style={{ width: "75%", margin: "auto" }}
-                    >
-                      <tbody>
-                        <tr>
-                          <th>Student's Name </th>
-                          <td>{student.username}</td>
-                        </tr>
-                        <tr>
-                          <th>Tag Line </th>
-                          <td>{student.tagLine}</td>
-                        </tr>
-                        <tr>
-                          <td>
-                            <div className="d-grid p-1">
-                              <button
-                                className="btn btn-danger text-light"
-                                type="button"
-                                onClick={() => {
-                                  onClickDeny(student.voterAddress);
-                                }}
-                              >
-                                Deny
-                              </button>
-                            </div>
-                          </td>
-                          <td>
-                            <div className="d-grid p-1">
-                              <button
-                                className="btn btn-success text-light"
-                                type="button"
-                                onClick={() => {
-                                  onClickApprove(student.voterAddress);
-                                }}
-                              >
-                                Approve
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
+                    {student.hasApplied && (
+                      <tr key={key}>
+                        <td>{student.username}</td>
+                        <td>{student.tagLine}</td>
+                        <td colSpan={2}>
+                          <div className="">
+                            <button
+                              className="btn btn-danger text-light"
+                              type="button"
+                              style={buttonStyle}
+                              onClick={() => {
+                                onClickDeny(student.voterAddress);
+                              }}
+                            >
+                              Deny
+                            </button>
+                            <button
+                              className="btn btn-success text-light"
+                              type="button"
+                              style={buttonStyle}
+                              onClick={() => {
+                                onClickApprove(student.voterAddress);
+                              }}
+                            >
+                              Approve
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    )}
                   </>
-                )}
-              </div>
-            );
-          })}
+                );
+              })}
+            </tbody>
+          </table>
 
           <h3 className="mt-4">Approved Candidates: </h3>
           <table

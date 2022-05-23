@@ -118,7 +118,7 @@ const VoterVerificationScreen = () => {
       <div className="container-main">
         {!isVerified && currentElectionPhase === "Voter Verification" && (
           <>
-            {isDenied && (
+            {isDenied && !hasApplied && (
               <div
                 className="text-center bg-danger text-light fw-bold fs-4"
                 style={divisionstyle}
@@ -166,14 +166,14 @@ const VoterVerificationScreen = () => {
                         className="form-label"
                         style={ystyle}
                       >
-                        Phone number <RequiredFieldStar />
+                        Mobile number <RequiredFieldStar />
                         <input
                           type="tel"
                           pattern="[0-9]{10}"
                           maxLength={10}
                           className="form-control"
                           id="studentPhoneno"
-                          placeholder="Enter your phone number"
+                          placeholder="Enter your mobile number"
                           value={mobile}
                           onChange={(e) => setMobile(e.target.value)}
                           required
