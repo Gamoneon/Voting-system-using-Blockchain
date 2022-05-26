@@ -26,7 +26,9 @@ const ElectionSetupScreen = () => {
 
   const [errorPendingRequests, setErrorPendingRequests] = useState("");
   const [electionTitle, setElectionTitle] = useState("");
-  const [organizationName, setOrganizationName] = useState("");
+  const [classes, setClasses] = useState("");
+  const [degree, setDegree] = useState("");
+  const [stream, setStream] = useState("");
   const [isElectionStarted, setIsElectionStarted] = useState(false);
   const [currentElectionPhase, setCurrentElectionPhase] = useState("");
   const [nextElectionPhase, setNextElectionPhase] = useState("");
@@ -57,7 +59,8 @@ const ElectionSetupScreen = () => {
     }
   };
 
-  const startElection = async (electionTitle, organizationName) => {
+  const startElection = async (electionTitle) => {
+    let organizationName = classes + " " + degree + " " + stream;
     const data = await sol_startElection(electionTitle, organizationName);
     if (data) {
       getElectionDetails();
@@ -73,7 +76,7 @@ const ElectionSetupScreen = () => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    startElection(electionTitle, organizationName);
+    startElection(electionTitle);
   };
 
   useEffect(() => {
@@ -181,13 +184,13 @@ const ElectionSetupScreen = () => {
                       className="form-select"
                       aria-label="Default select example"
                       id="electionClassYear"
-                      // onChange={(e) => setElectionClass(e.target.value)}
+                      onChange={(e) => setClasses(e.target.value)}
                       required
                     >
                       <option hidden>Choose Class Year</option>
-                      <option value="Class Representative">FY</option>
-                      <option value="Placement Coordinator">SY</option>
-                      <option value="Class Representative">TY</option>
+                      <option value="FY">FY</option>
+                      <option value="SY">SY</option>
+                      <option value="TY">TY</option>
                     </select>
                   </div>
                   <div className="col-4">
@@ -195,7 +198,7 @@ const ElectionSetupScreen = () => {
                       className="form-select"
                       aria-label="Default select example"
                       id="electionClassDegree"
-                      // onChange={(e) => setElectionClass(e.target.value)}
+                      onChange={(e) => setDegree(e.target.value)}
                       required
                     >
                       <option hidden>Choose Degree</option>
@@ -208,7 +211,7 @@ const ElectionSetupScreen = () => {
                       className="form-select"
                       aria-label="Default select example"
                       id="electionStream"
-                      // onChange={(e) => setElectionClass(e.target.value)}
+                      onChange={(e) => setStream(e.target.value)}
                       required
                     >
                       <option hidden>Choose Stream</option>

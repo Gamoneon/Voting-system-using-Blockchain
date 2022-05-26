@@ -56,11 +56,10 @@ const VerificationScreen = () => {
 
   const isPendingRequest = async () => {
     const data = await sol_isPendingRequest();
-    if(!data)
-    {
+    if (!data) {
       setAtLeastOnePending(false);
     }
-  }
+  };
 
   const getAllVoterDetails = async () => {
     const data = await sol_getAllVoterDetails();
@@ -118,14 +117,19 @@ const VerificationScreen = () => {
             style={{ width: "100%", margin: "auto" }}
           >
             <tbody>
-              {atLeastOnePending && (
+              <tr>
+                <th>Student's Name </th>
+                <th>Mobile No </th>
+                <th>PRN </th>
+                <th>Verification Status</th>
+                <th></th>
+                <th></th>
+              </tr>
+              {!atLeastOnePending && (
                 <tr>
-                  <th>Student's Name </th>
-                  <th>Mobile No </th>
-                  <th>PRN </th>
-                  <th>Verified</th>
-                  <th></th>
-                  <th></th>
+                  <th colSpan={6} className="text-center">
+                    No Pending Requests!
+                  </th>
                 </tr>
               )}
               {voterData.map((student, key) => {
@@ -136,20 +140,9 @@ const VerificationScreen = () => {
                         <td>{student.username}</td>
                         <td>{student.mobile}</td>
                         <td>{student.prn}</td>
-                        <td> {student.isVerified ? "True" : "False"}</td>
+                        <td> {student.isVerified ? "Verified" : "Pending"}</td>
                         <td colSpan={2}>
                           <div className="">
-                            <button
-                              className="btn btn-danger text-light"
-                              type="button"
-                              style={buttonStyle}
-                              onClick={() => {
-                                onClickDeny(student.voterAddress);
-                              }}
-                            >
-                              Deny
-                            </button>
-
                             <button
                               className="btn btn-success text-light"
                               type="button"
@@ -159,6 +152,17 @@ const VerificationScreen = () => {
                               }}
                             >
                               Approve
+                            </button>
+
+                            <button
+                              className="btn btn-danger text-light"
+                              type="button"
+                              style={buttonStyle}
+                              onClick={() => {
+                                onClickDeny(student.voterAddress);
+                              }}
+                            >
+                              Deny
                             </button>
                           </div>
                         </td>
@@ -180,10 +184,15 @@ const VerificationScreen = () => {
             }}
           >
             <tbody>
-              {atLeastOneVerified && (
+              <tr>
+                <th>Student's Name </th>
+                <th>PRN </th>
+              </tr>
+              {!atLeastOneVerified && (
                 <tr>
-                  <th>Student's Name </th>
-                  <th>PRN </th>
+                  <th colSpan={2} className="text-center">
+                    No Approved Voters!
+                  </th>
                 </tr>
               )}
             </tbody>

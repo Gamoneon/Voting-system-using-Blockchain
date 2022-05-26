@@ -274,13 +274,23 @@ const VoterVerificationScreen = () => {
             </div>
           </>
         )}
-        {isDenied && currentElectionPhase === "Candidate Application" && (
+        {isDenied && currentElectionPhase === "Candidate Application" && isVerified && (
               <div
                 className="text-center bg-danger text-light fw-bold fs-4"
                 style={divisionstyle}
               >
                 <div>Your Candidate application has been denied by the Admin!</div>
                 <div>But you can still vote for other candidates.</div>
+              </div>
+            )}
+
+        {isDenied && !hasApplied && (
+              <div
+                className="text-center bg-danger text-light fw-bold fs-4"
+                style={divisionstyle}
+              >
+                <div>You are not verified as a voter.</div>
+                <div>You can not participate in the Election.</div>
               </div>
             )}
 

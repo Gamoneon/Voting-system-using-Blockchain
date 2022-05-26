@@ -23,10 +23,13 @@ const ResultScreen = () => {
   const winnerBoxStyle = {
     width: "60%",
     margin: "auto",
-    marginleft: "0",
     padding: "1em",
   };
 
+  const analysisStyle = {
+    width: "100%",
+    marginLeft: "10%",
+  };
   //------------------------------ useState hooks -----------------------------------------//
 
   const [candidateData, setCandidateData] = useState([]);
@@ -124,8 +127,10 @@ const ResultScreen = () => {
           </table>
         </div>
         <div>
-            <h1>Analysis</h1>
+            <h1 className="mt-4">Analysis</h1>
+            <div style={analysisStyle}>
             <Analysis/>
+            </div>
           </div>
       </div>
       }

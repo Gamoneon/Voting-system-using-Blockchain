@@ -15,6 +15,7 @@ const ElectionInitializeMsg = (props) => {
   const [storedElectionTitle, setStoredElectionTitle] = useState("");
   const [isElectionStarted, setIsElectionStarted] = useState(false);
   const [currentElectionPhase, setCurrentElectionPhase] = useState("");
+  const [organizationName, setOrganizationName] = useState("");
 
   //------------------------------ Functions -----------------------------------------//
 
@@ -22,6 +23,7 @@ const ElectionInitializeMsg = (props) => {
     const data = await sol_getElectionDetails();
     setIsElectionStarted(data[0]);
     setStoredElectionTitle(data[1]);
+    setOrganizationName(data[2]);
     setCurrentElectionPhase(data[3]);
   };
 
@@ -48,7 +50,7 @@ const ElectionInitializeMsg = (props) => {
       {isElectionStarted ? (
         <>
           <h3>
-            The election for the role of {storedElectionTitle} has been started!
+            The election of {organizationName} for the role of {storedElectionTitle} has been started!
           </h3>
           <p>
             Current Election Phase is:{" "}

@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useNavigate , useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import Logo from "./Logo.js";
 import { sol_getElectionDetails } from "../webaction/SolidityFunctionModules.js";
-
 
 const NavbarVertical = (props) => {
   //------------------------------ Style CSS -----------------------------------------//
@@ -25,13 +24,13 @@ const NavbarVertical = (props) => {
   const [isAdminConnected, setIsAdminConnected] = useState(false);
   const [username, setUsername] = useState("");
   const [currentElectionPhase, setCurrentElectionPhase] = useState("");
-   //assigning location variable
-   const location = useLocation();
+  //assigning location variable
+  const location = useLocation();
 
-   //destructuring pathname from location
-   const { pathname } = location;
-    //Javascript split method to get the name of the path in array
-    const splitLocation = pathname.split("/");
+  //destructuring pathname from location
+  const { pathname } = location;
+  //Javascript split method to get the name of the path in array
+  const splitLocation = pathname.split("/");
 
   //------------------------------ Functions -----------------------------------------//
 
@@ -42,19 +41,18 @@ const NavbarVertical = (props) => {
 
   const logoutHandler = () => {
     if (window.confirm("Are you sure want to logout ?")) {
-      navigate("/");
+      navigate("/login");
     }
   };
 
   useEffect(() => {
     setIsAdminConnected(props.isAdmin);
     setUsername(props.username);
-    
   }, [props.isAdmin, props.username]);
 
   useEffect(() => {
     getElectionDetails();
-  },[currentElectionPhase]);
+  }, [currentElectionPhase]);
 
   return (
     <>
@@ -75,15 +73,22 @@ const NavbarVertical = (props) => {
             <>
               <Link
                 to="/electionsetup"
-                className={`list-group-item list-group-item-action ${splitLocation[splitLocation.length-1] === "electionsetup" ? "active" : ""}`} 
+                className={`list-group-item list-group-item-action ${
+                  splitLocation[splitLocation.length - 1] === "electionsetup"
+                    ? "active"
+                    : ""
+                }`}
               >
                 <i className="fa-solid fa-gears"></i> Election Setup
               </Link>
               {currentElectionPhase === "Voter Verification" && (
                 <Link
                   to="/verification"
-                  className={`list-group-item list-group-item-action ${splitLocation[splitLocation.length-1] === "verification" ? "active" : ""}`} 
-
+                  className={`list-group-item list-group-item-action ${
+                    splitLocation[splitLocation.length - 1] === "verification"
+                      ? "active"
+                      : ""
+                  }`}
                 >
                   <i className="fa-solid fa-user-check"></i> Verification
                 </Link>
@@ -91,8 +96,12 @@ const NavbarVertical = (props) => {
               {currentElectionPhase === "Candidate Application" && (
                 <Link
                   to="/candidateverification"
-                  className={`list-group-item list-group-item-action ${splitLocation[splitLocation.length-1] === "candidateverification" ? "active" : ""}`} 
-
+                  className={`list-group-item list-group-item-action ${
+                    splitLocation[splitLocation.length - 1] ===
+                    "candidateverification"
+                      ? "active"
+                      : ""
+                  }`}
                 >
                   <i className="fa-solid fa-user-check"></i> Candidate
                   Verification
@@ -103,24 +112,41 @@ const NavbarVertical = (props) => {
             <>
               <Link
                 to="/information"
-                className={`list-group-item list-group-item-action ${splitLocation[splitLocation.length-1] === "information" ? "active" : ""}`} 
-
+                className={`list-group-item list-group-item-action ${
+                  splitLocation[splitLocation.length - 1] === "information"
+                    ? "active"
+                    : ""
+                }`}
               >
                 <i className="fa-solid fa-circle-info"></i> Information
               </Link>
-
-              <Link
-                to="/voterverification"
-                className={`list-group-item list-group-item-action ${splitLocation[splitLocation.length-1] === "voterverification" ? "active" : ""}`} 
-
-              >
-                <i className="fa-regular fa-id-card"></i>{currentElectionPhase === "Candidate Application" ? " Candidate Application" : " Voter Verification"}
-              </Link>
+              {((currentElectionPhase === "Voter Verification" ||
+                currentElectionPhase === "Candidate Application") && (
+                  <Link
+                    to="/voterverification"
+                    className={`list-group-item list-group-item-action ${
+                      splitLocation[splitLocation.length - 1] ===
+                      "voterverification"
+                        ? "active"
+                        : ""
+                    }`}
+                  >
+                    <i className="fa-regular fa-id-card"></i>
+                    {currentElectionPhase === "Candidate Application"
+                      ? " Candidate Application"
+                      : (currentElectionPhase === "Result" || currentElectionPhase === "Voting")
+                      ? " Voter Profile"
+                      : " Voter Verification"}
+                  </Link>
+                ))}
               {currentElectionPhase === "Voting" && (
                 <Link
                   to="/voting"
-                  className={`list-group-item list-group-item-action ${splitLocation[splitLocation.length-1] === "voting" ? "active" : ""}`} 
-
+                  className={`list-group-item list-group-item-action ${
+                    splitLocation[splitLocation.length - 1] === "voting"
+                      ? "active"
+                      : ""
+                  }`}
                 >
                   <i className="fa-solid fa-box-archive"></i> Voting
                 </Link>
@@ -130,15 +156,18 @@ const NavbarVertical = (props) => {
           {currentElectionPhase === "Result" && (
             <Link
               to="/result"
-              className={`list-group-item list-group-item-action ${splitLocation[splitLocation.length-1] === "result" ? "active" : ""}`} 
-          
+              className={`list-group-item list-group-item-action ${
+                splitLocation[splitLocation.length - 1] === "result"
+                  ? "active"
+                  : ""
+              }`}
             >
               <i className="fa-solid fa-square-poll-vertical"></i> Result
             </Link>
           )}
           <div
             onClick={logoutHandler}
-            className="list-group-item list-group-item-action bg-danger"
+            className="list-group-item list-group-item-action"
             style={{ cursor: "pointer" }}
           >
             <i className="fa-solid fa-right-from-bracket"></i> Logout

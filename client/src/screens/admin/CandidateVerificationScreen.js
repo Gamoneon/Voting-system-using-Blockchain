@@ -119,12 +119,15 @@ const CandidateVerificationScreen = () => {
             style={{ width: "75%", margin: "auto" }}
           >
             <tbody>
-              {atLeastOnePending && (
                 <tr>
                   <th>Student's Name </th>
                   <th>Tag Line </th>
                   <th></th>
                   <th></th>
+                </tr>
+              {!atLeastOnePending && (
+                <tr>
+                  <th colSpan={4} className="text-center">No Pending Requests!</th>
                 </tr>
               )}
               {candidateData.map((student, key) => {
@@ -136,6 +139,17 @@ const CandidateVerificationScreen = () => {
                         <td>{student.tagLine}</td>
                         <td colSpan={2}>
                           <div className="">
+                          <button
+                              className="btn btn-success text-light"
+                              type="button"
+                              style={buttonStyle}
+                              onClick={() => {
+                                onClickApprove(student.voterAddress);
+                              }}
+                            >
+                              Approve
+                            </button>
+
                             <button
                               className="btn btn-danger text-light"
                               type="button"
@@ -146,16 +160,7 @@ const CandidateVerificationScreen = () => {
                             >
                               Deny
                             </button>
-                            <button
-                              className="btn btn-success text-light"
-                              type="button"
-                              style={buttonStyle}
-                              onClick={() => {
-                                onClickApprove(student.voterAddress);
-                              }}
-                            >
-                              Approve
-                            </button>
+                            
                           </div>
                         </td>
                       </tr>
@@ -176,11 +181,15 @@ const CandidateVerificationScreen = () => {
             }}
           >
             <tbody>
-              {atLeastOneCandidate && (
+              
                 <tr>
                   <th>Student's Name </th>
                   <th>Tag Line </th>
                 </tr>
+                {!atLeastOneCandidate && (
+                  <tr>
+                  <th colSpan={4} className="text-center">No Approved Candidates!</th>
+                  </tr>
               )}
             </tbody>
           </table>
