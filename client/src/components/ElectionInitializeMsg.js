@@ -4,7 +4,7 @@ import {
   sol_getElectionDetails,
 } from "../webaction/SolidityFunctionModules.js";
 
-const ElectionInitializeMsg = () => {
+const ElectionInitializeMsg = (props) => {
   //------------------------------ style CSS -----------------------------------------//
   const bgstyle = {
     background: "#ffdd99",
@@ -13,21 +13,18 @@ const ElectionInitializeMsg = () => {
   //------------------------------ useState Hooks -----------------------------------------//
   const [isAdminConnected, setIsAdminConnected] = useState(false);
   const [storedElectionTitle, setStoredElectionTitle] = useState("");
-  const [storedOrganizationName, setStoredOrganizationName] = useState("");
   const [isElectionStarted, setIsElectionStarted] = useState(false);
-  const [isElectionEnded, setIsElectionEnded] = useState(false);
   const [currentElectionPhase, setCurrentElectionPhase] = useState("");
-  const [nextElectionPhase, setNextElectionPhase] = useState("");
+  const [organizationName, setOrganizationName] = useState("");
+
   //------------------------------ Functions -----------------------------------------//
 
   const getElectionDetails = async () => {
     const data = await sol_getElectionDetails();
     setIsElectionStarted(data[0]);
-    setIsElectionEnded(data[1]);
-    setStoredElectionTitle(data[2]);
-    setStoredOrganizationName(data[3]);
-    setCurrentElectionPhase(data[4]);
-    setNextElectionPhase(data[5]);
+    setStoredElectionTitle(data[1]);
+    setOrganizationName(data[2]);
+    setCurrentElectionPhase(data[3]);
   };
 
   const isAdmin = async () => {
@@ -37,9 +34,12 @@ const ElectionInitializeMsg = () => {
 
   useEffect(() => {
     isAdmin();
+  }, []);
+
+  useEffect(() => {
     getElectionDetails();
-    // console.log(isAdminConnected);
-  },[]);
+  }, [props]);
+
   //------------------------------ Render Content -----------------------------------------//
   return (
     <div
@@ -50,17 +50,16 @@ const ElectionInitializeMsg = () => {
       {isElectionStarted ? (
         <>
           <h3>
-            The election for the role of {storedElectionTitle} has been started
-            !
+            The election of {organizationName} for the role of {storedElectionTitle} has been started!
           </h3>
           <p>
-            Current Election Phase is :{" "}
+            Current Election Phase is:{" "}
             <span className="text-success">{currentElectionPhase}</span>
           </p>
         </>
       ) : (
         <>
-          <h3>The election has not been initialized yet !</h3>
+          <h3>The election has not been initialized yet!</h3>
           {isAdminConnected ? (
             <p>Set up the election.</p>
           ) : (

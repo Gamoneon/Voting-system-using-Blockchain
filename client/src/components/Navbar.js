@@ -1,8 +1,16 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link , useLocation} from "react-router-dom";
 import Logo from "./Logo.js";
 
 const Navbar = () => {
+  const location = useLocation();
+
+  //destructuring pathname from location
+  const { pathname } = location;
+  const splitLocation = pathname.split("/");
+  const headerstyle = {
+    fontSize: "1.3rem",
+  }
   return (
     <div>
       <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
@@ -26,24 +34,30 @@ const Navbar = () => {
               className="collapse navbar-collapse"
               id="navbarSupportedContent"
             >
-              <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+              <ul className="navbar-nav me-auto mb-2 mb-lg-0" style={headerstyle}>
                 <li className="nav-item">
-                  <Link className="nav-link" to="/">
+                  <Link to="/" className={`nav-link ${splitLocation[splitLocation.length-1] === "" ? "active" : ""}`}
+                  >
                     Home
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link" to="/register">
+                  <Link to="/register" className={`nav-link ${splitLocation[splitLocation.length-1] === "register" ? "active" : ""}`}
+                 >
+
                     Register
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link" to="/adminlogin">
+                  <Link to="/adminlogin" className={`nav-link ${splitLocation[splitLocation.length-1] === "adminlogin" ? "active" : ""}`}
+                 >
+
                     Admin Login
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link" to="/login">
+                  <Link to="/login" className={`nav-link ${splitLocation[splitLocation.length-1] === "login" ? "active" : ""}`}
+                  >
                    Student Login
                   </Link>
                 </li>

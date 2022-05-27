@@ -40,12 +40,11 @@ const VoterVerificationScreen = () => {
   //------------------------------ userState Hooks  -----------------------------------------//
   const navigate = useNavigate();
   const [isAdminConnected, setIsAdminConnected] = useState(false);
-  const [account, setAccount] = useState(null);
-  const [email, setEmail] = useState("");
   const [prn, setPrn] = useState("");
   const [mobile, setMobile] = useState("");
   const [username, setUsername] = useState("");
   const [isVerified, setIsVerified] = useState(false);
+  const [isDenied, setIsDenied] = useState(false);
   const [isCandidate, setIsCandidate] = useState(false);
   const [tagLine, setTagLine] = useState("");
   const [currentElectionPhase, setCurrentElectionPhase] = useState("");
@@ -66,22 +65,21 @@ const VoterVerificationScreen = () => {
   };
   const getElectionDetails = async () => {
     const data = await sol_getElectionDetails();
-    setCurrentElectionPhase(data[4]);
+    setCurrentElectionPhase(data[3]);
   };
 
   const getUserDetails = async () => {
     const data = await sol_getUserDetails();
-
-    console.log(data);
     if (!data) {
       navigate("/login");
     }
     setUsername(data["username"]);
-    setPrn(data["prn"]);
-    setMobile(data["mobile"]);
-    setIsVerified(data["isVerified"]);
-    setIsCandidate(data["isCandidate"]);
-    setHasApplied(data["hasApplied"]);
+    setPrn(data["voterElectionDetails"]["prn"]);
+    setMobile(data["voterElectionDetails"]["mobile"]);
+    setIsVerified(data["voterElectionDetails"]["isVerified"]);
+    setIsDenied(data["voterElectionDetails"]["isDenied"]);
+    setIsCandidate(data["voterElectionDetails"]["isCandidate"]);
+    setHasApplied(data["voterElectionDetails"]["hasApplied"]);
   };
 
   const applyForVerification = async () => {
@@ -106,7 +104,7 @@ const VoterVerificationScreen = () => {
     routeValidation();
 
     getElectionDetails();
-  },[]);
+  }, []);
 
   useEffect(() => {
     getUserDetails();
@@ -115,18 +113,27 @@ const VoterVerificationScreen = () => {
   //------------------------------ Render Content -----------------------------------------//
   return (
     <>
-      <YourAccount account={account} />
+      <YourAccount/>
       <ElectionInitializeMsg isAdmin={isAdminConnected} />
       <div className="container-main">
         {!isVerified && currentElectionPhase === "Voter Verification" && (
           <>
+            {isDenied && !hasApplied && (
+              <div
+                className="text-center bg-danger text-light fw-bold fs-4"
+                style={divisionstyle}
+              >
+                <div>Your application has been denied by the Admin!</div>
+                <div>Please submit valid details to get verified as voter.</div>
+              </div>
+            )}
             <h2>Apply for Voter Verification</h2>
             {hasApplied ? (
               <div
                 className="text-center bg-info text-light fw-bold fs-4"
                 style={divisionstyle}
               >
-                <div>Applied Successfully !</div>
+                <div>Applied Successfully!</div>
                 <div>Please wait for admin to verify your details.</div>
               </div>
             ) : (
@@ -139,13 +146,14 @@ const VoterVerificationScreen = () => {
                         className="form-label"
                         style={ystyle}
                       >
-                        PRN No. (8 digit) <RequiredFieldStar />
+                        PRN (8 digit) <RequiredFieldStar />
                         <input
                           type="tel"
                           pattern="[0-9]{8}"
+                          maxLength={8}
                           className="form-control"
                           id="studentPRNNo"
-                          placeholder="e.g. 15562522 (8 digit)"
+                          placeholder="Enter your permanent registration number"
                           value={prn}
                           onChange={(e) => setPrn(e.target.value)}
                           required
@@ -158,13 +166,14 @@ const VoterVerificationScreen = () => {
                         className="form-label"
                         style={ystyle}
                       >
-                        Phone number <RequiredFieldStar />
+                        Mobile number <RequiredFieldStar />
                         <input
                           type="tel"
                           pattern="[0-9]{10}"
+                          maxLength={10}
                           className="form-control"
                           id="studentPhoneno"
-                          placeholder="eg. 9841234567"
+                          placeholder="Enter your mobile number"
                           value={mobile}
                           onChange={(e) => setMobile(e.target.value)}
                           required
@@ -190,12 +199,12 @@ const VoterVerificationScreen = () => {
           </>
         )}
       </div>
-      {!hasApplied && !isCandidate && isVerified && (
+      {!hasApplied && !isCandidate && isVerified && !isDenied &&(
         <div
           className="text-center bg-info text-light fw-bold fs-4"
           style={divisionstyle}
         >
-          <div>You are verified successfully !</div>
+          <div>You are verified successfully!</div>
           {currentElectionPhase === "Voter Verification" ? (
             <div>Please wait for the next phase of the election.</div>
           ) : (
@@ -206,7 +215,7 @@ const VoterVerificationScreen = () => {
 
       {isVerified &&
         !isCandidate &&
-        currentElectionPhase === "Apply as a Candidate" && (
+        currentElectionPhase === "Candidate Application" && !isDenied &&(
           <>
             <div className="container-main">
               {hasApplied ? (
@@ -214,7 +223,7 @@ const VoterVerificationScreen = () => {
                   className="text-center bg-info text-light fw-bold fs-4"
                   style={divisionstyle}
                 >
-                  <div>Applied Successfully !</div>
+                  <div>Applied Successfully!</div>
                   <div>Please wait for admin's approval.</div>
                 </div>
               ) : (
@@ -265,15 +274,34 @@ const VoterVerificationScreen = () => {
             </div>
           </>
         )}
+        {isDenied && currentElectionPhase === "Candidate Application" && isVerified && (
+              <div
+                className="text-center bg-danger text-light fw-bold fs-4"
+                style={divisionstyle}
+              >
+                <div>Your Candidate application has been denied by the Admin!</div>
+                <div>But you can still vote for other candidates.</div>
+              </div>
+            )}
 
-      {isCandidate && currentElectionPhase === "Apply as a Candidate" && (
+        {isDenied && !hasApplied && (
+              <div
+                className="text-center bg-danger text-light fw-bold fs-4"
+                style={divisionstyle}
+              >
+                <div>You are not verified as a voter.</div>
+                <div>You can not participate in the Election.</div>
+              </div>
+            )}
+
+      {isCandidate && currentElectionPhase === "Candidate Application" && (
         <div
           className="text-center bg-info text-light fw-bold fs-4"
           style={divisionstyle}
         >
-          <div>Congratulations !!! </div>
-          <div>Approved as a Candidate by Admin !</div>
-          <div>Students can vote you now in the next voting phase !</div>
+          <div>Congratulations!!! </div>
+          <div>Approved as a Candidate by Admin!</div>
+          <div>Students can vote you now in the next voting phase!</div>
           <div>All the best.</div>
         </div>
       )}
