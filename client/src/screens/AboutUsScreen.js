@@ -7,7 +7,7 @@ const AboutUsScreen = () => {
       _id: 1,
       name: "Sahil Kavitake (CTO)",
       stream: "M.Sc. Industrial Mathematics With Computer Applications",
-      image: "./Images/sahil2.jpg",
+      image: "./Images/sahil.jpg",
       linkedin: "https://www.linkedin.com/in/sahil-kavitake/",
     },
     {
