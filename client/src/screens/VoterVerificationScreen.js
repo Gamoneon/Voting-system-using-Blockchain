@@ -113,7 +113,7 @@ const VoterVerificationScreen = () => {
   //------------------------------ Render Content -----------------------------------------//
   return (
     <>
-      <YourAccount/>
+      <YourAccount />
       <ElectionInitializeMsg isAdmin={isAdminConnected} />
       <div className="container-main">
         {!isVerified && currentElectionPhase === "Voter Verification" && (
@@ -199,7 +199,7 @@ const VoterVerificationScreen = () => {
           </>
         )}
       </div>
-      {!hasApplied && !isCandidate && isVerified && !isDenied &&(
+      {!hasApplied && !isCandidate && isVerified && !isDenied && (
         <div
           className="text-center bg-info text-light fw-bold fs-4"
           style={divisionstyle}
@@ -215,7 +215,8 @@ const VoterVerificationScreen = () => {
 
       {isVerified &&
         !isCandidate &&
-        currentElectionPhase === "Candidate Application" && !isDenied &&(
+        currentElectionPhase === "Candidate Application" &&
+        !isDenied && (
           <>
             <div className="container-main">
               {hasApplied ? (
@@ -274,25 +275,29 @@ const VoterVerificationScreen = () => {
             </div>
           </>
         )}
-        {isDenied && currentElectionPhase === "Candidate Application" && isVerified && (
-              <div
-                className="text-center bg-danger text-light fw-bold fs-4"
-                style={divisionstyle}
-              >
-                <div>Your Candidate application has been denied by the Admin!</div>
-                <div>But you can still vote for other candidates.</div>
-              </div>
-            )}
+      {isDenied &&
+        currentElectionPhase === "Candidate Application" &&
+        isVerified && (
+          <div
+            className="text-center bg-danger text-light fw-bold fs-4"
+            style={divisionstyle}
+          >
+            <div>Your Candidate application has been denied by the Admin!</div>
+            <div>But you can still vote for other candidates.</div>
+          </div>
+        )}
 
-        {isDenied && !hasApplied && (
-              <div
-                className="text-center bg-danger text-light fw-bold fs-4"
-                style={divisionstyle}
-              >
-                <div>You are not verified as a voter.</div>
-                <div>You can not participate in the Election.</div>
-              </div>
-            )}
+      {isDenied &&
+        !hasApplied &&
+        currentElectionPhase !== "Voter Verification" && (
+          <div
+            className="text-center bg-danger text-light fw-bold fs-4"
+            style={divisionstyle}
+          >
+            <div>You are not verified as a voter.</div>
+            <div>You can not participate in the Election.</div>
+          </div>
+        )}
 
       {isCandidate && currentElectionPhase === "Candidate Application" && (
         <div
@@ -331,12 +336,12 @@ const VoterVerificationScreen = () => {
                   <td>{prn}</td>
                 </tr>
                 <tr>
-                  <th>Verification</th>
-                  <td>{isVerified ? "True" : "False"}</td>
+                  <th>Verification Status</th>
+                  <td>{isVerified ? "Verified" : "Not Verified"}</td>
                 </tr>
                 <tr>
-                  <th>Candidate</th>
-                  <td>{isCandidate ? "True" : "False"}</td>
+                  <th>Candidate Status</th>
+                  <td>{isCandidate ? "Candidate" : "Not Candidate"}</td>
                 </tr>
               </tbody>
             </table>
