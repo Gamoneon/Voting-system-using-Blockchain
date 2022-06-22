@@ -80,6 +80,7 @@ const VoterVerificationScreen = () => {
     setIsDenied(data["voterElectionDetails"]["isDenied"]);
     setIsCandidate(data["voterElectionDetails"]["isCandidate"]);
     setHasApplied(data["voterElectionDetails"]["hasApplied"]);
+    console.log(isVerified);
   };
 
   const applyForVerification = async () => {
@@ -113,7 +114,7 @@ const VoterVerificationScreen = () => {
   //------------------------------ Render Content -----------------------------------------//
   return (
     <>
-      <YourAccount/>
+      <YourAccount />
       <ElectionInitializeMsg isAdmin={isAdminConnected} />
       <div className="container-main">
         {!isVerified && currentElectionPhase === "Voter Verification" && (
@@ -199,7 +200,7 @@ const VoterVerificationScreen = () => {
           </>
         )}
       </div>
-      {!hasApplied && !isCandidate && isVerified && !isDenied &&(
+      {!hasApplied && !isCandidate && isVerified && !isDenied && (
         <div
           className="text-center bg-info text-light fw-bold fs-4"
           style={divisionstyle}
@@ -215,7 +216,8 @@ const VoterVerificationScreen = () => {
 
       {isVerified &&
         !isCandidate &&
-        currentElectionPhase === "Candidate Application" && !isDenied &&(
+        currentElectionPhase === "Candidate Application" &&
+        !isDenied && (
           <>
             <div className="container-main">
               {hasApplied ? (
@@ -240,7 +242,7 @@ const VoterVerificationScreen = () => {
                           >
                             Enter Your Tagline <RequiredFieldStar />
                             <textarea
-                              class="form-control"
+                              className="form-control"
                               placeholder="Write your tagline here"
                               id="studentTagline"
                               style={{ height: "100px" }}
@@ -274,25 +276,30 @@ const VoterVerificationScreen = () => {
             </div>
           </>
         )}
-        {isDenied && currentElectionPhase === "Candidate Application" && isVerified && (
-              <div
-                className="text-center bg-danger text-light fw-bold fs-4"
-                style={divisionstyle}
-              >
-                <div>Your Candidate application has been denied by the Admin!</div>
-                <div>But you can still vote for other candidates.</div>
-              </div>
-            )}
+      {isDenied &&
+        currentElectionPhase === "Candidate Application" &&
+        isVerified && (
+          <div
+            className="text-center bg-danger text-light fw-bold fs-4"
+            style={divisionstyle}
+          >
+            <div>Your Candidate application has been denied by the Admin!</div>
+            <div>But you can still vote for other candidates.</div>
+          </div>
+        )}
 
-        {isDenied && !hasApplied && (
-              <div
-                className="text-center bg-danger text-light fw-bold fs-4"
-                style={divisionstyle}
-              >
-                <div>You are not verified as a voter.</div>
-                <div>You can not participate in the Election.</div>
-              </div>
-            )}
+      {isDenied &&
+        !hasApplied &&
+        !isVerified &&
+        currentElectionPhase !== "Voter Verification" && (
+          <div
+            className="text-center bg-danger text-light fw-bold fs-4"
+            style={divisionstyle}
+          >
+            <div>You are not verified as a voter.</div>
+            <div>You can not participate in the Election.</div>
+          </div>
+        )}
 
       {isCandidate && currentElectionPhase === "Candidate Application" && (
         <div
