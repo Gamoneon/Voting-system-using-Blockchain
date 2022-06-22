@@ -80,6 +80,7 @@ const VoterVerificationScreen = () => {
     setIsDenied(data["voterElectionDetails"]["isDenied"]);
     setIsCandidate(data["voterElectionDetails"]["isCandidate"]);
     setHasApplied(data["voterElectionDetails"]["hasApplied"]);
+    console.log(isVerified);
   };
 
   const applyForVerification = async () => {
@@ -241,7 +242,7 @@ const VoterVerificationScreen = () => {
                           >
                             Enter Your Tagline <RequiredFieldStar />
                             <textarea
-                              class="form-control"
+                              className="form-control"
                               placeholder="Write your tagline here"
                               id="studentTagline"
                               style={{ height: "100px" }}
@@ -289,6 +290,7 @@ const VoterVerificationScreen = () => {
 
       {isDenied &&
         !hasApplied &&
+        !isVerified &&
         currentElectionPhase !== "Voter Verification" && (
           <div
             className="text-center bg-danger text-light fw-bold fs-4"
