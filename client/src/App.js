@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import HomeScreen from "./screens/HomeScreen.js";
+import AboutUs from "./screens/AboutUsScreen.js";
 import RegisterScreen from "./screens/RegisterScreen.js";
 import LoginScreen from "./screens/LoginScreen.js";
 import DashboardScreen from "./screens/DashboardScreen.js";
@@ -23,6 +24,7 @@ const App = () => {
           <div>
             <Routes>
               <Route exact path="/" element={<HomeScreen />} />
+              <Route exact path="/aboutus" element={<AboutUs />} />
               <Route exact path="/register" element={<RegisterScreen />} />
               <Route exact path="/adminlogin" element={<AdminLoginScreen />} />
               <Route exact path="/login" element={<LoginScreen />} />

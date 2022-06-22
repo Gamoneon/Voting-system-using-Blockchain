@@ -1,5 +1,5 @@
 import React from "react";
-import { Link , useLocation} from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import Logo from "./Logo.js";
 
 const Navbar = () => {
@@ -10,7 +10,7 @@ const Navbar = () => {
   const splitLocation = pathname.split("/");
   const headerstyle = {
     fontSize: "1.3rem",
-  }
+  };
   return (
     <div>
       <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
@@ -18,6 +18,7 @@ const Navbar = () => {
           <Link className="navbar-brand" to="/">
             <Logo />
           </Link>
+
           <button
             className="navbar-toggler"
             type="button"
@@ -34,31 +35,68 @@ const Navbar = () => {
               className="collapse navbar-collapse"
               id="navbarSupportedContent"
             >
-              <ul className="navbar-nav me-auto mb-2 mb-lg-0" style={headerstyle}>
+              <ul
+                className="navbar-nav me-auto mb-2 mb-lg-0"
+                style={headerstyle}
+              >
                 <li className="nav-item">
-                  <Link to="/" className={`nav-link ${splitLocation[splitLocation.length-1] === "" ? "active" : ""}`}
+                  <Link
+                    to="/"
+                    className={`nav-link ${
+                      splitLocation[splitLocation.length - 1] === ""
+                        ? "active"
+                        : ""
+                    }`}
                   >
                     Home
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link to="/register" className={`nav-link ${splitLocation[splitLocation.length-1] === "register" ? "active" : ""}`}
-                 >
-
+                  <Link
+                    to="/register"
+                    className={`nav-link ${
+                      splitLocation[splitLocation.length - 1] === "register"
+                        ? "active"
+                        : ""
+                    }`}
+                  >
                     Register
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link to="/adminlogin" className={`nav-link ${splitLocation[splitLocation.length-1] === "adminlogin" ? "active" : ""}`}
-                 >
-
+                  <Link
+                    to="/adminlogin"
+                    className={`nav-link ${
+                      splitLocation[splitLocation.length - 1] === "adminlogin"
+                        ? "active"
+                        : ""
+                    }`}
+                  >
                     Admin Login
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link to="/login" className={`nav-link ${splitLocation[splitLocation.length-1] === "login" ? "active" : ""}`}
+                  <Link
+                    to="/login"
+                    className={`nav-link ${
+                      splitLocation[splitLocation.length - 1] === "login"
+                        ? "active"
+                        : ""
+                    }`}
                   >
-                   Student Login
+                    Student Login
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link
+                    to="/aboutus"
+                    className={`nav-link ${
+                      splitLocation[splitLocation.length - 1] === "aboutus"
+                        ? "active"
+                        : ""
+                    }`}
+                  >
+                    About Us
                   </Link>
                 </li>
               </ul>
