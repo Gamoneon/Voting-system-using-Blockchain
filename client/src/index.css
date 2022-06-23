@@ -36,7 +36,11 @@ h1,h2,h3,h4,h5{
 
 .card{
   width: fit-content;
-  height: fit-content;
+  
+}
+.card-header{
+  height: 6rem;
+  text-align: center;
 }
 
 .card-subtitle {
