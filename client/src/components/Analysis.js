@@ -10,7 +10,8 @@ const Analysis = () => {
   const [P2_candidateCount, setP2_CandidateCount] = useState(0);
   const [P2_votedCount, setP2_VotedCount] = useState(0);
   const [P2_notVotedVerifiedCount, setP2_NotVotedVerifiedCount] = useState(0);
-  const [P2_notVotedNotVerifiedCount, setP2_NotVotedNotVerifiedCount] =useState(-1);
+  const [P2_notVotedNotVerifiedCount, setP2_NotVotedNotVerifiedCount] =
+    useState(-1);
 
   const getAllVoterDetails = async () => {
     const data = await sol_getAllVoterDetails();
@@ -47,7 +48,6 @@ const Analysis = () => {
           );
         }
       }
-     
     }
   };
 
@@ -87,7 +87,7 @@ const Analysis = () => {
       outsidetextfont: { size: 20, color: "#377eb8" },
       leaf: { opacity: 0.4 },
       marker: { line: { width: 2 } },
-      branchvalues: 'total',
+      branchvalues: "total",
       textinfo: "label+value",
     },
   ];
@@ -96,9 +96,12 @@ const Analysis = () => {
     <div className="mt-3 p-2">
       <Plot
         data={P1_data}
-          
-          layout={{ width: 400, height: 500, title: "No of votes per Candidate" ,margin: { l: 0, r: 0, b: 0, t: 50 }}}
-        
+        layout={{
+          width: 400,
+          height: 500,
+          title: "Number of votes per Candidate",
+          margin: { l: 0, r: 0, b: 0, t: 50 },
+        }}
       />
       <Plot
         data={P2_data}
@@ -107,7 +110,6 @@ const Analysis = () => {
           width: 500,
           height: 500,
           title: "Student's participation in the Election",
-
         }}
       />
     </div>

@@ -28,3 +28,21 @@ ul{
 h1,h2,h3,h4,h5{
   overflow: hidden;
 }
+
+.card-title.h5,
+.card-body {
+  color: #000000;
+}
+
+.card{
+  width: fit-content;
+  
+}
+.card-header{
+  height: 6rem;
+  text-align: center;
+}
+
+.card-subtitle {
+  color: #464444;
+}

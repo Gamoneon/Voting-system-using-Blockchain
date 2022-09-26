@@ -3,20 +3,36 @@
 
 <head>
   <meta charset="utf-8" />
-  <link rel="icon" href="%PUBLIC_URL%/favicon.ico" /> 
+  <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#000000" />
   <meta name="description" content="Web site created using create-react-app" />
-  
+
   <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-  
+
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
     integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
   <link rel="stylesheet" href="bootstrap.css">
   <script src="https://cdn.plot.ly/plotly-2.12.1.min.js"></script>
- 
+  <script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
+  <df-messenger intent="WELCOME" wait-open="true" chat-icon="./Images/chatbot_icon.png" chat-title="Voting System Bot"
+    agent-id="e219010f-72ad-42cd-aa1f-203bf81f49ae" language-code="en">
+  </df-messenger>
+  <style>
+    df-messenger {
+      /* --df-messenger-bot-message: #878fac; */
+      --df-messenger-button-titlebar-color: #415a9e;
+      /* --df-messenger-chat-background-color: #23263F; */
+      /* --df-messenger-font-color: white; */
+      --df-messenger-send-icon: #23263F;
+      /* --df-messenger-user-message: #23263F; */
+    }
+  </style>
+
 
   <title>Voting System</title>
 </head>
@@ -24,7 +40,7 @@
 <body>
   <noscript>You need to enable JavaScript to run this app.</noscript>
   <div id="root"></div>
-  
+
 </body>
 
 </html>
