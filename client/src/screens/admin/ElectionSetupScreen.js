@@ -169,12 +169,12 @@ const ElectionSetupScreen = () => {
                   </div>
                   <div className="col-4">
                     <label htmlFor="electionClassDegree" className="form-label">
-                      Choose Degree
+                      Degree
                     </label>
                   </div>
                   <div className="col-4">
                     <label htmlFor="electionStream" className="form-label">
-                      Choose Stream
+                      Stream
                     </label>
                   </div>
                 </div>
